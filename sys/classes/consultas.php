@@ -806,7 +806,9 @@ class Consultas
     function save_dominio($data){
 
         $table = new Table($this->db, 'dominio');
-
+        if(isset($data['id_dominio'])){
+            $table->find($data['id_dominio']);
+        }
         $table->descripcion = $data['descripcion'];
         $table->aplicativo = 'sys';
         $table->tipo = $data['tipo'];
@@ -814,7 +816,7 @@ class Consultas
         $table->usuario = '1';
 
         if($table->save()){
-            return $table->id_relacion;
+            return $table->id_dominio;
         }else{
             return 0;
         }
@@ -830,9 +832,11 @@ class Consultas
     /*****************abm dominios*********************/
     /***************************************/
     function getUsuarios(){
-        $query = "SELECT a.* 
-              FROM usuarios a "
-            . " WHERE 1 ";
+        $query = "SELECT u.* ,d.descripcion dominio
+              FROM usuarios u 
+               LEFT JOIN  usuario_dominio ud ON ud.id_usuario=u.id_usuario 
+               LEFT JOIN  dominio d ON d.id_dominio=ud.id_dominio 
+               WHERE 1 ";
 
         $result = $this->db->loadObjectList($query);
         if($result)
@@ -842,8 +846,10 @@ class Consultas
     }
     function getUsuariosById($id_registro){
 
-        $query = "SELECT m.* "
-            . " FROM usuarios m "
+        $query = "SELECT m.*, d.descripcion dominio, ud.id_dominio id_dom "
+            . "  FROM usuarios m 
+               LEFT JOIN  usuario_dominio ud ON ud.id_usuario=m.id_usuario 
+               LEFT JOIN  dominio d ON d.id_dominio=ud.id_dominio  "
             . " WHERE m.id_usuario='".$id_registro."' ";
         //echo $query;
         $result = $this->db->loadObjectList($query);
@@ -864,6 +870,7 @@ class Consultas
         $table->nombre = $data['nombre'];
         $table->clave = $data['clave'];
         $table->tipo = $data['tipo'];
+        $table->rol = $data['rol'];
         $table->usuario = $_SESSION['id'];
         $table->fecha_baja = "0000-00-00 00:00:00";
         $table->fecha_ultima_modificacion = "0000-00-00 00:00:00";
@@ -899,6 +906,12 @@ class Consultas
     }
     function eliminar_aplicativos_usuario($usuario){
         $query = "DELETE FROM usuario_aplicativos WHERE id_usuario='".$usuario."'";
+        //$conn->execute($sql);
+        $this->db->query($query);
+
+    }
+    function eliminar_dominio_usuario($usuario){
+        $query = "DELETE FROM usuario_dominio WHERE id_usuario='".$usuario."'";
         //$conn->execute($sql);
         $this->db->query($query);
 

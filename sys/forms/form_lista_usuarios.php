@@ -36,8 +36,10 @@
                         <thead>
                         <tr>
                             <th>Nombre Usuario</th>
+                            <th>Rol </th>
                             <th>User </th>
                             <th>Password</th>
+                            <th>Dominio</th>
                             <th>
                             </th>
                             <th></th>
@@ -53,8 +55,10 @@
                                 <tr class="odd gradeX">
 
                                     <td><?php echo $v->nombre_persona; ?></td>
+                                    <td><?php echo ($v->rol=='Admin')?'Administrador':'Secretario/a'; ?></td>
                                     <td><?php echo $v->nombre; ?></td>
                                     <td><?php echo $v->clave; ?></td>
+                                    <td><?php echo $v->dominio; ?></td>
                                     <td>
                                         <a href="controlador.php?action=edita_usuario&id_usuario=<?php echo $v->id_usuario; ?>"><img src="img/edit.png"/></a>
                                     </td>

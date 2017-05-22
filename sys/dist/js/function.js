@@ -113,26 +113,16 @@ function edita_relacion(relacion) {
 function guardar_pago() {
 
     if($("#clientes").val()==''){
-
-        $('#cuerpo').html('El cliente no puede estar vacio');
-        $('#myModal').modal('show');
-
+        alert("El cliente no puede estar vacio");
         return false;
     }
 
     if($("#precio").val()==''){
-        $('#cuerpo').html('El monto a pagar no puede estar vacio');
-        $('#myModal').modal('show');
+        alert("El monto a pagar no puede estar vacio");
         return false;
     }
     if($("#periodo").val()==''){
-        $('#cuerpo').html('El periodo a pagar no puede estar vacio');
-        $('#myModal').modal('show');
-        return false;
-    }
-    if($("#id_producto").val()==''){
-        $('#cuerpo').html('La actividad no puede estar vacio');
-        $('#myModal').modal('show');
+        alert("El periodo a pagar no puede estar vacio");
         return false;
     }
     $.ajax({
@@ -142,9 +132,9 @@ function guardar_pago() {
         type: 'get',
         success:       function(data) {
 
-            $('#cuerpo').html(data.mjs+" Comprobante numero:"+data.id_pago);
-            $('#myModal').modal('show');
-            window.location.href = 'controlador.php?action=lista_pagos';
+                $("#form_datos").html(data.mjs+" Comprobante numero:"+data.id_pago);
+
+
         }
     });
 }

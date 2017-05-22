@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="dist/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">-->
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <!-- jvectormap -->
@@ -33,49 +33,7 @@
 
     <script src="dist/js/jquery-ui.js"></script>
     <script src="dist/js/function.js"></script>
-    <!--    <script src="js/jquery.validate.js"></script>-->
+<!--    <script src="js/jquery.validate.js"></script>-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Mensaje</h4>
-            </div>
-            <div class="modal-body" id="cuerpo">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-<div id="modal_pass" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-            </div>
-
-            <form action="controlador.php">
-                <div class="modal-body">
-                    cambiame de pass
-                    <input name="action" id="action" value="cambiar_contrasenia">
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-default">Envia</button>
-                </div>
-            </form>
-        </div>
-
-    </div>
-</div>
 <div class="wrapper">

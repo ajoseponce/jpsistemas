@@ -62,13 +62,18 @@
                                     <option <?php echo ($result->tipo==2)?"selected":""; ?>  value="2">Gimnasio</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label>Rol Usuario</label>
+                                    <input type="radio" <?php echo ($result->rol=='Admin')?"checked":""; ?> value="Admin" name="rol"/>Administrador
+                                    <input type="radio" <?php echo ($result->rol=='Secre')?"checked":""; ?> value="Secre" name="rol"/>Secretario
+                            </div>
                             <div class="ui-widget">
                                 <label>Dominio: </label>
                                 <input class="form-control" id="suggest_dominios" value="<?php echo $result->dominio?>">
-                                <input type="hidden" id="dominios" name="dominios" value="<?php echo $result->id_dominio?>">
+                                <input type="hidden" id="dominios" name="dominios" value="<?php echo $result->id_dom?>">
                             </div>
                             <input type="hidden"  name="action" value="guardar_usuario" />
-                            <input type="hidden" id="id_usuario" id="id_usuario"  name="id_usuario" value="<?php echo (isset($result->id_usuario))?$result->id_usuario:""; ?>" />
+                            <input type="text" id="id_usuario" id="id_usuario"  name="id_usuario" value="<?php echo (isset($result->id_usuario))?$result->id_usuario:""; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
                             <button onclick="volver_listado('usuarios')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->

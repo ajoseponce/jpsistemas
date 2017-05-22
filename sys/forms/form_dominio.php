@@ -63,7 +63,7 @@
                                 ?>
                                 <div class="form-group">
                                     <label>Estado</label>
-                                    <select style="width: 200px;"  class="form-control" id="tipo" name="tipo">
+                                    <select style="width: 200px;"  class="form-control" id="estado" name="estado">
                                         <option value="">SELECCIONE UN ESTADO</option>
                                         <option <?php echo ($result->estado=='A')?"selected":""; ?> value="A">ALTA</option>
                                         <option <?php echo ($result->estado=='B')?"selected":""; ?>  value="B">BAJA</option>
@@ -71,7 +71,7 @@
                                 </div>
                             <?php } ?>
                             <input type="hidden"  name="action" value="guardar_dominio" />
-                            <input type="hidden" id="id_dominio" id="id_dominio"  name="id_dominio" value="<?php echo (isset($result->id_dominio))?$result->id_dominio:""; ?>" />
+                            <input type="text" id="id_dominio" id="id_dominio"  name="id_dominio" value="<?php echo (isset($result->id_dominio))?$result->id_dominio:""; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
                             <button onclick="volver_listado('dominio')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->

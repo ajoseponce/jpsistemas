@@ -36,7 +36,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal_pass">Contrase&nacute;a</a>
+                                <a href="#" class="btn btn-default btn-flat">Contrase&nacute;a</a>
                             </div>
                             <div class="pull-right">
                                 <a href="controlador.php?action=logout" class="btn btn-default btn-flat">Salir</a>

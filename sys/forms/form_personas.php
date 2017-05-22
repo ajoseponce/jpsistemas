@@ -94,7 +94,7 @@
                             <input type="hidden"  name="action" value="guardar_persona" />
                             <input type="hidden" id="id_persona_dias" name="id_persona_dias" value="<?php echo (isset($result->id_persona_dias))?$result->id_persona_dias:""; ?>" />
                             <input type="hidden" id="id_persona" id="id_persona"  name="id_persona" value="<?php echo (isset($result->id_persona))?$result->id_persona:""; ?>" />
-                            <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
+                            <input type="button"  onclick="guardar_datos()" class="btn btn-primary" value="Guardar Datos" />
                             <button onclick="volver_listado('personas')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->
                         </div>

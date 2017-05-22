@@ -45,7 +45,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 <div class="banner-right">
                     <ul>
                         <li><label> </label></li>
-                        <li>¿Necesita ayuda?<span><a href="mail-to:ayuda@jpsistemas.com">ayuda@jpsistemas.com</a></span></li>
+                        <li>¿Necesita ayuda?<span><a href="mail-to:ayuda@sistemasjp.com">ayuda@sistemasjps.com</a></span></li>
                     </ul>
                 </div>
             </div>

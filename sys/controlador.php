@@ -256,22 +256,12 @@ $action = $_REQUEST["action"];
         case "guardar_pago":
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');
-            //include 'header.php';
             $html=array ();
             $id_pago = $consultas->save_pago($_REQUEST);
-            if($id_pago==false){
-                $mensaje="ocurrio un error.";
-                $html['mjs']=$mensaje;
-                $html['error']=1;
-                $html['id_pago']=$id_pago;
-
-            }else{
-                $mensaje="El pago se realizo correctamente se realizo correctamente.";
-                $html['mjs']=$mensaje;
-                $html['id_pago']=$id_pago;
-            }
             /*********************/
-
+            $mensaje="El pago se realizo correctamente se realizo correctamente.";
+            $html['mjs']=$mensaje;
+            $html['id_pago']=$id_pago;
             echo  json_encode($html);
             break;
         case "pagos_periodo":
@@ -298,7 +288,7 @@ $action = $_REQUEST["action"];
             $result= $consultas->getPagos();
             $formulario='forms/form_lista_pagos.php';
             break;
-        /**************************************************/
+
         case "menu_usuario":
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');
@@ -618,7 +608,8 @@ $action = $_REQUEST["action"];
             include "nav.php";
 
             include 'menu.php';
-
+//            print_r($_REQUEST);
+//            exit;
             $consultas->save_dominio($_REQUEST);
 
             $mensaje="La operacion se realizo correctamente.";
@@ -633,7 +624,7 @@ $action = $_REQUEST["action"];
             include 'header.php';
             include "nav.php";
             include 'menu.php';
-            $result= $consultas->getDominiobyid($_REQUEST['id_dominio']);
+            $result= $consultas->getDominobyid($_REQUEST['id_dominio']);
             $formulario='forms/form_dominio.php';
             break;
         case "elimina_dominio":
@@ -742,6 +733,7 @@ $action = $_REQUEST["action"];
                     $consultas->save_aplicativo_persona($data);
                 }
             /****************************/
+            $consultas->eliminar_dominio_usuario($id_usuario);
             $consultas->save_persona_dominio($_REQUEST);
             /************************************/
             $result= $consultas->getUsuarios();
@@ -809,7 +801,22 @@ $action = $_REQUEST["action"];
             <script>
                 //$('#myModal').modal('show')
             </script>
-<?php
+            <?php
+            break;
+        case "datos_persona_all":
+
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+
+
+            include 'header.php';
+            include "nav.php";
+            include 'menu.php';
+            /******************************************/
+            $result= $consultas->getPersonasbyid($_REQUEST['id_persona']);
+
+            /***************************************/
+            $formulario='forms/form_persona_all.php';
             break;
         /***************************************/
     }
