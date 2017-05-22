@@ -375,4 +375,9 @@ function autocomleteINI_usuario(id, path) {
             }
         }) ;
 }
+function eliminarPago(pago){
+    if(confirm('Usted esta por eliminar un comprobante.Desea Continuar?')){
+        window.location.assign('controlador.php?action=elimina_pago&id_pago='+pago);
+    }
+}
 

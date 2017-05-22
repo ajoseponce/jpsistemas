@@ -11,7 +11,7 @@
             <li class="active">Alta</li>
         </ol>
     </section>
-
+<?php print_r($_SESSION);?>
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -100,8 +100,11 @@
                                         <td><?php echo $v->dias_retraso; ?></td>
                                         <td><?php echo $v->monto_incremento; ?></td>
                                         <td><?php echo $v->nota; ?></td>
-                                        <td><a href="imprimir_comprobante.php?id_comprobante=<?php echo $v->id_pago; ?>"><img src="./img/printer.png"></a></td>
-
+<!--                                        <td><a href="imprimir_comprobante.php?id_comprobante=--><?php //echo $v->id_pago; ?><!--"><img src="./img/printer.png"></a></td>-->
+                                        <td><?php if($_SESSION['rol']=='Admin'){ ?>
+                                            <img onclick="eliminarPago(<?php echo $v->id_pago; ?>)" src="./img/delete.png" />
+                                            <?php } ?>
+                                        </td>
                                     </tr>
                                 <?php }} ?>
                             <tr class="odd gradeX">

@@ -30,6 +30,7 @@ if(isset($_POST["btnSubmit"])){
         $_SESSION['tipo']=$usuario->tipo;
         $_SESSION['nombre_dominio']=$usuario->nombre_dominio;
         $_SESSION['aplicativo']=$usuario->aplicativo;
+        $_SESSION['rol']=$usuario->rol;
 
         $_SESSION['nombre']=$usuario->nombre_persona;
 //        print_r($_SESSION);

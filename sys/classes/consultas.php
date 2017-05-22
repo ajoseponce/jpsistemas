@@ -412,7 +412,7 @@ class Consultas
                   FROM pagos p 
                   INNER JOIN personas pr ON pr.id_persona=p.id_cliente 
                   INNER JOIN productos pd ON pd.id_producto=p.id_producto 
-                  WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' " ;
+                  WHERE p.estado='A' AND p.id_dominio='".$_SESSION['dominio']."' " ;
         if($fecha_desde && $fecha_hasta==null){
             $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
             $query .=" AND p.fecha_hora>='".$fecha_desde."'";
@@ -439,6 +439,13 @@ class Consultas
             return $result;
         else
             return false;
+
+    }
+    function eliminar_pago($idPago){
+        $query = "UPDATE pagos
+                      SET estado='B' 
+                      WHERE id_pago='$idPago'";
+        $this->db->query($query);
 
     }
     function getcontarPagos($periodo=null){
@@ -872,7 +879,7 @@ class Consultas
         $table->tipo = $data['tipo'];
         $table->rol = $data['rol'];
         $table->usuario = $_SESSION['id'];
-        $table->fecha_baja = "0000-00-00 00:00:00";
+        $table->fecha_baja = "0000-00-00";
         $table->fecha_ultima_modificacion = "0000-00-00 00:00:00";
         $table->estado = 'A';
 
@@ -915,6 +922,26 @@ class Consultas
         //$conn->execute($sql);
         $this->db->query($query);
 
+    }
+    function savecontrasenia($datar){
+        global $error;
+        //insert o update del rol
+        $table = new Table($this->db, 'usuarios');
+        if ($datar['action']=='save') {
+            //update
+            $table->find($_SESSION['id']);
+            // controlar el cambio de estado para registrar fecha de baja
+            $table->clave = $datar['nueva'];
+
+        }
+        if($table->save())
+        {
+            $error->add('',LEVEL_SUCCESSFULLY,'La operaci&oacute;n se ha realizado con &eacute;xito.');
+            return $table->id_usuario;
+        }
+        else
+            $error->add('',LEVEL_ERROR_FATAL,'No se ha realizado la operaci&oacute;n');
+        return false;
     }
 
 }     

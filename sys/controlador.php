@@ -288,7 +288,22 @@ $action = $_REQUEST["action"];
             $result= $consultas->getPagos();
             $formulario='forms/form_lista_pagos.php';
             break;
+        case "elimina_pago":
+            /***************includes******************/
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
 
+            include "nav.php";
+
+            include 'menu.php';
+            /*********************/
+            $consultas->eliminar_pago($_REQUEST['id_pago']);
+            $mensaje="La eliminacion se realizo correctamente.";
+            $result= $consultas->getPagos();
+
+            $formulario='forms/form_lista_menu.php';
+            break;
         case "menu_usuario":
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');

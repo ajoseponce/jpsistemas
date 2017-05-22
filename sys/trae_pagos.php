@@ -37,6 +37,7 @@ $result = $consultas->getPagos($_REQUEST['fecha_desde'],$_REQUEST['fecha_hasta']
                 <td><?php echo $v->dias_retraso; ?></td>
                 <td><?php echo $v->monto_incremento; ?></td>
                 <td><?php echo $v->nota; ?></td>
+                <td></td>
 
             </tr>
         <?php }} ?>
