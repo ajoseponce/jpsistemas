@@ -43,7 +43,7 @@ function redirect($filename){
  * @return
  */
 function requireLogin(){
-    $filename = 'index.php';
+    $filename = 'login.php';
 
 	session_start();
 	return (is_null($_SESSION['id']))? redirect($filename):"";

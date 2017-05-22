@@ -36,4 +36,5 @@
 <!--    <script src="js/jquery.validate.js"></script>-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+<?php include 'contrasenia.php'; ?>
 <div class="wrapper">

@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 //print_r($_SESSION);
 include '../lib/DB_Conectar.php';
 include 'classes/consultas.php';

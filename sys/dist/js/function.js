@@ -380,4 +380,24 @@ function eliminarPago(pago){
         window.location.assign('controlador.php?action=elimina_pago&id_pago='+pago);
     }
 }
+function guardar_cambio_contrasenia(){
+    if($("#contrasenia_nueva1").val()!=$("#contrasenia_nueva2").val()){
+        alert("Las contraseñas  nuevas deben ser iguales");
+        return false;
+    }
+    if($("#contrasenia_nueva1").val()==''){
+        alert("El campo nueva contraseña no puede ser nulo");
+        return false;
+    }
+    $.ajax({
+        url:           "controlador.php",
+        data:          {action: "guardar_contrasenia_nueva",contrasenia_nueva1: ""+$("#contrasenia_nueva1").val()+""},
+        type: 'post',
+        success:       function(data){
+            alert('La aplicacion se cerrara vuelva a ingresar .Gracias');
+            //location.reload();
+            window.location.href = 'controlador.php?action=logout';
+        }
+    });
+}
 

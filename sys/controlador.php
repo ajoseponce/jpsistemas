@@ -833,6 +833,14 @@ $action = $_REQUEST["action"];
             /***************************************/
             $formulario='forms/form_persona_all.php';
             break;
+        case "guardar_contrasenia_nueva":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+
+            $result= $consultas->save_contrasenia($_REQUEST['contrasenia_nueva1']);
+            /***************includes******************/
+
+            break;
         /***************************************/
     }
    

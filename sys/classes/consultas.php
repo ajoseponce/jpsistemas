@@ -923,25 +923,15 @@ class Consultas
         $this->db->query($query);
 
     }
-    function savecontrasenia($datar){
+    function save_contrasenia($datar){
+        session_start();
         global $error;
         //insert o update del rol
-        $table = new Table($this->db, 'usuarios');
-        if ($datar['action']=='save') {
-            //update
-            $table->find($_SESSION['id']);
-            // controlar el cambio de estado para registrar fecha de baja
-            $table->clave = $datar['nueva'];
+        $query = "UPDATE usuarios
+                      SET clave='".$datar."' 
+                      WHERE id_usuario='".$_SESSION['id']."'";
+        $this->db->query($query);
 
-        }
-        if($table->save())
-        {
-            $error->add('',LEVEL_SUCCESSFULLY,'La operaci&oacute;n se ha realizado con &eacute;xito.');
-            return $table->id_usuario;
-        }
-        else
-            $error->add('',LEVEL_ERROR_FATAL,'No se ha realizado la operaci&oacute;n');
-        return false;
     }
 
 }     
