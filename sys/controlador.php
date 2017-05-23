@@ -828,7 +828,12 @@ $action = $_REQUEST["action"];
             include "nav.php";
             include 'menu.php';
             /******************************************/
+
             $result= $consultas->getPersonasbyid($_REQUEST['id_persona']);
+
+            $evo_morales= $consultas->getEvoluciones($_REQUEST['id_persona']);
+
+
 
             /***************************************/
             $formulario='forms/form_persona_all.php';

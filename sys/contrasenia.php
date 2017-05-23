@@ -24,8 +24,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="button" onclick="guardar_cambio_contrasenia()" class="btn btn-primary">Guardar Cambio</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

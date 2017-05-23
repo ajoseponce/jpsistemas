@@ -933,6 +933,21 @@ class Consultas
         $this->db->query($query);
 
     }
+    function getEvoluciones($id_registro){
+
+        $query = "SELECT e.*,date_format(e.fecha_hora, '%d/%m/%Y') fecha_evolucion ,CONCAT_WS(' ',p.nombre, p.apellido) paciente,u.nombre_persona nombre_usuario "
+            . " FROM evoluciones e "
+            . " INNER JOIN personas p ON p.id_persona=e.id_persona "
+            . " INNER JOIN dominio d ON d.id_dominio=e.id_dominio "
+            . " INNER JOIN usuarios u ON u.id_usuario=e.usuario "
+            . " WHERE p.id_persona='".$id_registro."' ";
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
+        else
+            return false;
+    }
 
 }     
 $consultas= new Consultas($db);
