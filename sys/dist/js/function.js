@@ -401,3 +401,20 @@ function guardar_cambio_contrasenia(){
     });
 }
 
+function guardar_turno(){
+    $('#form_datos').submit();
+    //$('#turnera').modal('toggle');
+
+    //$("#turnera").toogllee();
+
+    // $.ajax({
+    //     url:           "controlador.php",
+    //     data:          {action: "guardar_contrasenia_nueva",contrasenia_nueva1: ""+$("#contrasenia_nueva1").val()+""},
+    //     type: 'post',
+    //     success:       function(data){
+    //         alert('La aplicacion se cerrara vuelva a ingresar .Gracias');
+    //         //location.reload();
+    //         window.location.href = 'controlador.php?action=logout';
+    //     }
+    // });
+}

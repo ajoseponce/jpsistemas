@@ -61,6 +61,7 @@
                                             <a href="controlador.php?action=edita_persona&id_persona=<?php echo $v->id_persona; ?>"><img src="img/edit.png"/></a>
                                             <a href="controlador.php?action=datos_persona_all&id_persona=<?php echo $v->id_persona; ?>"><img src="img/info_all.png"/></a>
                                             <img  onclick="eiminaCliente('<?php echo (int)$v->id_persona ?>')" style="cursor: pointer;" src="img/delete.png"/>
+                                            <img   data-toggle="modal" data-target="#turnera"  style="cursor: pointer;" src="img/turnos.png"/>
                                         </td>
                                     </tr>
                                 <?php }} ?>

@@ -22,6 +22,8 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,7 +36,19 @@
     <script src="dist/js/jquery-ui.js"></script>
     <script src="dist/js/function.js"></script>
 <!--    <script src="js/jquery.validate.js"></script>-->
+<!--calendario-->
+    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
+<!--    tiempo hora pm am-->
+    <script src="plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css">
+    <!-- Select2 -->
+    <script src="plugins/select2/select2.full.js"></script>
+    <link rel="stylesheet" href="plugins/select2/select2.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <?php include 'contrasenia.php'; ?>
+
+<?php include 'turnos.php'; ?>
 <div class="wrapper">

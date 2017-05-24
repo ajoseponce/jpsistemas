@@ -948,6 +948,22 @@ class Consultas
         else
             return false;
     }
+    public function getTurnos($persona)
+    {
+
+        $query = "SELECT * , date_format(t.fecha_turno, '%d/%m/%Y') fecha, date_format(t.fecha_turno, '%H/%i') hora, m.descripcion motivo
+                  FROM turnos t 
+                  INNER JOIN motivos_turno m ON m.id_motivo=t.id_turno
+                  WHERE 1 AND t.id_persona = $persona";
+//echo $query;
+        $resutlt = $this->db->loadObjectList($query);
+        if ($resutlt) {
+            return $resutlt;
+        }
+        return array();
+
+    }
+
 
 }     
 $consultas= new Consultas($db);

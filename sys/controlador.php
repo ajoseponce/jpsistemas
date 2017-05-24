@@ -832,6 +832,7 @@ $action = $_REQUEST["action"];
             $result= $consultas->getPersonasbyid($_REQUEST['id_persona']);
 
             $evo_morales= $consultas->getEvoluciones($_REQUEST['id_persona']);
+            $turnos= $consultas->getTurnos($_REQUEST['id_persona']);
 
 
 
@@ -843,6 +844,14 @@ $action = $_REQUEST["action"];
             include('classes/consultas.php');
 
             $result= $consultas->save_contrasenia($_REQUEST['contrasenia_nueva1']);
+            /***************includes******************/
+
+            break;
+        case "guardar_turno":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+
+            $result= $consultas->save_turno_persona($_REQUEST['contrasenia_nueva1']);
             /***************includes******************/
 
             break;

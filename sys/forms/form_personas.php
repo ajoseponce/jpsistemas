@@ -144,7 +144,7 @@
         font-weight: bold;
         padding-right: .25em;
     }
-</style>\
+</style>
 <script src="plugins/input-mask/jquery.inputmask.js"></script>
 <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
