@@ -63,7 +63,7 @@
 <script>
     $(".select2").select2();
     //Date picker
-    $('#datepicker').datepicker({
+    $('#fecha').datepicker({
         autoclose: true
     });
     //Timepicker
