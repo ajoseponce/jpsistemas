@@ -9,17 +9,16 @@
             </div>
             <div class="modal-body">
                 <form id="form_datos">
-                    <h4 id="myLargeModalLabel" class="modal-title">Paciente</h4>
+                    <h4 id="myLargeModalLabel" class="modal-title">Persona: Lucas <Perie></Perie></h4>
                         <div class="form-group">
                             <label>Motivo Turno</label>
                             <select class="form-control select2" multiple="multiple" data-placeholder="Seleccione una opcion" style="width: 100%;">
                                 <option>Control</option>
-                                <option>Alaska</option>
-                                <option>California</option>
-                                <option>Delaware</option>
-                                <option>Tennessee</option>
-                                <option>Texas</option>
-                                <option>Washington</option>
+                                <option>Ruido eje</option>
+                                <option>Amortiguadores</option>
+                                <option>Faros</option>
+                                <option>Carburador</option>
+
                             </select>
                         </div>
                     <div class="form-group">
