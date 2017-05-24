@@ -21,9 +21,6 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-
-
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -49,6 +46,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <?php include 'contrasenia.php'; ?>
-
 <?php include 'turnos.php'; ?>
+<?php include 'mensaje.php'; ?>
+<?php include 'mensaje_error.php'; ?>
 <div class="wrapper">

@@ -151,7 +151,7 @@
                                     } ?>
                                     <li>
 <!--                                        <i class="fa fa-clock-o bg-gray"></i>-->
-                                        <button class="btn btn-danger"  data-toggle="modal" data-target="#turnera"  type="button">Dar Turno</button>
+                                        <button class="btn btn-danger"  onclick="abrir_pop_turnos(<?php echo $result->id_persona; ?>)" type="button">Dar Turno</button>
                                     </li>
                                 </ul>
                             </div>

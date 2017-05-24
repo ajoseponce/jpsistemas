@@ -400,21 +400,39 @@ function guardar_cambio_contrasenia(){
         }
     });
 }
+function abrir_pop_turnos(idpersona){
+    $("#fechaDiv").addClass( "form-group" );
+    $("#motivoDiv").addClass( "form-group" );
 
+    $("#persona").load('trae_persona.php?idpersona='+idpersona);
+    $("#motivo").load('trae_motivos.php');
+    $('#turnera').modal('toggle');
+
+}
 function guardar_turno(){
-    $('#form_datos').submit();
-    //$('#turnera').modal('toggle');
-
-    //$("#turnera").toogllee();
-
-    // $.ajax({
-    //     url:           "controlador.php",
-    //     data:          {action: "guardar_contrasenia_nueva",contrasenia_nueva1: ""+$("#contrasenia_nueva1").val()+""},
-    //     type: 'post',
-    //     success:       function(data){
-    //         alert('La aplicacion se cerrara vuelva a ingresar .Gracias');
-    //         //location.reload();
-    //         window.location.href = 'controlador.php?action=logout';
-    //     }
-    // });
+    //alert($("#motivo").val());
+    if($("#fecha").val()==''){
+        $("#fechaDiv").addClass( "form-group  has-error" );
+        return false;
+    }
+    if($("#motivo").val()==null){
+        $("#motivoDiv").addClass( "form-group  has-error" );
+        return false;
+    }
+    $.ajax({
+            url:           "controlador.php",
+            data:          {action: "guardar_turno",id_persona: ""+$("#id_persona").val()+"",fecha: ""+$("#fecha").val()+"",hora: ""+$("#hora").val()+"",observaciones: ""+$("#observaciones").val()+"",motivo: ""+$("#motivo").val()+""},
+            type: 'post',
+            success:       function(data){
+                //alert(data);
+                if(data){
+                    $('#mjs').html('El turno se reservo correctamente');
+                    $('#mensaje').modal('toggle');
+                }else{
+                    $('#mjs_error').html('Ocurrio un error');
+                    $('#mensaje_error').modal('toggle');
+                }
+                $('#turnera').modal('toggle');
+            }
+        });
 }

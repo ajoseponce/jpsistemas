@@ -955,13 +955,39 @@ class Consultas
                   FROM turnos t 
                   INNER JOIN motivos_turno m ON m.id_motivo=t.id_turno
                   WHERE 1 AND t.id_persona = $persona";
-//echo $query;
         $resutlt = $this->db->loadObjectList($query);
         if ($resutlt) {
             return $resutlt;
         }
         return array();
+    }
+    function save_turno_persona($data){
+        $fecha=substr($data['fecha'], 6, 4)."-".substr($data['fecha'], 3, 2)."-".substr($data['fecha'], 0, 2)."-".substr($data['hora'], 0, 5).":00";
+        $table = new Table($this->db, 'turnos');
 
+        $table->id_persona = $data['id_persona'];
+        $table->id_motivo = $data['motivo'];
+        $table->usuario = $data['usuario'];
+        $table->fecha_turno = $fecha;
+        $table->fecha_carga = date('Y-m-d H:i:s');
+        $table->estado = 'Asignado';
+
+
+        if($table->save()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public function getMotivos(){
+        $query = "SELECT * 
+                  FROM  motivos_turno m 
+                  WHERE 1 ";
+        $resutlt = $this->db->loadObjectList($query);
+        if ($resutlt) {
+            return $resutlt;
+        }
+        return array();
     }
 
 

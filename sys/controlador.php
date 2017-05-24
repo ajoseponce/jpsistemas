@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 //ini_set("display_errors", 1);
-include('../lib/functions.php');
+include('lib/functions.php');
 requireLogin();
 //error_reporting(0);
 $action = $_REQUEST["action"];
@@ -850,10 +850,10 @@ $action = $_REQUEST["action"];
         case "guardar_turno":
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');
-
-            $result= $consultas->save_turno_persona($_REQUEST['contrasenia_nueva1']);
+            //print_r($_REQUEST);
+            $result= $consultas->save_turno_persona($_REQUEST);
             /***************includes******************/
-
+            echo $result;
             break;
         /***************************************/
     }

@@ -11,7 +11,7 @@
             <li class="active">Alta</li>
         </ol>
     </section>
-<?php print_r($_SESSION);?>
+<?php //print_r($_SESSION);?>
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
