@@ -67,7 +67,7 @@ class Consultas
 	    }
         function getPersonasbyid($id_registro){
 
-            $query = "SELECT r.*,date_format(r.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
+            $query = "SELECT r.*,date_format(r.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento,pd.* "
                 . " FROM personas r "
                 . " LEFT JOIN personas_dias pd ON pd.id_persona=r.id_persona "
                 . " WHERE r.id_persona='".$id_registro."' ";
@@ -79,9 +79,23 @@ class Consultas
                 return false;
         }
 
-    function getpersonas(){
-        $query = "SELECT a.*,date_format(a.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
-            . "  FROM personas a WHERE 1 AND id_dominio='".$_SESSION['dominio']."' ORDER BY apellido, nombre ASC " ;
+    function getpersonas($apellidofiltro=null, $nombrefiltro=null, $dni=null){
+            session_start();
+        $query = "SELECT p.*,date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
+            . "  FROM personas p 
+            
+            WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' ";
+        if($apellidofiltro){
+            $query .=" AND p.apellido like '%$apellidofiltro%'";
+        }
+        if($nombrefiltro){
+            $query .=" AND p.nombre like '%$nombrefiltro%'";
+        }
+        if($dni){
+            $query .=" AND p.dni like '%$dni%'";
+        }
+        $query .= " ORDER BY p.apellido, p.nombre ASC " ;
+
         //echo $query;
         $result = $this->db->loadObjectList($query);
         if($result) {
@@ -529,7 +543,7 @@ class Consultas
     }
     function getProviene(){
         $query = "SELECT a.* "
-            . "  FROM proviene a WHERE 1 ORDER BY id_registro ASC " ;
+            . "  FROM proviene a WHERE 1 AND id_dominio='".$_SESSION['dominio']."' ORDER BY id_registro ASC " ;
         //echo $query;
         $result = $this->db->loadObjectList($query);
         if($result)
@@ -989,7 +1003,63 @@ class Consultas
         }
         return array();
     }
+    function getpersonasDos(){
+        $query = "SELECT a.* "
+            . "  FROM personas_dos a WHERE 1 " ;
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result) {
 
+            return $result;
+
+        }else
+            return false;
+    }
+    function getpersonasDiaDos($idpersona){
+        $query = "SELECT a.* "
+            . "  FROM personas_dias_dos a WHERE a.id_persona='".$idpersona."' " ;
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result) {
+            return $result[0];
+        }else
+            return false;
+    }
+    function save_persona_migrada($data){
+
+        $table = new Table($this->db, 'personas');
+
+        $table->fecha_alta = date('Y-m-d H:i:s');
+
+        $table->nombre = $data->nombre;
+        $table->apellido = $data->apellido;
+        $table->dni = $data->dni;
+        $table->cod_estado = 'A';
+        $table->id_dominio = 3;
+        $table->usuario = 4;
+        $table->fecha_alta = date('Y-m-d H:i:s');
+        if($table->save()){
+            return $table->id_persona;
+        }else{
+            return 0;
+        }
+    }
+    function save_dias_personas_dos($id_persona_nueva,$data){
+        $table = new Table($this->db, 'personas_dias');
+
+        $table->id_persona = $id_persona_nueva;
+        $table->lunes = $data->lunes;
+        $table->martes = $data->martes;
+        $table->miercoles = $data->miercoles;
+        $table->jueves = $data->jueves;
+        $table->viernes = $data->viernes;
+
+        if($table->save()){
+            return $table->id_persona_dias;
+        }else{
+            return 0;
+        }
+    }
 
 }     
 $consultas= new Consultas($db);

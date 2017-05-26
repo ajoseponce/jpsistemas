@@ -2,7 +2,7 @@
 <!--    <div class="modal-dialog" role="document">-->
     <div class="modal-dialog with-border">
         <div class="modal-content">
-            <form id="form_datos">
+            <form id="form_datos_turnos">
             <div style="background: #3C8DBC;"  class="modal-header modal-warning">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

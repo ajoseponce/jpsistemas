@@ -34,7 +34,7 @@
     <script src="dist/js/function.js"></script>
 <!--    <script src="js/jquery.validate.js"></script>-->
 <!--calendario-->
-    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+<!--    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>-->
     <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
 <!--    tiempo hora pm am-->
     <script src="plugins/daterangepicker/daterangepicker.js"></script>

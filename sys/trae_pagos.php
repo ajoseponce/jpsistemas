@@ -17,6 +17,7 @@ $result = $consultas->getPagos($_REQUEST['fecha_desde'],$_REQUEST['fecha_hasta']
         <th>Recargo&nbsp;</th>
         <th>Dias de Mora</th>
         <th>Nota</th>
+        <th></th>
     </tr>
     </thead>
 
@@ -37,7 +38,10 @@ $result = $consultas->getPagos($_REQUEST['fecha_desde'],$_REQUEST['fecha_hasta']
                 <td><?php echo $v->dias_retraso; ?></td>
                 <td><?php echo $v->monto_incremento; ?></td>
                 <td><?php echo $v->nota; ?></td>
-                <td></td>
+                <td><?php if($_SESSION['rol']=='Admin'){ ?>
+                        <img onclick="eliminarPago(<?php echo $v->id_pago; ?>)" src="./img/delete.png" />
+                    <?php } ?>
+                </td>
 
             </tr>
         <?php }} ?>

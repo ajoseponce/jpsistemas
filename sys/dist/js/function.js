@@ -436,3 +436,10 @@ function guardar_turno(){
             }
         });
 }
+function busca_persona(){
+    var apellido_filtro=$("#apellido_filtro").val();
+    var nombre_filtro=$("#nombre_filtro").val();
+    var dni_filtro=$("#dni_filtro").val();
+    $("#tabla_listado").load('trae_personas.php?dnifiltro='+dni_filtro+'&apellidofiltro='+apellido_filtro+'&nombrefiltro='+nombre_filtro);
+
+}

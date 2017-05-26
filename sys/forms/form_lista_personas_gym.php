@@ -31,7 +31,24 @@
             <?php } ?>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <div class="table-container">
+                <table class="table table-striped table-bordered table-hover" >
+                    <tr>
+                        <th>Apellido
+                            <input type="text" size="60" onchange="busca_persona()" value="" id="apellido_filtro"  name="apellido_filtro" type="text">
+                        </th>
+                        <th>Nombre
+                            <input type="text" size="60" onchange="busca_persona()" value="" id="nombre_filtro"  name="nombre_filtro" type="text">
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>DNI
+                            <input type="text"  value="" id="dni_filtro"  onchange="busca_persona()" name="dni_filtro" type="text">
+                        </th>
+                        <th>&nbsp;
+                        </th>
+                    </tr>
+                </table>
+                <div class="table-container" id="tabla_listado">
                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                         <thead>
                         <tr>

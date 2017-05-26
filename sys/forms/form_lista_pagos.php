@@ -28,7 +28,9 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <?php echo $mensaje_error ;?><a href="#" class="alert-link"></a>.
                 </div>
-            <?php } ?>
+            <?php }
+            //print_r($_SESSION);
+            ?>
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <div class="dataTable_wrapper">
@@ -158,9 +160,8 @@
     }
 </style>
 <script>
+
     //$j=jQuery.noConflict();
-    $(function() {
-        //alert('bueno');
         $("#fecha_desde").datepicker({
             dateFormat: 'dd-mm-yy',
             dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
@@ -170,17 +171,14 @@
             monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
         });
         $("#fecha_hasta").datepicker({
-            dateFormat: 'dd-mm-yy',
+            dateFormat: 'dd-mm-yyyy',
             dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
             onSelect:  function(dateText) {
                 trae_pagos();
             },
             monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
         });
-    });
-    //        function  ver_cambio(){
-    //
-    //        }
+
 </script>
 <?php include 'footer.php'; ?>
 <!-- /#wrapper -->

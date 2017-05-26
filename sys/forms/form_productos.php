@@ -70,30 +70,29 @@
                             <input class="form-control"  style="width: 50px;" maxlength="3" value="<?php echo (isset($result->incremento_dia))?$result->incremento_dia:""; ?>" name="incremento_dia" id="incremento_dia" placeholder="">
 <!--                            <span class="input-group-addon">%</span>-->
                         </div>
-<!--                        <label>Dias de Actividad</label>-->
-<!--                        <div class="form-group">-->
-<!---->
-<!--                            <label class="checkbox-inline">-->
-<!--                                <input id="lunes" name="lunes" value="S" type="checkbox" --><?php //echo ($result->lunes=="S")?"checked":""; ?><!-->
-<!--                                Lunes-->
-<!--                            </label>-->
-<!--                            <label class="checkbox-inline">-->
-<!--                                <input type="checkbox" id="martes" value="S"  name="martes" --><?php //echo ($result->martes=="S")?"checked":""; ?><!-->
-<!--                                Martes-->
-<!--                            </label>-->
-<!--                            <label class="checkbox-inline">-->
-<!--                                <input type="checkbox" id="miercoles" value="S"  name="miercoles" --><?php //echo ($result->miercoles=="S")?"checked":""; ?><!-->
-<!--                                Miercoles-->
-<!--                            </label>-->
-<!--                            <label class="checkbox-inline">-->
-<!--                                <input type="checkbox" id="jueves" value="S"  name="jueves" --><?php //echo ($result->jueves=="S")?"checked":""; ?><!-->
-<!--                                Jueves-->
-<!--                            </label>-->
-<!--                            <label class="checkbox-inline">-->
-<!--                                <input type="checkbox" id="viernes" value="S"  name="viernes" --><?php //echo ($result->viernes=="S")?"checked":""; ?><!-->
-<!--                                Viernes-->
-<!--                            </label>-->
-<!--                        </div>-->
+                        <label>Dias de Actividad</label>
+                        <div class="form-group">
+
+                            <label>
+                                <input id="lunes" name="lunes" value="S" type="checkbox" <?php echo ($result->lunes=="S")?"checked":""; ?>/>
+                                Lunes
+                            </label>
+                            <label>
+                                <input type="checkbox" id="martes" value="S"  name="martes" <?php echo ($result->martes=="S")?"checked":""; ?>/>
+                                Martes
+                            </label>
+                            <label>
+                                <input type="checkbox" id="miercoles" value="S"  name="miercoles" <?php echo ($result->miercoles=="S")?"checked":""; ?>/>
+                                Miercoles
+                            </label>
+                            <label>
+                                <input type="checkbox" id="jueves" value="S"  name="jueves" <?php echo ($result->jueves=="S")?"checked":""; ?>/>
+                                Jueves
+                            </label>
+                            <label>
+                                <input type="checkbox" id="viernes" value="S"  name="viernes" <?php echo ($result->viernes=="S")?"checked":""; ?>/>Viernes
+                            </label>
+                        </div>
 
                         <?php
                         if($result->id_producto){
@@ -111,7 +110,7 @@
                         <input type="hidden" id="id_producto" name="id_producto" value="<?php echo (isset($result->id_producto))?$result->id_producto:""; ?>" />
                         <input type="hidden" id="id_producto_dias" name="id_producto_dias" value="<?php echo (isset($result->id_producto_dias))?$result->id_producto_dias:""; ?>" />
                         <input type="button"  onclick="guardar_producto()" class="btn btn-default" value="Guardar Datos" />
-                        <button onclick="volver_listado_productos()" type="reset"  class="btn btn-default">Volver</button>
+                        <button onclick="volver_listado('productos')" type="reset"  class="btn btn-default">Volver</button>
                     </form>
                     <!-- /.col -->
                     <!-- /.form-group -->
