@@ -293,6 +293,7 @@ class Consultas
         $table->usuario = $_SESSION['id'];
         $table->id_dominio = $_SESSION['dominio'];
         $table->fecha_hora = date('Y-m-d H:i:s');
+        $table->estado = 'A';
         if($table->save()){
             return $table->id_pago;
         }else{
