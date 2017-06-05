@@ -1061,6 +1061,40 @@ class Consultas
             return 0;
         }
     }
+    function getAsistencias($fecha_desde=null, $fecha_hasta=null, $dni=null){
+        session_start();
+        $query = "SELECT CONCAT_WS(' ',p.apellido,p.nombre) persona,
+                        date_format(pp.fecha_hora, '%d/%m/%Y') fecha_h "
+            . "  FROM personas p 
+            INNER JOIN presente_cliente pp ON pp.id_cliente=p.id_persona
+            WHERE 1 AND pp.id_dominio='".$_SESSION['dominio']."' ";
+        if($fecha_desde && $fecha_hasta==null){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $query .=" AND pp.fecha_hora>='".$fecha_desde."'";
+        }
+        if($fecha_desde==null && $fecha_hasta){
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND pp.fecha_hora<='".$fecha_hasta."'";
+        }
+
+        if($fecha_desde && $fecha_hasta){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND (pp.fecha_hora between '".$fecha_desde."' AND '".$fecha_hasta."')";
+        }
+        if($dni){
+            $query .=" AND p.dni like '%$dni%'";
+        }
+        //$query .= " ORDER BY p.apellido, p.nombre ASC " ;
+
+        echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result) {
+            return $result;
+
+        }else
+            return false;
+    }
 
 }     
 $consultas= new Consultas($db);

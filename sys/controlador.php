@@ -856,6 +856,20 @@ $action = $_REQUEST["action"];
             echo $result;
             break;
         /***************************************/
+        case "listar_asistencias":
+
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getAsistencias();
+            //exit();
+            $formulario='forms/form_lista_asistencias.php';
+            break;
     }
    
 if($formulario){    
