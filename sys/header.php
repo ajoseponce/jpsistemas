@@ -43,6 +43,8 @@
     <!-- Select2 -->
     <script src="plugins/select2/select2.full.js"></script>
     <link rel="stylesheet" href="plugins/select2/select2.css">
+
+    <link rel="stylesheet" href="css/custom.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <?php include 'contrasenia.php'; ?>

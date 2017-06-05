@@ -1,4 +1,4 @@
-<div class="modal" id="turnera" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="turnera" style="z-index: 1050;" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <!--    <div class="modal-dialog" role="document">-->
     <div class="modal-dialog with-border">
         <div class="modal-content">
@@ -32,7 +32,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            <input id="fecha" name="fecha" class="form-control pull-right " type="text">
+                            <input id="fecha_turno" name="fecha_turno" class="form-control pull-right " type="text">
                         </div>
                     </div>
                     <div class="bootstrap-timepicker">
@@ -63,8 +63,10 @@
 <script>
     $(".select2").select2();
     //Date picker
-    $('#fecha').datepicker({
-        autoclose: true
+    $("#fecha_turno").datepicker({
+        dateFormat: 'dd-mm-yy',
+        dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+        monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
     });
     //Timepicker
     $(".timepicker").timepicker({
