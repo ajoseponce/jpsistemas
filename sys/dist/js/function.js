@@ -8,15 +8,7 @@ function volver_listado_productos(){
     window.location.href = 'controlador.php?action=lista_productos';
 }
 function guardar_datos(){
-    // if($("#nombre").val()==''){
-    //     alert("Seleccione una nombre por favor");
-    //     return false;
-    // }
-    // if($("#apellido").val()==''){
-    //     alert("Seleccione un apellido por favor");
-    //     return false;
-    // }
-   $("#form_datos").submit();
+    $("#form_datos").submit();
 }
 
 function guardar_producto(){
@@ -200,6 +192,13 @@ function trae_pagos(){
         var fecha_hasta=$("#fecha_hasta").val();
         var periodo=$("#periodo").val();
         $("#tabla_listado").load('trae_pagos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta+'&periodo='+periodo);
+
+}
+function trae_turnos_fecha(){
+//  alert('holaaa comenten');
+        var fecha_turno=$("#fecha_turno").val();
+
+        $("#contador_turnos").load('trae_turnos_dia.php?fecha_turno='+fecha_turno);
 
 }
 function trae_actividades_clientes() {
@@ -411,7 +410,7 @@ function abrir_pop_turnos(idpersona){
 }
 function guardar_turno(){
     //alert($("#motivo").val());
-    if($("#fecha").val()==''){
+    if($("#fecha_turno").val()==''){
         $("#fechaDiv").addClass( "form-group  has-error" );
         return false;
     }
@@ -421,7 +420,7 @@ function guardar_turno(){
     }
     $.ajax({
             url:           "controlador.php",
-            data:          {action: "guardar_turno",id_persona: ""+$("#id_persona").val()+"",fecha: ""+$("#fecha").val()+"",hora: ""+$("#hora").val()+"",observaciones: ""+$("#observaciones").val()+"",motivo: ""+$("#motivo").val()+""},
+            data:          {action: "guardar_turno",id_persona: ""+$("#id_persona").val()+"",fecha_turno: ""+$("#fecha_turno").val()+"",tipo_turno: ""+$("#tipo_turno").val()+"",hora: ""+$("#hora").val()+"",observaciones: ""+$("#observaciones").val()+"",motivo: ""+$("#motivo").val()+""},
             type: 'post',
             success:       function(data){
                 //alert(data);

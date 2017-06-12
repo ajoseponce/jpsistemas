@@ -7,7 +7,7 @@ requireLogin();
 $action = $_REQUEST["action"];
 //print_r($_REQUEST);
     switch ($action) {
-        
+
      //crga el categorias
         case "logout":
             /***************includes******************/
@@ -870,11 +870,24 @@ $action = $_REQUEST["action"];
             //exit();
             $formulario='forms/form_lista_asistencias.php';
             break;
+        case "listar_turnos":
+               // echo "bueno";
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getTurnos();
+
+            $formulario='forms/form_lista_turnos.php';
+        break;
     }
-   
-if($formulario){    
+
+if($formulario){
     include($formulario);
-}    
+}
 //include 'footer.php';
-?>   
-    
+?>

@@ -33,6 +33,9 @@
                                 <i class="fa fa-calendar"></i>
                             </div>
                             <input id="fecha_turno" name="fecha_turno" class="form-control pull-right " type="text">
+                            <input id="tipo_turno" name="tipo_turno" type="hidden" value="PR">
+                            <input id="estado" name="estado" type="hidden" value="Asignado">
+                            <label id="contador_turnos"></label>
                         </div>
                     </div>
                     <div class="bootstrap-timepicker">
@@ -62,10 +65,14 @@
 </div>
 <script>
     $(".select2").select2();
-    //Date picker
+    
     $("#fecha_turno").datepicker({
         dateFormat: 'dd-mm-yy',
+        minDate: "D",
         dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+        onSelect:  function(dateText) {
+            trae_turnos_fecha();
+        },
         monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
     });
     //Timepicker

@@ -45,7 +45,8 @@
                             </thead>
 
                             <tbody>
-                            <?php if($result){
+                            <?php
+                            if($result){
                                 foreach ($result as $v) { ?>
                                     <tr class="odd gradeX">
                                         <td width="85">
@@ -56,7 +57,6 @@
                                         <td><?php echo $v->nombre; ?></td>
                                         <td><?php echo $v->dni; ?></td>
                                         <td><?php echo $v->fecha_nacimiento; ?></td>
-<!--                                        <td>--><?php //echo $v->presentes; ?><!--</td>-->
                                         <td><?php echo ($v->cod_estado=='A')?"Alta":"Baja"; ?></td>
                                         <td>
                                             <a href="controlador.php?action=edita_persona&id_persona=<?php echo $v->id_persona; ?>"><img src="img/edit.png"/></a>
@@ -109,4 +109,3 @@
 <!-- /#wrapper -->
 
 <!-- jQuery -->
-

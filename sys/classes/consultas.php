@@ -4,12 +4,12 @@ class Consultas
 	function __construct($db){
 		$this->db = $db;
 	}
-        
+
         //////////////////********************/////////////////7
         function save_documentos($data, $nombre, $extension){
             $table = new Table($this->db, 'documentos');
-            
-            if($data['id_registro']){ 
+
+            if($data['id_registro']){
                 $table->find($data['id_registro']);
                 if($nombre){
                 $table->archivo_nombre = $nombre;
@@ -17,7 +17,7 @@ class Consultas
                 if($extension){
                 $table->archivo_extension = $extension;
                 }
-                
+
             $table->estado = $data['estado'];
                 //$table->fecha_modificacion = date('Y-m-d H:i:s');
             }else{
@@ -29,19 +29,19 @@ class Consultas
             $table->descripcion = $data['descripcion'];
             $table->ruta = $data['ruta'];
             $table->categoria = $data['categoria'];
-            
+
            // $table->fecha_carga = date('Y-m-d H:i:s');
             $table->usuario = $_SESSION['id'];
-            
+
             //$table->usuario = 1;
-            
+
             if($table->save()){
                 return $table->id_registro;
             }else{
                 return 0;
             }
         }
-        
+
         function getDocumentos(){
             //session_start();
 		$query = "SELECT d.* FROM documentos d "
@@ -53,17 +53,17 @@ class Consultas
 		else
 			return false;
 	}
-        function getDocumentosbyid($id_registro){
-                
-		$query = "SELECT r.* "
-                        . " FROM documentos r"
-                        . " WHERE r.id_registro='".$id_registro."' ";
-		//echo $query;
-                $result = $this->db->loadObjectList($query);
-		if($result)
-			return $result[0];
-		else
-			return false;
+      function getDocumentosbyid($id_registro){
+
+			$query = "SELECT r.* "
+	                        . " FROM documentos r"
+	                        . " WHERE r.id_registro='".$id_registro."' ";
+			//echo $query;
+	                $result = $this->db->loadObjectList($query);
+			if($result)
+				return $result[0];
+			else
+				return false;
 	    }
         function getPersonasbyid($id_registro){
 
@@ -82,8 +82,8 @@ class Consultas
     function getpersonas($apellidofiltro=null, $nombrefiltro=null, $dni=null){
             session_start();
         $query = "SELECT p.*,date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
-            . "  FROM personas p 
-            
+            . "  FROM personas p
+
             WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' ";
         if($apellidofiltro){
             $query .=" AND p.apellido like '%$apellidofiltro%'";
@@ -218,7 +218,7 @@ class Consultas
         $table = new Table($this->db, 'productos');
         if(isset($data['id_producto'])){
             $table->find($data['id_producto']);
-            
+
         }
         $table->descripcion = $data['descripcion'];
         $table->precio = $data['precio'];
@@ -424,9 +424,9 @@ class Consultas
         session_start();
         $query = "SELECT p.*, date_format(p.fecha_hora, '%d/%m/%Y %H:%i') fecha_pago ,  CONCAT_WS(' ',pr.apellido, pr.nombre) cliente,
                   pd.descripcion actividad
-                  FROM pagos p 
-                  INNER JOIN personas pr ON pr.id_persona=p.id_cliente 
-                  INNER JOIN productos pd ON pd.id_producto=p.id_producto 
+                  FROM pagos p
+                  INNER JOIN personas pr ON pr.id_persona=p.id_cliente
+                  INNER JOIN productos pd ON pd.id_producto=p.id_producto
                   WHERE p.estado='A' AND p.id_dominio='".$_SESSION['dominio']."' " ;
         if($fecha_desde && $fecha_hasta==null){
             $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
@@ -448,7 +448,7 @@ class Consultas
             $query .=" AND p.periodo ='".$periodo."'";
         }
         //$query .= " WHERE p.periodo='".$periodo."' ";
-        //echo $query;
+        echo $query;
         $result = $this->db->loadObjectList($query);
         if($result)
             return $result;
@@ -458,7 +458,7 @@ class Consultas
     }
     function eliminar_pago($idPago){
         $query = "UPDATE pagos
-                      SET estado='B' 
+                      SET estado='B'
                       WHERE id_pago='$idPago'";
         $this->db->query($query);
 
@@ -466,9 +466,9 @@ class Consultas
     function getcontarPagos($periodo=null){
         session_start();
         $query = "SELECT COUNT(p.id_pago) total
-                  FROM pagos p 
-                  INNER JOIN personas pr ON pr.id_persona=p.id_cliente 
-                  INNER JOIN productos pd ON pd.id_producto=p.id_producto 
+                  FROM pagos p
+                  INNER JOIN personas pr ON pr.id_persona=p.id_cliente
+                  INNER JOIN productos pd ON pd.id_producto=p.id_producto
                   WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' " ;
         if($periodo){
             $query .=" AND p.periodo ='".$periodo."'";
@@ -498,7 +498,7 @@ class Consultas
     }
     function getPagosClientesPeriodo($cliente){
         session_start();
-        $query = "SELECT COUNT(p.id_pago) total FROM pagos p 
+        $query = "SELECT COUNT(p.id_pago) total FROM pagos p
         LEFT JOIN personas pr ON pr.id_persona=p.id_cliente " ;
         $query .= " WHERE pr.id_dominio='".$_SESSION['dominio']."' AND p.periodo='".(int)date('m')."' AND  pr.dni='".$cliente."' ";
         //echo $query;
@@ -533,7 +533,7 @@ class Consultas
         }
     }
     function getValidaPresente($cliente){
-        $query = "SELECT COUNT(p.id_presente) total FROM presente_cliente p 
+        $query = "SELECT COUNT(p.id_presente) total FROM presente_cliente p
         WHERE p.id_cliente='".$cliente."' AND date_format(p.fecha_hora, '%Y-%m-%d')='".date('Y-m-d')."' ";
         $result = $this->db->loadObjectList($query);
         if($result)
@@ -553,7 +553,7 @@ class Consultas
             return false;
     }
     function getPresentePeriodo($cliente){
-        $query = "SELECT COUNT(p.id_presente) total FROM presente_cliente p 
+        $query = "SELECT COUNT(p.id_presente) total FROM presente_cliente p
         WHERE p.id_cliente='".$cliente."' AND date_format(p.fecha_hora, '%m')='".date('m')."' ";
         //echo $query;
         $result = $this->db->loadObjectList($query);
@@ -800,7 +800,7 @@ class Consultas
     /*****************abm dominios*********************/
     /***************************************/
     function getDominios($dato=null){
-        $query = "SELECT a.*, dt.descripcion tipo_dominio 
+        $query = "SELECT a.*, dt.descripcion tipo_dominio
               FROM dominio a INNER JOIN dominio_tipo dt ON dt.id_tipo_dominio=a.tipo "
             . " WHERE 1 ";
 
@@ -813,7 +813,7 @@ class Consultas
     function getDominobyid($id_registro){
 
         $query = "SELECT m.*, dt.descripcion tipo_dominio "
-            . " FROM dominio m 
+            . " FROM dominio m
             INNER JOIN dominio_tipo dt ON dt.id_tipo_dominio=m.tipo "
             . " WHERE m.id_dominio='".$id_registro."' ";
         //echo $query;
@@ -855,9 +855,9 @@ class Consultas
     /***************************************/
     function getUsuarios(){
         $query = "SELECT u.* ,d.descripcion dominio
-              FROM usuarios u 
-               LEFT JOIN  usuario_dominio ud ON ud.id_usuario=u.id_usuario 
-               LEFT JOIN  dominio d ON d.id_dominio=ud.id_dominio 
+              FROM usuarios u
+               LEFT JOIN  usuario_dominio ud ON ud.id_usuario=u.id_usuario
+               LEFT JOIN  dominio d ON d.id_dominio=ud.id_dominio
                WHERE 1 ";
 
         $result = $this->db->loadObjectList($query);
@@ -869,8 +869,8 @@ class Consultas
     function getUsuariosById($id_registro){
 
         $query = "SELECT m.*, d.descripcion dominio, ud.id_dominio id_dom "
-            . "  FROM usuarios m 
-               LEFT JOIN  usuario_dominio ud ON ud.id_usuario=m.id_usuario 
+            . "  FROM usuarios m
+               LEFT JOIN  usuario_dominio ud ON ud.id_usuario=m.id_usuario
                LEFT JOIN  dominio d ON d.id_dominio=ud.id_dominio  "
             . " WHERE m.id_usuario='".$id_registro."' ";
         //echo $query;
@@ -943,7 +943,7 @@ class Consultas
         global $error;
         //insert o update del rol
         $query = "UPDATE usuarios
-                      SET clave='".$datar."' 
+                      SET clave='".$datar."'
                       WHERE id_usuario='".$_SESSION['id']."'";
         $this->db->query($query);
 
@@ -963,13 +963,19 @@ class Consultas
         else
             return false;
     }
-    public function getTurnos($persona)
+    public function getTurnos($persona=null)
     {
 
-        $query = "SELECT * , date_format(t.fecha_turno, '%d/%m/%Y') fecha, date_format(t.fecha_turno, '%H/%i') hora, m.descripcion motivo
-                  FROM turnos t 
-                  INNER JOIN motivos_turno m ON m.id_motivo=t.id_turno
-                  WHERE 1 AND t.id_persona = $persona";
+        $query = "SELECT t.* , date_format(t.fecha_turno, '%d/%m/%Y') fecha, date_format(t.fecha_turno, '%H/%i') hora, m.descripcion motivo,CONCAT_WS(' ',p.apellido,p.nombre) cliente
+                  FROM turnos t
+                  LEFT JOIN motivos_turno m ON m.id_motivo=t.id_turno
+									  LEFT JOIN personas p ON p.id_persona=t.id_persona
+									WHERE 1 ";
+				if($persona){
+					$query .= " AND t.id_persona = $persona";
+				}
+				$query .= " ORDER BY  t.fecha_turno DESC";
+				echo $query;
         $resutlt = $this->db->loadObjectList($query);
         if ($resutlt) {
             return $resutlt;
@@ -977,13 +983,17 @@ class Consultas
         return array();
     }
     function save_turno_persona($data){
-        $fecha=substr($data['fecha'], 6, 4)."-".substr($data['fecha'], 3, 2)."-".substr($data['fecha'], 0, 2)."-".substr($data['hora'], 0, 5).":00";
+        $fecha=substr($data['fecha_turno'], 6, 4)."-".substr($data['fecha_turno'], 3, 2)."-".substr($data['fecha_turno'], 0, 2)."-".substr($data['hora'], 0, 5).":00";
         $table = new Table($this->db, 'turnos');
 
         $table->id_persona = $data['id_persona'];
         $table->id_motivo = $data['motivo'];
-        $table->usuario = $data['usuario'];
+        $table->usuario = $_SESSION['id'];
+				$table->id_dominio = $_SESSION['dominio'];
         $table->fecha_turno = $fecha;
+				$table->tipo_turno = $data['tipo_turno'];
+				$table->estado = $data['estado_turno'];
+				$table->observaciones = $data['observaciones'];
         $table->fecha_carga = date('Y-m-d H:i:s');
         $table->estado = 'Asignado';
 
@@ -995,8 +1005,8 @@ class Consultas
         }
     }
     public function getMotivos(){
-        $query = "SELECT * 
-                  FROM  motivos_turno m 
+        $query = "SELECT *
+                  FROM  motivos_turno m
                   WHERE 1 ";
         $resutlt = $this->db->loadObjectList($query);
         if ($resutlt) {
@@ -1065,7 +1075,7 @@ class Consultas
         session_start();
         $query = "SELECT CONCAT_WS(' ',p.apellido,p.nombre) persona,
                         date_format(pp.fecha_hora, '%d/%m/%Y') fecha_h "
-            . "  FROM personas p 
+            . "  FROM personas p
             INNER JOIN presente_cliente pp ON pp.id_cliente=p.id_persona
             WHERE 1 AND pp.id_dominio='".$_SESSION['dominio']."' ";
         if($fecha_desde && $fecha_hasta==null){
@@ -1095,6 +1105,22 @@ class Consultas
         }else
             return false;
     }
+		function getCountTurnosDia($fecha_turno){
+			session_start();
+			$fecha_desde=substr($fecha_turno, 6, 4)."-".substr($fecha_turno, 3, 2)."-".substr($fecha_turno, 0, 2)." 00:00:00";
+			$fecha_hasta=substr($fecha_turno, 6, 4)."-".substr($fecha_turno, 3, 2)."-".substr($fecha_turno, 0, 2)." 23:59:00";
 
-}     
+        $query = "SELECT COUNT(t.id_turno) total FROM turnos t  WHERE 1 AND t.id_dominio='".$_SESSION['dominio']."' " ;
+				$query .=" AND (t.fecha_turno between '".$fecha_desde."' AND '".$fecha_hasta."')";
+				$query .="  ";
+				//echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result) {
+            return $result[0]->total;
+
+        }else
+            return false;
+    }
+
+}
 $consultas= new Consultas($db);
