@@ -15,7 +15,7 @@
     <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a href="controlador.php?action=cargar_turno">Agregar <img src="img/agregar.png"></a>
+                    <a href="controlador.php?action=listar_personas">Agregar <img src="img/agregar.png"></a>
                 </div>
                 <?php if($mensaje){ ?>
                     <div class="alert alert-success alert-dismissable">
@@ -36,6 +36,7 @@
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr>
+                                <th>&nbsp;</th>
                                 <th>Fecha</th>
                                 <th>cliente</th>
                                 <th>Motivo</th>
@@ -44,23 +45,23 @@
 
                             </tr>
                             </thead>
-
                             <tbody>
                             <?php if($result){
                                 foreach ($result as $v) {
                                   if($v->estado=='Cancelado'){
-                                    $color_linea='style="background:red;"';
+                                    $color_linea='style="background:#f2a4a4;"';
                                   }
                                      ?>
                                     <tr class="odd gradeX" <?php echo $color_linea; ?> >
-
+                                      <td>
+                                        <a href="controlador.php?action=cargar_atencion&id_turno=<?php echo $v->id_turno; ?>"><img src="img/mantenimiento.png"/></a>
+                                      </td>
                                         <td><?php echo $v->fecha; ?></td>
                                         <td><?php echo $v->cliente; ?></td>
                                         <td><?php echo $v->motivo; ?></td>
                                         <td><?php echo $v->observaciones; ?></td>
                                         <td>
-                                          <a href="controlador.php?action=cancelar_turno&id_turno=<?php echo $v->id_turno; ?>"><img src="img/delete.png"/></a>
-                                          <a href="controlador.php?action=cargar_datos_turno&id_turno=<?php echo $v->id_turno; ?>"><img src="img/mantenimiento.png"/></a>
+                                          <img src="img/delete.png" onclick="cancelar_turno(<?php echo $v->id_turno; ?>)" />
                                         </td>
                                     </tr>
                                 <?php }} ?>

@@ -402,7 +402,8 @@ function guardar_cambio_contrasenia(){
 function abrir_pop_turnos(idpersona){
     $("#fechaDiv").addClass( "form-group" );
     $("#motivoDiv").addClass( "form-group" );
-
+    $("#fechaDiv").attr("");
+    $("#fecha_turno").attr("");
     $("#persona").load('trae_persona.php?idpersona='+idpersona);
     $("#motivo").load('trae_motivos.php');
     $('#turnera').modal('toggle');
@@ -435,10 +436,43 @@ function guardar_turno(){
             }
         });
 }
+
 function busca_persona(){
     var apellido_filtro=$("#apellido_filtro").val();
     var nombre_filtro=$("#nombre_filtro").val();
     var dni_filtro=$("#dni_filtro").val();
     $("#tabla_listado").load('trae_personas.php?dnifiltro='+dni_filtro+'&apellidofiltro='+apellido_filtro+'&nombrefiltro='+nombre_filtro);
 
+}
+function guardar_motivo(){
+    //alert($("#motivo").val());
+    if($("#descripcion").val()==''){
+        $("#descripcioniv").addClass( "form-group  has-error" );
+        return false;
+    }
+    $.ajax({
+            url:           "controlador.php",
+            data:          {action: "guardar_motivo",descripcion: ""+$("#descripcion").val()},
+            type: 'post',
+            success:       function(data){
+                //alert(data);
+                if(data){
+                    $('#mjs').html('El motivo se reservo correctamente');
+                    $('#mensaje').modal('toggle');
+                }else{
+                    $('#mjs_error').html('Ocurrio un error');
+                    $('#mensaje_error').modal('toggle');
+                }
+                $('#motivo').modal('toggle');
+            }
+    });
+}
+function cancelar_turno(turno){
+    if(confirm('Usted esta por cancelar un turno.Desea Continuar?')){
+        window.location.assign('controlador.php?action=cancelar_turnos&turno='+turno);
+    }
+}
+function abrir_pop_motivos(){
+  //var_dump('hola');
+    $('#motivos').modal('toggle');
 }

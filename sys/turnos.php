@@ -16,7 +16,7 @@
                         <div id="persona"></div>
                     </div>
                     <div class="form-group" id="motivoDiv">
-                        <label>Motivo Turno</label>
+                        <label>Motivo Turno <img src="img/add.png" onclick="abrir_pop_motivos()" alt=""></label>
                         <select id="motivo" name="motivo" class="form-control select2" multiple="multiple" data-placeholder="Seleccione una opcion" style="width: 100%;">
                             <option>Control</option>
                             <option>Ruido eje</option>
@@ -65,7 +65,7 @@
 </div>
 <script>
     $(".select2").select2();
-    
+
     $("#fecha_turno").datepicker({
         dateFormat: 'dd-mm-yy',
         minDate: "D",

@@ -49,6 +49,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <?php include 'contrasenia.php'; ?>
 <?php include 'turnos.php'; ?>
+<?php include 'motivos.php'; ?>
 <?php include 'mensaje.php'; ?>
 <?php include 'mensaje_error.php'; ?>
 <div class="wrapper">

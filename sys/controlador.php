@@ -884,6 +884,28 @@ $action = $_REQUEST["action"];
 
             $formulario='forms/form_lista_turnos.php';
         break;
+        case "cancelar_turnos":
+               // echo "bueno";
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+
+            $result= $consultas->cancelar_turno($_REQUEST['turno']);
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getTurnos();
+
+            $formulario='forms/form_lista_turnos.php';
+        break;
+        case "guardar_motivo":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            $consultas->save_motivo($_REQUEST);
+
+            break;
     }
 
 if($formulario){

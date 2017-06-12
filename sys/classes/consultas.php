@@ -975,7 +975,7 @@ class Consultas
 					$query .= " AND t.id_persona = $persona";
 				}
 				$query .= " ORDER BY  t.fecha_turno DESC";
-				echo $query;
+				//echo $query;
         $resutlt = $this->db->loadObjectList($query);
         if ($resutlt) {
             return $resutlt;
@@ -1120,6 +1120,30 @@ class Consultas
 
         }else
             return false;
+    }
+		function cancelar_turno($idturno){
+        $query = "UPDATE turnos
+                      SET estado='Cancelado'
+                      WHERE id_turno='$idturno'";
+        $this->db->query($query);
+
+    }
+		function save_motivo($data){
+        $table = new Table($this->db, 'motivos_turno');
+        if(isset($data['id_motivo'])){
+            $table->find($data['id_motivo']);
+        }
+        $table->descripcion = $data['descripcion'];
+        if($data['estado']){
+            $table->estado = $data['estado'];
+        }else{
+            $table->estado = 'A';
+        }
+        if($table->save()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }
