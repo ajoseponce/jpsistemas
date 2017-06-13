@@ -1134,6 +1134,9 @@ class Consultas
             $table->find($data['id_motivo']);
         }
         $table->descripcion = $data['descripcion'];
+				$table->usuario = $_SESSION['id'];
+				$table->id_dominio = $_SESSION['dominio'];
+				$table->fecha_alta = date('Y-m-d H:i:s');
         if($data['estado']){
             $table->estado = $data['estado'];
         }else{

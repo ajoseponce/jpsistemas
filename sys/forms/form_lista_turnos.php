@@ -54,7 +54,7 @@
                                      ?>
                                     <tr class="odd gradeX" <?php echo $color_linea; ?> >
                                       <td>
-                                        <a href="controlador.php?action=cargar_atencion&id_turno=<?php echo $v->id_turno; ?>"><img src="img/mantenimiento.png"/></a>
+                                        <img src="img/mantenimiento.png" onclick="atencion_turno(<?php echo $v->id_turno; ?>)" />
                                       </td>
                                         <td><?php echo $v->fecha; ?></td>
                                         <td><?php echo $v->cliente; ?></td>

@@ -447,7 +447,7 @@ function busca_persona(){
 function guardar_motivo(){
     //alert($("#motivo").val());
     if($("#descripcion").val()==''){
-        $("#descripcioniv").addClass( "form-group  has-error" );
+        $("#descripciondiv").addClass( "form-group  has-error" );
         return false;
     }
     $.ajax({
@@ -455,15 +455,16 @@ function guardar_motivo(){
             data:          {action: "guardar_motivo",descripcion: ""+$("#descripcion").val()},
             type: 'post',
             success:       function(data){
-                //alert(data);
+                alert(data);
                 if(data){
                     $('#mjs').html('El motivo se reservo correctamente');
                     $('#mensaje').modal('toggle');
+                    $("#motivo").load('trae_motivos.php');
                 }else{
                     $('#mjs_error').html('Ocurrio un error');
                     $('#mensaje_error').modal('toggle');
                 }
-                $('#motivo').modal('toggle');
+                $('#motivos').modal('toggle');
             }
     });
 }
@@ -475,4 +476,33 @@ function cancelar_turno(turno){
 function abrir_pop_motivos(){
   //var_dump('hola');
     $('#motivos').modal('toggle');
+}
+function atencion_turno(turno){
+  //var_dump('hola');
+  $('#id_turno').val(turno);
+    $('#atencion').modal('toggle');
+}
+function guardar_atencion(){
+    //alert($("#motivo").val());
+    if($("#descripcion_atencion").val()==''){
+        $("#descripcionatenciondiv").addClass( "form-group  has-error" );
+        return false;
+    }
+    $.ajax({
+            url:           "controlador.php",
+            data:          {action: "guardar_atencion",descripcion_atencion: ""+$("#descripcion_atencion").val()},
+            type: 'post',
+            success:       function(data){
+                alert(data);
+                if(data){
+                    $('#mjs').html('La tarea realizada se grabo correctamente');
+                    $('#mensaje').modal('toggle');
+                    $("#motivo").load('trae_motivos.php');
+                }else{
+                    $('#mjs_error').html('Ocurrio un error');
+                    $('#mensaje_error').modal('toggle');
+                }
+                $('#motivos').modal('toggle');
+            }
+    });
 }

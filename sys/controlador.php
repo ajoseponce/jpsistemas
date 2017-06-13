@@ -903,7 +903,7 @@ $action = $_REQUEST["action"];
         case "guardar_motivo":
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');
-            $consultas->save_motivo($_REQUEST);
+            echo $consultas->save_motivo($_REQUEST);
 
             break;
     }
