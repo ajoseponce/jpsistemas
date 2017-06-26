@@ -1,5 +1,5 @@
 function volver_listado(relacion){
- window.location.href = 'controlador.php?action=listar_'+relacion;
+ window.location.href = 'controlador.php?action='+relacion;
 }
 function volver_listado_relaciones(){
     window.location.href = 'controlador.php?action=lista_relaciones';
@@ -29,7 +29,7 @@ function guardar_relacion(){
     }
     $.ajax({
         url:           "controlador.php",
-        data:          {action: "guardar_relacion",clientes: ""+$("#id_persona").val()+"",id_producto: ""+$("#id_producto").val()+"",fecha_inicio: ""+$("#fecha_inicio").val()+""},
+        data:          {action_js: "guardar_relacion",clientes: ""+$("#id_persona").val()+"",id_producto: ""+$("#id_producto").val()+"",fecha_inicio: ""+$("#fecha_inicio").val()+""},
         type: 'get',
         success:       function(data){
             alert('La actividad se relaciono al cliente correctamente');
@@ -86,7 +86,7 @@ function guardar_edicion_relacion(relacion){
     }
     $.ajax({
         url:           "controlador.php",
-        data:          {action: "guardar_relacion",clientes: ""+$("#id_persona").val()+"",id_relacion: ""+relacion+"",id_producto: ""+$("#id_producto_"+relacion).val()+"",fecha_inicio: ""+$("#fecha_inicio_"+relacion).val()+""},
+        data:          {action_js: "guardar_relacion",clientes: ""+$("#id_persona").val()+"",id_relacion: ""+relacion+"",id_producto: ""+$("#id_producto_"+relacion).val()+"",fecha_inicio: ""+$("#fecha_inicio_"+relacion).val()+""},
         type: 'get',
         success:       function(data){
             alert('La actividad se edito correctamente');
@@ -119,7 +119,7 @@ function guardar_pago() {
     }
     $.ajax({
         url:           "controlador.php",
-            data:          {action: "guardar_pago",id_cliente: ""+$("#clientes").val()+"",id_producto: ""+$("#id_producto").val()+"",periodo: ""+$("#periodo").val()+"",monto: ""+$("#precio").val()+"",nota: ""+$("#nota").val()},
+            data:          {action_js: "guardar_pago",id_cliente: ""+$("#clientes").val()+"",id_producto: ""+$("#id_producto").val()+"",periodo: ""+$("#periodo").val()+"",monto: ""+$("#precio").val()+"",nota: ""+$("#nota").val()},
         dataType:      'json',
         type: 'get',
         success:       function(data) {
@@ -137,7 +137,7 @@ function trae_precio(id) {
     }
     $.ajax({
         url:           "controlador.php",
-        data:          {action: "buscar_precio",clientes: ""+$("#clientes").val()+"",id_producto: ""+id+"",periodo: ""+$("#periodo").val()},
+        data:          {action_js: "buscar_precio",clientes: ""+$("#clientes").val()+"",id_producto: ""+id+"",periodo: ""+$("#periodo").val()},
         dataType:      'json',
         type: 'get',
         success:       function(data){
@@ -161,7 +161,7 @@ function trae_pago_periodo(periodo) {
     }
     $.ajax({
         url:           "controlador.php",
-        data:          {action: "pagos_periodo",periodo: ""+periodo+"",cliente: ""+$("#clientes").val()},
+        data:          {action_js: "pagos_periodo",periodo: ""+periodo+"",cliente: ""+$("#clientes").val()},
         dataType:      'json',
         type: 'get',
         success:       function(data){
@@ -233,7 +233,7 @@ function trae_actividades_clientes() {
 }
 function eiminaCliente(persona){
     if(confirm('Usted esta por eliminar un cliente.Desea Continuar?')){
-        window.location.assign('controlador.php?action=eliminar_persona&id_persona='+persona);
+        window.location.assign('controlador.php?action_js=eliminar_persona&id_persona='+persona);
     }
 }
 function presente_cliente() {
@@ -263,7 +263,7 @@ function presente_cliente() {
 
 }
 function refrescar() {
-    location.href= 'controlador.php?action=asistencia';
+    location.href= 'controlador.php?action_js=asistencia';
 
 }
 function IsNumeric(valor)
@@ -376,7 +376,7 @@ function autocomleteINI_usuario(id, path) {
 }
 function eliminarPago(pago){
     if(confirm('Usted esta por eliminar un comprobante.Desea Continuar?')){
-        window.location.assign('controlador.php?action=elimina_pago&id_pago='+pago);
+        window.location.assign('controlador.php?action_js=elimina_pago&id_pago='+pago);
     }
 }
 function guardar_cambio_contrasenia(){
@@ -390,7 +390,7 @@ function guardar_cambio_contrasenia(){
     }
     $.ajax({
         url:           "controlador.php",
-        data:          {action: "guardar_contrasenia_nueva",contrasenia_nueva1: ""+$("#contrasenia_nueva1").val()+""},
+        data:          {action_js: "guardar_contrasenia_nueva",contrasenia_nueva1: ""+$("#contrasenia_nueva1").val()+""},
         type: 'post',
         success:       function(data){
             alert('La aplicacion se cerrara vuelva a ingresar .Gracias');
@@ -421,7 +421,7 @@ function guardar_turno(){
     }
     $.ajax({
             url:           "controlador.php",
-            data:          {action: "guardar_turno",id_persona: ""+$("#id_persona").val()+"",fecha_turno: ""+$("#fecha_turno").val()+"",tipo_turno: ""+$("#tipo_turno").val()+"",hora: ""+$("#hora").val()+"",observaciones: ""+$("#observaciones").val()+"",motivo: ""+$("#motivo").val()+""},
+            data:          {action_js: "guardar_turno",id_persona: ""+$("#id_persona").val()+"",fecha_turno: ""+$("#fecha_turno").val()+"",tipo_turno: ""+$("#tipo_turno").val()+"",hora: ""+$("#hora").val()+"",observaciones: ""+$("#observaciones").val()+"",motivo: ""+$("#motivo").val()+""},
             type: 'post',
             success:       function(data){
                 //alert(data);
@@ -444,6 +444,14 @@ function busca_persona(){
     $("#tabla_listado").load('trae_personas.php?dnifiltro='+dni_filtro+'&apellidofiltro='+apellido_filtro+'&nombrefiltro='+nombre_filtro);
 
 }
+
+function busca_persona_all(){
+    var apellido_filtro=$("#apellido_filtro").val();
+    var nombre_filtro=$("#nombre_filtro").val();
+    var dni_filtro=$("#dni_filtro").val();
+    $("#tabla_listado").load('trae_personas_all.php?dnifiltro='+dni_filtro+'&apellidofiltro='+apellido_filtro+'&nombrefiltro='+nombre_filtro);
+
+}
 function guardar_motivo(){
     //alert($("#motivo").val());
     if($("#descripcion").val()==''){
@@ -452,7 +460,7 @@ function guardar_motivo(){
     }
     $.ajax({
             url:           "controlador.php",
-            data:          {action: "guardar_motivo",descripcion: ""+$("#descripcion").val()},
+            data:          {action_js: "guardar_motivo",descripcion: ""+$("#descripcion").val()},
             type: 'post',
             success:       function(data){
                 alert(data);
@@ -477,11 +485,7 @@ function abrir_pop_motivos(){
   //var_dump('hola');
     $('#motivos').modal('toggle');
 }
-function atencion_turno(turno){
-  //var_dump('hola');
-  $('#id_turno').val(turno);
-    $('#atencion').modal('toggle');
-}
+
 function guardar_atencion(){
     //alert($("#motivo").val());
     if($("#descripcion_atencion").val()==''){
@@ -490,7 +494,7 @@ function guardar_atencion(){
     }
     $.ajax({
             url:           "controlador.php",
-            data:          {action: "guardar_atencion",descripcion_atencion: ""+$("#descripcion_atencion").val()},
+            data:          {action_js: "guardar_atencion",descripcion_atencion: ""+$("#descripcion_atencion").val()},
             type: 'post',
             success:       function(data){
                 alert(data);

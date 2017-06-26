@@ -48,7 +48,7 @@
                                 <tr class="odd gradeX">
                                     <td><?php echo $v->persona; ?></td>
                                     <td><?php echo $v->aplicativo; ?></td>
-                                    <td><a href="controlador.php?action=elimina_aplicativo_persona&id_relacion=<?php echo $v->id_registro; ?>"><img src="img/delete.png"/></a></td>
+                                    <td><a href="controlador.php?action=<?php echo base64_encode('elimina_aplicativo_persona');?>&id_relacion=<?php echo $v->id_registro; ?>"><img src="img/delete.png"/></a></td>
                                 </tr>
                             <?php }} ?>
                         </tbody>

@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="panel-heading">
-                <a href="controlador.php?action=cargar_pago">Agregar otro Pago<img src="img/agregar.png"></a>
+                <a href="controlador.php?action=<?php echo base64_encode('cargar_pago'); ?>">Agregar otro Pago<img src="img/agregar.png"></a>
             </div>
             <div class="row">
             <?php if($mensaje){ ?>

@@ -77,7 +77,7 @@
                         </select>
                     </div>     
                     <?php } ?>    
-                    <input type="hidden"  name="action" value="guardar_documento" />
+                    <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_documento');?>" />
                     <input type="hidden" id="id_registro" name="id_registro"  name="action" value="<?php echo (isset($result->id_registro))?$result->id_registro:""; ?>" />
                     <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
                     <button onclick="volver_listado()" type="reset"  class="btn btn-default">Volver</button>

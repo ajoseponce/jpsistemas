@@ -49,7 +49,7 @@
                                             <td><?php echo $v->archivo_extension; ?></td>
                                             <td><?php echo $v->categoria; ?></td>
                                             <td><?php echo ($v->estado=='A')?"Alta":"Baja"; ?></td>
-                                            <td><a href="controlador.php?action=edita_documentos&id_registro=<?php echo $v->id_registro; ?>&archivo_nombre=<?php echo $v->archivo_nombre; ?>"><img src="img/edit.png"/></a></td>
+                                            <td><a href="controlador.php?action=<?php echo base64_encode('edita_documentos'); ?>&id_registro=<?php echo $v->id_registro; ?>&archivo_nombre=<?php echo $v->archivo_nombre; ?>"><img src="img/edit.png"/></a></td>
                                         </tr>
                                         <?php }} ?>        
                                     </tbody>

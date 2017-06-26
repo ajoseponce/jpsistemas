@@ -15,7 +15,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a href="controlador.php?action=carga_personas_gym">Agregar <img src="img/agregar.png"></a>
+                <a href="controlador.php?action=<?php echo base64_encode('carga_personas_gym'); ?>">Agregar <img src="img/agregar.png"></a>
             </div>
             <?php if($mensaje){ ?>
                 <div class="alert alert-success alert-dismissable">
@@ -91,7 +91,7 @@
                                     <td><?php echo $v->presentes; ?></td>
                                     <td><?php echo ($v->cod_estado=='A')?"Alta":"Baja"; ?></td>
                                     <td>
-                                        <a href="controlador.php?action=edita_persona_gym&id_persona=<?php echo $v->id_persona; ?>"><img src="img/edit.png"/></a>
+                                        <a href="controlador.php?action=<?php echo base64_encode('edita_persona_gym');?>&id_persona=<?php echo $v->id_persona; ?>"><img src="img/edit.png"/></a>
                                         <img  onclick="eiminaCliente('<?php echo (int)$v->id_persona ?>')" style="cursor: pointer;" src="img/delete.png"/>
                                     </td>
                                 </tr>

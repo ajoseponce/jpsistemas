@@ -15,7 +15,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a href="controlador.php?action=cargar_aplicativo">Agregar <img src="img/agregar.png"></a>
+                <a href="controlador.php?action=<?php echo base64_encode('cargar_aplicativo'); ?>">Agregar <img src="img/agregar.png"></a>
             </div>
             <?php if($mensaje){ ?>
                 <div class="alert alert-success alert-dismissable">
@@ -56,7 +56,7 @@
                                         <?php echo ($v->tipo==4)?"Clinico":""; ?>
 
                                     <td>
-                                        <a href="controlador.php?action=edita_aplicativo&id_aplicativo=<?php echo $v->id_aplicativo; ?>"><img src="img/edit.png"/></a></td>
+                                        <a href="controlador.php?action=<?php echo base64_encode('edita_aplicativo');?>&id_aplicativo=<?php echo $v->id_aplicativo; ?>"><img src="img/edit.png"/></a></td>
                                 </tr>
                             <?php }} ?>
                         </tbody>

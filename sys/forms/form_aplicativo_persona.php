@@ -52,10 +52,10 @@
                                 <input class="form-control" id="suggest_aplicativo" name="suggest_aplicativo" value="">
                                 <input type="hidden" id="aplicativo" name="aplicativo" value="">
                             </div>
-                                <input type="hidden"  name="action" value="guardar_aplicativo_persona" />
+                                <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_aplicativo_persona'); ?>" />
                             <!--                            <input type="hidden" id="id_aplicativo" id="id_aplicativo"  name="id_aplicativo" value="--><?php //echo (isset($result->id_aplicativo))?$result->id_aplicativo:""; ?><!--" />-->
                             <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
-                            <button onclick="volver_listado('aplicativo_menu')" type="reset"  class="btn btn-default">Volver</button>
+                            <button onclick="volver_listado('<?php echo base64_encode('listar_aplicativo_menu'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->
                         </div>
                     </form>

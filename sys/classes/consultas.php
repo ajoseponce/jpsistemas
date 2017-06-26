@@ -108,6 +108,28 @@ class Consultas
         }else
             return false;
     }
+		function getpersonasApi(){
+          //  session_start();
+        $query = "SELECT p.*,date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
+            . "  FROM personas p
+
+            WHERE 1 ";
+
+        $query .= " ORDER BY p.apellido, p.nombre ASC " ;
+
+      //  echo $query;
+        //$result = $this->db->loadObjectList($query);
+        //if($result) {
+					while ($row = $this->db->loadObjectList($query)) {
+					    $data[] = array(
+					        'label' =>$row['apellido'],
+					        'id' =>$row['id_persona']
+					    );
+
+					}
+            return $data;
+
+    }
     function getcontarpersonas(){
         $query = "SELECT COUNT(a.id_persona) total "
             . "  FROM personas a WHERE 1 AND id_dominio='".$_SESSION['dominio']."' ORDER BY apellido, nombre ASC " ;
@@ -448,7 +470,7 @@ class Consultas
             $query .=" AND p.periodo ='".$periodo."'";
         }
         //$query .= " WHERE p.periodo='".$periodo."' ";
-        echo $query;
+        //echo $query;
         $result = $this->db->loadObjectList($query);
         if($result)
             return $result;

@@ -15,7 +15,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a href="controlador.php?action=cargar_dominio">Agregar <img src="img/agregar.png"></a>
+                <a href="controlador.php?action=<?php echo base64_encode('cargar_dominio'); ?>">Agregar <img src="img/agregar.png"></a>
             </div>
             <?php if($mensaje){ ?>
                 <div class="alert alert-success alert-dismissable">
@@ -50,7 +50,7 @@
                                     <td><?php echo $v->descripcion; ?></td>
                                     <td><?php echo $v->tipo_dominio; ?></td>
                                     <td><?php echo ($v->estado=='A')?"Alta":"Baja"; ?></td>
-                                    <td><a href="controlador.php?action=edita_dominio&id_dominio=<?php echo $v->id_dominio; ?>"><img src="img/edit.png"/></a></td>
+                                    <td><a href="controlador.php?action=<?php echo base64_encode('edita_dominio'); ?>&id_dominio=<?php echo $v->id_dominio; ?>"><img src="img/edit.png"/></a></td>
                                 </tr>
                             <?php }} ?>
                         </tbody>

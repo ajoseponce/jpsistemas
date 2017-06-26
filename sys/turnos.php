@@ -17,13 +17,8 @@
                     </div>
                     <div class="form-group" id="motivoDiv">
                         <label>Motivo Turno <img src="img/add.png" onclick="abrir_pop_motivos()" alt=""></label>
-                        <select id="motivo" name="motivo" class="form-control select2" multiple="multiple" data-placeholder="Seleccione una opcion" style="width: 100%;">
-                            <option>Control</option>
-                            <option>Ruido eje</option>
-                            <option>Amortiguadores</option>
-                            <option>Faros</option>
-                            <option>Carburador</option>
-
+                        <select id="motivo" name="motivo" class="form-control" data-placeholder="Seleccione una opcion" style="width: 100%;">
+                            
                         </select>
                     </div>
                         <div class="form-group" id="fechaDiv" >

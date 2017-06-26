@@ -15,7 +15,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a href="controlador.php?action=carga_usuarios">Agregar <img src="img/agregar.png"></a>
+                <a href="controlador.php?action=<?php echo base64_encode('carga_usuarios'); ?>">Agregar <img src="img/agregar.png"></a>
             </div>
             <?php if($mensaje){ ?>
                 <div class="alert alert-success alert-dismissable">
@@ -60,10 +60,10 @@
                                     <td><?php echo $v->clave; ?></td>
                                     <td><?php echo $v->dominio; ?></td>
                                     <td>
-                                        <a href="controlador.php?action=edita_usuario&id_usuario=<?php echo $v->id_usuario; ?>"><img src="img/edit.png"/></a>
+                                        <a href="controlador.php?action=<?php echo base64_encode('edita_usuario'); ?>&id_usuario=<?php echo $v->id_usuario; ?>"><img src="img/edit.png"/></a>
                                     </td>
 
-                                    <td><a href="controlador.php?action=elimina_aplicativo_menu&id_relacion=<?php echo $v->id_relacion; ?>"><img src="img/delete.png"/></a></td>
+                                    <td><a href="controlador.php?action=<?php echo base64_encode('elimina_aplicativo_menu'); ?>&id_relacion=<?php echo $v->id_relacion; ?>"><img src="img/delete.png"/></a></td>
 
                                 </tr>
                             <?php }} ?>

@@ -41,7 +41,8 @@
                                 </li>
                             </ul>
 
-                            <a href="controlador.php?action=edita_persona&id_persona=<?php echo $result->id_persona; ?>" class="btn btn-primary btn-block"><b>Editar Datos</b></a>
+                            <a href="controlador.php?action=<?php echo base64_encode('edita_persona'); ?>&id_persona=<?php echo $_REQUEST['id_persona']; ?>" class="btn btn-primary btn-block"><b>Editar Datos</b></a>
+                            <a href="controlador.php?action=<?php echo base64_encode('listar_personas'); ?>" class="btn btn-default btn-block"><b>Volver</b></a>
                         </div>
                         <!-- /.box-body -->
                     </div>
@@ -79,6 +80,48 @@
                                 <!-- Post -->
 
                                         <div class="col-md-13">
+                                            <div class="box box-solid">
+                                                <div class="box-header with-border">
+                                                    <h3 class="box-title">Nueva Evolucion del paciente </h3>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="box-group" id="accordion">
+                                                        <div class="panel box box-success">
+                                                            <div class="box-header with-border">
+                                                                <h4 class="box-title">
+                                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $e->id_evolucion; ?>">
+                                                                        
+                                                                    </a>
+                                                                </h4>
+                                                            </div>
+                                                            <div class="panel-collapse collapse in">
+                                                                <form>
+                                                                <div class="form-group">
+                                                                    
+                                                                    <select class="form-control select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
+                                                                                <option selected="selected">Alabama</option>
+                                                                                <option>Alaska</option>
+                                                                                <option>California</option>
+                                                                                <option>Delaware</option>
+                                                                                <option>Tennessee</option>
+                                                                                <option>Texas</option>
+                                                                                <option>Washington</option>
+                                                                                </select>
+                                                                    <textarea name="evolucion" id="evolucion" class="form-control" rows="3" placeholder="Observaciones ..."></textarea>
+                                                                    
+                                                                </div>
+                                                               </form>
+                                                            </div>
+                                                            
+                                                             <button class="btn btn-default"  onclick="guardar_evolucion()" type="button">Guardar Evolucion</button>
+                                                            
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- /.box-body -->
+                                            </div>
                                             <div class="box box-solid">
                                                 <div class="box-header with-border">
                                                     <h3 class="box-title">Evoluciones del paciente <?php echo $result->nombre." ".$result->apellido; ?></h3>
@@ -135,7 +178,7 @@
 
                                         <div class="timeline-item">
                                             <span class="time"><i class="fa fa-clock-o"></i> <?php echo $t->hora;  ?></span>
-                                            <h3 class="timeline-header"><a href="#"><?php echo $t->motivo;  ?></a> sent you an email</h3>
+                                            <h3 class="timeline-header"><a href="#"><?php echo $t->motivo;  ?></a> </h3>
 
                                             <div class="timeline-body">
                                                 <?php echo $t->observacion;  ?>
@@ -151,7 +194,7 @@
                                     } ?>
                                     <li>
 <!--                                        <i class="fa fa-clock-o bg-gray"></i>-->
-                                        <button class="btn btn-danger"  onclick="abrir_pop_turnos(<?php echo $result->id_persona; ?>)" type="button">Dar Turno</button>
+                                        <button class="btn btn-danger"  onclick="abrir_pop_turnos(<?php echo $_REQUEST['id_persona']; ?>)" type="button">Dar Turno</button>
                                     </li>
                                 </ul>
                             </div>

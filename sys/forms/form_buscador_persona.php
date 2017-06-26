@@ -62,10 +62,10 @@
                                     </select>
                                 </div>
                             <?php } ?>
-                            <input type="hidden"  name="action" value="guardar_menu" />
+                            <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_menu'); ?>" />
                             <input type="hidden" id="id_menu" id="id_menu"  name="id_menu" value="<?php echo (isset($result->id_menu))?$result->id_menu:""; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
-                            <button onclick="volver_listado('menu')" type="reset"  class="btn btn-default">Volver</button>
+                            <button onclick="volver_listado('<?php echo base64_encode('listar_menu'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->
                         </div>
                     </form>

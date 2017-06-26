@@ -45,7 +45,7 @@
                         <?php } ?>
                         <div  class="ui-widget">
                             <BR>
-                        <input type="hidden"  name="action" value="guardar_relacion" />
+                        <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_relacion'); ?>" />
                         <input type="hidden" id="id_relacion" name="id_relacion" value="<?php echo (isset($result->id_relacion))?$result->id_relacion:""; ?>" />
                         <input type="button"  onclick="guardar_relacion()" class="btn btn-default" value="Guardar Datos" />
                         <button onclick="location()" type="reset"  class="btn btn-default">Volver</button>

@@ -15,7 +15,7 @@
     <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a href="controlador.php?action=listar_personas">Agregar <img src="img/agregar.png"></a>
+                    <a href="controlador.php?action=<?php echo base64_encode('listar_personas'); ?>">Agregar <img src="img/marcar_turno.png"></a>
                 </div>
                 <?php if($mensaje){ ?>
                     <div class="alert alert-success alert-dismissable">
@@ -54,7 +54,7 @@
                                      ?>
                                     <tr class="odd gradeX" <?php echo $color_linea; ?> >
                                       <td>
-                                        <img src="img/mantenimiento.png" onclick="atencion_turno(<?php echo $v->id_turno; ?>)" />
+                                      <a href="controlador.php?action=<?php echo base64_encode('visita_turno'); ?>&id_persona=<?php echo $v->id_persona; ?>"><img src="img/agrega_nota.png"/></a>
                                       </td>
                                         <td><?php echo $v->fecha; ?></td>
                                         <td><?php echo $v->cliente; ?></td>

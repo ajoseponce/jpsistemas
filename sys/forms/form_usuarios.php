@@ -72,10 +72,10 @@
                                 <input class="form-control" id="suggest_dominios" value="<?php echo $result->dominio?>">
                                 <input type="hidden" id="dominios" name="dominios" value="<?php echo $result->id_dom?>">
                             </div>
-                            <input type="hidden"  name="action" value="guardar_usuario" />
+                            <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_usuario'); ?>" />
                             <input type="text" id="id_usuario" id="id_usuario"  name="id_usuario" value="<?php echo (isset($result->id_usuario))?$result->id_usuario:""; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
-                            <button onclick="volver_listado('usuarios')" type="reset"  class="btn btn-default">Volver</button>
+                            <button onclick="volver_listado('<?php echo base64_encode('listar_usuarios'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->
                         </div>
                     </form>

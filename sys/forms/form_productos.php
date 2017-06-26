@@ -106,11 +106,11 @@
                                 </select>
                             </div>
                         <?php } ?>
-                        <input type="hidden"  name="action" value="guardar_producto" />
+                        <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_producto'); ?>" />
                         <input type="hidden" id="id_producto" name="id_producto" value="<?php echo (isset($result->id_producto))?$result->id_producto:""; ?>" />
                         <input type="hidden" id="id_producto_dias" name="id_producto_dias" value="<?php echo (isset($result->id_producto_dias))?$result->id_producto_dias:""; ?>" />
                         <input type="button"  onclick="guardar_producto()" class="btn btn-default" value="Guardar Datos" />
-                        <button onclick="volver_listado('productos')" type="reset"  class="btn btn-default">Volver</button>
+                        <button onclick="volver_listado('<?php echo base64_encode('listar_productos'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                     </form>
                     <!-- /.col -->
                     <!-- /.form-group -->

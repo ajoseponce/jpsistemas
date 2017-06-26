@@ -1,4 +1,4 @@
-form_persona_hist<div class="content-wrapper">
+<div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -82,11 +82,11 @@ form_persona_hist<div class="content-wrapper">
                         </div>
                         <div  class="ui-widget">
                             <BR>
-                            <input type="hidden"  name="action" value="guardar_pago" id="action" />
+                            <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_pago'); ?>" id="action" />
                             <input type="hidden"  name="dias_retraso" value="0" id="dias_retraso" />
                             <input type="hidden"  name="monto_incremento" value="0" id="monto_incremento" />
                             <input type="button"  onclick="guardar_pago()" id="graba" class="btn btn-default" value="Grabar Pago" />
-                            <button onclick="volver_listado_pagos()" type="reset"  class="btn btn-default">Volver</button>
+                            <button onclick="volver_listado('<?php echo base64_encode('listar_pagos'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                         </div>
                     </div>
                     </form>

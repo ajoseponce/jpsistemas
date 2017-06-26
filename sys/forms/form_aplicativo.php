@@ -61,10 +61,10 @@
                                     <option <?php echo ($result->tipo==4)?"selected":""; ?>  value="4">Clinico</option>
                                 </select>
                             </div>
-                            <input type="hidden"  name="action" value="guardar_aplicativo" />
+                            <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_aplicativo'); ?>" />
                             <input type="hidden" id="id_aplicativo" id="id_aplicativo"  name="id_aplicativo" value="<?php echo (isset($result->id_aplicativo))?$result->id_aplicativo:""; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
-                            <button onclick="volver_listado('aplicativo')" type="reset"  class="btn btn-default">Volver</button>
+                            <button onclick="volver_listado('<?php echo base64_encode('listar_aplicativo'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->
                         </div>
                     </form>

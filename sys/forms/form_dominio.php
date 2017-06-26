@@ -70,10 +70,10 @@
                                     </select>
                                 </div>
                             <?php } ?>
-                            <input type="hidden"  name="action" value="guardar_dominio" />
+                            <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_dominio'); ?>" />
                             <input type="text" id="id_dominio" id="id_dominio"  name="id_dominio" value="<?php echo (isset($result->id_dominio))?$result->id_dominio:""; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
-                            <button onclick="volver_listado('dominio')" type="reset"  class="btn btn-default">Volver</button>
+                            <button onclick="volver_listado('<?php echo base64_encode('listar_dominio'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->
                         </div>
                     </form>

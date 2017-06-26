@@ -15,7 +15,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a href="controlador.php?action=cargar_pago">Agregar <img src="img/agregar.png"></a>
+                <a href="controlador.php?action=<?php echo base64_encode('cargar_pago'); ?>">Agregar <img src="img/agregar.png"></a>
             </div>
             <?php if($mensaje){ ?>
                 <div class="alert alert-success alert-dismissable">

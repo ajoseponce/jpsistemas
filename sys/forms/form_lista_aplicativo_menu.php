@@ -15,7 +15,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a href="controlador.php?action=cargar_aplicativo_menu">Agregar <img src="img/agregar.png"></a>
+                <a href="controlador.php?action=<?php echo base64_encode('cargar_aplicativo_menu'); ?>">Agregar <img src="img/agregar.png"></a>
             </div>
             <?php if($mensaje){ ?>cargar_aplicativo_menu
                 <div class="alert alert-success alert-dismissable">
@@ -48,7 +48,7 @@
                                 <tr class="odd gradeX">
                                     <td><?php echo $v->menu; ?></td>
                                     <td><?php echo $v->aplicativo; ?></td>
-                                    <td><a href="controlador.php?action=elimina_aplicativo_menu&id_relacion=<?php echo $v->id_relacion; ?>"><img src="img/delete.png"/></a></td>
+                                    <td><a href="controlador.php?action=<?php echo base64_encode('elimina_aplicativo_menu'); ?>&id_relacion=<?php echo $v->id_relacion; ?>"><img src="img/delete.png"/></a></td>
                                 </tr>
                             <?php }} ?>
                         </tbody>

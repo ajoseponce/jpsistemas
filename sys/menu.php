@@ -31,7 +31,7 @@
                                     <li>
                                         <a <?php if($m->id_aplicativo==23){
                                             echo "target='_blank'";
-                                        } ?> href="controlador.php?action=<?php echo $m->nombre_action ?>"><i class="fa fa-circle-o"></i> <?php echo $m->nombre_menu ?></a>
+                                        } ?> href="controlador.php?action=<?php echo base64_encode ($m->nombre_action) ?>"><i class="fa fa-circle-o"></i> <?php echo $m->nombre_menu ?></a>
                                     </li>
                                         <?php
                                     }

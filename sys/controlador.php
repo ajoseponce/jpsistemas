@@ -1,10 +1,13 @@
 <?php
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 //ini_set("display_errors", 1);
 include('lib/functions.php');
 requireLogin();
 //error_reporting(0);
-$action = $_REQUEST["action"];
+if(isset($_REQUEST["action_js"])){
+     $_REQUEST["action"]=base64_encode($_REQUEST["action_js"]);
+      }
+$action = base64_decode($_REQUEST["action"]);
 //print_r($_REQUEST);
     switch ($action) {
 

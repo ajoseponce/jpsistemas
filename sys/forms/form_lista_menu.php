@@ -15,7 +15,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a href="controlador.php?action=cargar_menu">Agregar <img src="img/agregar.png"></a>
+                <a href="controlador.php?action=<?php echo base64_encode('cargar_menu'); ?>">Agregar <img src="img/agregar.png"></a>
             </div>
             <?php if($mensaje){ ?>
                 <div class="alert alert-success alert-dismissable">
@@ -49,7 +49,7 @@
 
                                     <td><?php echo $v->descripcion; ?></td>
                                     <td><?php echo ($v->estado=='A')?"Alta":"Baja"; ?></td>
-                                    <td><a href="controlador.php?action=edita_menu&id_menu=<?php echo $v->id_menu; ?>"><img src="img/edit.png"/></a></td>
+                                    <td><a href="controlador.php?action=<?php echo base64_encode('edita_menu'); ?>&id_menu=<?php echo $v->id_menu; ?>"><img src="img/edit.png"/></a></td>
                                 </tr>
                             <?php }} ?>
                         </tbody>

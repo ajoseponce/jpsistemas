@@ -15,7 +15,7 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                   <a href="controlador.php?action=carga_personas">Agregar <img src="img/agregar.png"></a>
+                   <a href="controlador.php?action=<?php echo base64_encode('carga_personas'); ?>">Agregar <img src="img/agrega_persona.png"></a>
                 </div>
                 <?php if($mensaje){ ?>
                     <div class="alert alert-success alert-dismissable">
@@ -31,7 +31,24 @@
                 <?php } ?>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="table-container">
+                    <table class="table table-striped table-bordered table-hover" >
+                    <tr>
+                        <th>Apellido
+                            <input type="text" size="60" onchange="busca_persona_all()" value="" id="apellido_filtro"  name="apellido_filtro" type="text">
+                        </th>
+                        <th>Nombre
+                            <input type="text" size="60" onchange="busca_persona_all()" value="" id="nombre_filtro"  name="nombre_filtro" type="text">
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>DNI
+                            <input type="text"  value="" id="dni_filtro"  onchange="busca_persona_all()" name="dni_filtro" type="text">
+                        </th>
+                        <th>&nbsp;
+                        </th>
+                    </tr>
+                </table>
+                <div class="table-container" id="tabla_listado">
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr>
@@ -50,7 +67,7 @@
                                 foreach ($result as $v) { ?>
                                     <tr class="odd gradeX">
                                         <td width="85">
-                                            <a href="controlador.php?action=datos_persona_all&id_persona=<?php echo $v->id_persona; ?>"><img src="img/info_all.png"/></a>
+                                            <a href="controlador.php?action=<?php echo base64_encode('datos_persona_all');?>&id_persona=<?php echo $v->id_persona; ?>"><img src="img/info_all.png"/></a>
                                             <img data-toggle="modal" onclick="abrir_pop_turnos(<?php echo $v->id_persona; ?>)" style="cursor: pointer;" src="img/turnos.png"/>
                                         </td>
                                         <td><?php echo $v->apellido; ?></td>
@@ -59,7 +76,7 @@
                                         <td><?php echo $v->fecha_nacimiento; ?></td>
                                         <td><?php echo ($v->cod_estado=='A')?"Alta":"Baja"; ?></td>
                                         <td>
-                                            <a href="controlador.php?action=edita_persona&id_persona=<?php echo $v->id_persona; ?>"><img src="img/edit.png"/></a>
+                                            <a href="controlador.php?action=<?php echo base64_encode('edita_persona'); ?>&id_persona=<?php echo $v->id_persona; ?>"><img src="img/edit.png"/></a>
                                             <img  onclick="eiminaCliente('<?php echo (int)$v->id_persona ?>')" style="cursor: pointer;" src="img/delete.png"/>
                                         </td>
                                     </tr>
