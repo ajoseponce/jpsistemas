@@ -4,20 +4,20 @@ class Consultas
 	function __construct($db){
 		$this->db = $db;
 	}
-        
+
         //////////////////********************/////////////////7
         function save_documentos($data, $nombre, $extension){
             $table = new Table($this->db, 'documentos');
-            
-            if($data['id_registro']){ 
-                $table->find($data['id_registro']); 
+
+            if($data['id_registro']){
+                $table->find($data['id_registro']);
                 if($nombre){
                 $table->archivo_nombre = $nombre;
                 }
                 if($extension){
                 $table->archivo_extension = $extension;
                 }
-                
+
             $table->estado = $data['estado'];
                 //$table->fecha_modificacion = date('Y-m-d H:i:s');
             }else{
@@ -29,19 +29,19 @@ class Consultas
             $table->descripcion = $data['descripcion'];
             $table->ruta = $data['ruta'];
             $table->categoria = $data['categoria'];
-            
+
            // $table->fecha_carga = date('Y-m-d H:i:s');
             $table->usuario = $_SESSION['id'];
-            
+
             //$table->usuario = 1;
-            
+
             if($table->save()){
                 return $table->id_registro;
             }else{
                 return 0;
             }
         }
-        
+
         function getDocumentos(){
             //session_start();
 		$query = "SELECT d.* FROM documentos d "
@@ -237,6 +237,6 @@ class Consultas
                 return false;
         }
         /*********************************************************************************/
-        
-}     
+
+}
 $consultas= new Consultas($db);

@@ -89,7 +89,7 @@ $action = base64_decode($_REQUEST["action"]);
 
             include 'menu.php';
 
-            $result= $consultas->getpersonas();
+            //$result= $consultas->getpersonas();
 
             $formulario='forms/form_lista_personas.php';
         break;
@@ -833,6 +833,10 @@ $action = base64_decode($_REQUEST["action"]);
             /******************************************/
 
             $result= $consultas->getPersonasbyid($_REQUEST['id_persona']);
+            /**********problemas***********/
+            $problemas= $consultas->getProblemas();
+            $problemas= $consultas->getProblemas();
+            $problemas_persona= $consultas->getProblemasByPersona($_REQUEST['id_persona']);
 
             $evo_morales= $consultas->getEvoluciones($_REQUEST['id_persona']);
             $turnos= $consultas->getTurnos($_REQUEST['id_persona']);
@@ -908,6 +912,11 @@ $action = base64_decode($_REQUEST["action"]);
             include('classes/consultas.php');
             echo $consultas->save_motivo($_REQUEST);
 
+            break;
+        case "guardar_problema":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                echo $consultas->save_problema($_REQUEST);
             break;
     }
 

@@ -463,9 +463,9 @@ function guardar_motivo(){
             data:          {action_js: "guardar_motivo",descripcion: ""+$("#descripcion").val()},
             type: 'post',
             success:       function(data){
-                alert(data);
+                //alert(data);
                 if(data){
-                    $('#mjs').html('El motivo se reservo correctamente');
+                    $('#mjs').html('El motivo se guardo correctamente');
                     $('#mensaje').modal('toggle');
                     $("#motivo").load('trae_motivos.php');
                 }else{
@@ -473,6 +473,30 @@ function guardar_motivo(){
                     $('#mensaje_error').modal('toggle');
                 }
                 $('#motivos').modal('toggle');
+            }
+    });
+}
+function guardar_problema(){
+
+    if($("#descripcion_problema").val()==''){
+        $("#descripcion_problemadiv").addClass( "form-group  has-error" );
+        return false;
+    }
+    $.ajax({
+            url:           "controlador.php",
+            data:          {action_js: "guardar_problema",descripcion: ""+$("#descripcion_problema").val()},
+            type: 'post',
+            success:       function(data){
+                //alert(data);
+                if(data){
+                    $('#mjs').html('El problema se guardo correctamente');
+                    $('#mensaje').modal('toggle');
+                    $("#problemas_persona").load('trae_problemas.php');
+                }else{
+                    $('#mjs_error').html('Ocurrio un error');
+                    $('#mensaje_error').modal('toggle');
+                }
+                $('#problemas').modal('toggle');
             }
     });
 }
@@ -485,7 +509,10 @@ function abrir_pop_motivos(){
   //var_dump('hola');
     $('#motivos').modal('toggle');
 }
-
+function abrir_pop_problemas(){
+  //var_dump('hola');
+    $('#problemas').modal('toggle');
+}
 function guardar_atencion(){
     //alert($("#motivo").val());
     if($("#descripcion_atencion").val()==''){

@@ -87,39 +87,28 @@
                                                 <div class="box-body">
                                                     <div class="box-group" id="accordion">
                                                         <div class="panel box box-success">
-                                                            <div class="box-header with-border">
-                                                                <h4 class="box-title">
-                                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $e->id_evolucion; ?>">
-                                                                        
-                                                                    </a>
-                                                                </h4>
-                                                            </div>
-                                                            <div class="panel-collapse collapse in">
-                                                                <form>
-                                                                <div class="form-group">
-                                                                    
-                                                                    <select class="form-control select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
-                                                                                <option selected="selected">Alabama</option>
-                                                                                <option>Alaska</option>
-                                                                                <option>California</option>
-                                                                                <option>Delaware</option>
-                                                                                <option>Tennessee</option>
-                                                                                <option>Texas</option>
-                                                                                <option>Washington</option>
-                                                                                </select>
-                                                                    <textarea name="evolucion" id="evolucion" class="form-control" rows="3" placeholder="Observaciones ..."></textarea>
-                                                                    
-                                                                </div>
-                                                               </form>
-                                                            </div>
-                                                            
-                                                             <button class="btn btn-default"  onclick="guardar_evolucion()" type="button">Guardar Evolucion</button>
-                                                            
+                                                          <div class="form-group">
+                                                              <label>Diagnostico <img src="img/add.png" onclick="abrir_pop_problemas()" alt=""></label>
+                                                              <select id="problemas_persona"  name="problemas_persona" class="form-control select2" multiple="multiple"  data-placeholder="Seleccione una opcion" style="width: 100%;">
+                                                              <?php
+                                                              if($problemas){
+                                                                  foreach ($problemas as $pp){
+                                                                    echo "<option value='".$pp->id_problema."'>".$pp->descripcion."</option>" ;
+                                                                  }
+                                                              }  ?>
+                                                              </select>
+                                                          </div>
+                                                          <div class="form-group">
+                                                              <label>Observaciones</label>
+                                                              <textarea name="evolucion" id="evolucion" class="form-control" rows="3" placeholder="Evolucion ..."></textarea>
+                                                          </div>
+                                                          <button class="btn btn-default"  onclick="guardar_evolucion()" type="button">Guardar Evolucion</button>
+
                                                         </div>
 
                                                     </div>
                                                 </div>
-                                                
+
                                                 <!-- /.box-body -->
                                             </div>
                                             <div class="box box-solid">
@@ -179,13 +168,13 @@
                                         <div class="timeline-item">
                                             <span class="time"><i class="fa fa-clock-o"></i> <?php echo $t->hora;  ?></span>
                                             <h3 class="timeline-header"><a href="#"><?php echo $t->motivo;  ?></a> </h3>
-
                                             <div class="timeline-body">
-                                                <?php echo $t->observacion;  ?>
+                                                <?php echo ($t->observaciones)?$t->observaciones:"Sin Observaciones";  ?>
                                             </div>
                                             <div class="timeline-footer">
-                                                <a class="btn btn-primary btn-xs">Ver Mas</a>
-
+                                              <?php if($t->estado=='Asignado'){ ?>
+                                                <a class="btn btn-primary btn-xs" onclick="marcar_presente(<?php echo $t->id_turno; ?>)">Marcar presente</a>
+                                              <?php }  ?>
                                             </div>
                                         </div>
                                     </li>

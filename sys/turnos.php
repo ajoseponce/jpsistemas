@@ -18,7 +18,7 @@
                     <div class="form-group" id="motivoDiv">
                         <label>Motivo Turno <img src="img/add.png" onclick="abrir_pop_motivos()" alt=""></label>
                         <select id="motivo" name="motivo" class="form-control" data-placeholder="Seleccione una opcion" style="width: 100%;">
-                            
+
                         </select>
                     </div>
                         <div class="form-group" id="fechaDiv" >

@@ -985,12 +985,13 @@ class Consultas
         else
             return false;
     }
-    public function getTurnos($persona=null)
-    {
-
-        $query = "SELECT t.* , date_format(t.fecha_turno, '%d/%m/%Y') fecha, date_format(t.fecha_turno, '%H/%i') hora, m.descripcion motivo,CONCAT_WS(' ',p.apellido,p.nombre) cliente
+    public function getTurnos($persona=null) {
+        $query = "SELECT t.* , date_format(t.fecha_turno, '%d/%m/%Y') fecha,
+									date_format(t.fecha_turno, '%H/%i') hora,
+									m.descripcion motivo,
+									CONCAT_WS(' ',p.apellido,p.nombre) cliente
                   FROM turnos t
-                  LEFT JOIN motivos_turno m ON m.id_motivo=t.id_turno
+                  LEFT JOIN motivos_turno m ON m.id_motivo=t.id_motivo
 									  LEFT JOIN personas p ON p.id_persona=t.id_persona
 									WHERE 1 ";
 				if($persona){
@@ -1170,6 +1171,51 @@ class Consultas
             return false;
         }
     }
+		function save_problema($data){
+        $table = new Table($this->db, 'problemas');
+        if(isset($data['id_problemas'])){
+            $table->find($data['id_problemas']);
+        }
+        $table->descripcion = $data['descripcion'];
+				$table->usuario = $_SESSION['id'];
+				$table->id_dominio = $_SESSION['dominio'];
+				$table->fecha_alta = date('Y-m-d H:i:s');
+        if($data['estado']){
+            $table->estado = $data['estado'];
+        }else{
+            $table->estado = 'A';
+        }
+        if($table->save()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+		function getProblemas(){
+				$query = "SELECT pp.descripcion, pp.id_problema FROM c0580050_jp.problemas pp
+									WHERE pp.estado='A'";
+
+				$result = $this->db->loadObjectList($query);
+				if($result)
+						return $result;
+				else
+						return false;
+
+		}
+		function getProblemasByPersona($idpersona){
+				$query = "SELECT pr.descripcion, pr.id_problema
+				FROM c0580050_jp.problemas pr
+				INNER JOIN c0580050_jp.problemas_personas pp ON pp.id_problema=pr.id_problema
+
+									WHERE pp.id_persona='".$idpersona."'";
+
+				$result = $this->db->loadObjectList($query);
+				if($result)
+						return $result;
+				else
+						return false;
+
+		}
 
 }
 $consultas= new Consultas($db);
