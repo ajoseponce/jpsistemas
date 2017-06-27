@@ -67,9 +67,13 @@ class Consultas
 	    }
         function getPersonasbyid($id_registro){
 
-            $query = "SELECT r.*,date_format(r.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento,pd.* "
+            $query = "SELECT r.*,date_format(r.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento,pd.*,pc.id_registro id_persona_cobertura,
+						 c.descripcion cobertura, c.id_cobertura  id_cobertura, pc.numero_cobertura, cp.descripcion plan_cobertura, pc.id_plan id_plan_cobertura  "
                 . " FROM personas r "
-                . " LEFT JOIN personas_dias pd ON pd.id_persona=r.id_persona "
+								. " LEFT JOIN personas_dias pd ON pd.id_persona=r.id_persona "
+								. " LEFT JOIN persona_cobertura pc ON pc.id_persona=r.id_persona "
+								. " LEFT JOIN cobertura c ON c.id_cobertura=pc.id_cobertura "
+                . " LEFT JOIN cobertura_plan cp ON cp.id_plan_cobertura=pc.id_plan "
                 . " WHERE r.id_persona='".$id_registro."' ";
             //echo $query;
             $result = $this->db->loadObjectList($query);
@@ -192,6 +196,24 @@ class Consultas
             $table->fecha_alta = date('Y-m-d H:i:s');
             if($table->save()){
                 return $table->id_persona;
+            }else{
+                return 0;
+            }
+        }
+				function save_persona_cobertura($id_persona_cobertura,$id_persona,$data){
+
+            $table = new Table($this->db, 'persona_cobertura');
+            if(isset($id_persona_cobertura)){
+                $table->find($id_persona_cobertura);
+                //$table->fecha_modificacion = date('Y-m-d H:i:s');
+            }
+						$table->id_persona = $id_persona;
+            $table->id_cobertura = $data['cobertura'];
+						$table->id_plan = $data['plan_cobertura'];
+						$table->numero_cobertura = $data['numero_cobertura'];
+            $table->estado = 'A';
+            if($table->save()){
+                return $table->id_relacion;
             }else{
                 return 0;
             }
@@ -1214,8 +1236,66 @@ class Consultas
 						return $result;
 				else
 						return false;
-
 		}
+		function getOS(){
+				//session_start();
+		$query = "SELECT d.* FROM ango_personas.financiador_programa_medico d "
+												. "WHERE 1 ";
+		$result = $this->db->loadObjectList($query);
+		if($result)
+			return $result;
+		else
+			return false;
+		}
+		function getPlanOS($idcobertura){
+				//session_start();
+		$query = "SELECT d.* FROM cobertura_plan d "
+												. "WHERE d.id_cobertura='".$idcobertura."' ";
+												//echo $query;
+		$result = $this->db->loadObjectList($query);
+		if($result)
+			return $result;
+		else
+			return false;
+		}
+		function getPlanOSMigrar($idcobertura){
+				//session_start();
+		$query = "SELECT d.* FROM ango_personas.financiador_programa_medico_plan d "
+												. "WHERE d.id_programa_medico='".$idcobertura."' ";
+												//echo $query;
+		$result = $this->db->loadObjectList($query);
+		if($result)
+			return $result;
+		else
+			return false;
+		}
+		function save_cobertura($denominacion){
+        $table = new Table($this->db, 'cobertura');
+
+        $table->descripcion = $denominacion;
+				$table->usuario = $_SESSION['id'];
+				$table->fecha_modificacion = date('Y-m-d H:i:s');
+        $table->estado = 'A';
+        if($table->save()){
+						//$this
+            return $table->id_cobertura;
+        }else{
+            return false;
+        }
+    }
+		function save_plan_cobertura($denominacion, $id_cobertura){
+        $table = new Table($this->db, 'cobertura_plan');
+
+				$table->id_cobertura = $id_cobertura;
+        $table->descripcion = $denominacion;
+
+        $table->estado = 'A';
+        if($table->save()){
+            return $table->id_plan_cobertura;
+        }else{
+            return false;
+        }
+    }
 
 }
 $consultas= new Consultas($db);

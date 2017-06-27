@@ -28,9 +28,10 @@ $action = base64_decode($_REQUEST["action"]);
             include 'menu.php';
 //print_r($_REQUEST);
             $id_persona= $consultas->save_persona($_REQUEST);
+            $id_persona_persona= $consultas->save_persona_cobertura($_REQUEST['id_persona_cobertura'],$id_persona,$_REQUEST);
 
             $mensaje="La operacion se realizo correctamente.";
-            $result= $consultas->getpersonas();
+            //$result= $consultas->getpersonas();
             /*********************/
 
             $formulario='forms/form_lista_personas.php';
@@ -74,9 +75,8 @@ $action = base64_decode($_REQUEST["action"]);
             include "nav.php";
             include 'menu.php';
             $result= $consultas->getPersonasbyid($_REQUEST['id_persona']);
-//            $productos= $consultas->getproductos();
-//            $proviene= $consultas->getProviene();
-//            $actividadesCliente= $consultas->getRelacionByIDCliente($_REQUEST['id_persona']);
+            //$planes= $consultas->getPersonasbyid($_REQUEST['id_persona']);
+
             $formulario='forms/form_personas.php';
         break;
         case "listar_personas":

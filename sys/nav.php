@@ -40,7 +40,7 @@
                                 <a href="#"  data-toggle="modal" data-target="#myModal" class="btn btn-default btn-flat">Contrase&nacute;a</a>
                             </div>
                             <div class="pull-right">
-                                <a href="controlador.php?action=logout" class="btn btn-default btn-flat">Salir</a>
+                                <a href="controlador.php?action_js=logout" class="btn btn-default btn-flat">Salir</a>
                             </div>
                         </li>
                     </ul>

@@ -74,6 +74,25 @@ function autocomleteINI_productos(id, path) {
             }
         }) ;
 }
+function autocomleteINI_coberturas(id, path) {
+    $('#suggest_' + id).autocomplete(
+        { messages: { noResults: 'No', results: function() {} },
+            source: function (request, response) {
+                $.getJSON( path, { term: this.term }, response );
+            }, minLength: 2,
+            select: function (event, ui) {
+                // /console.log(ui); i
+                if (ui.item == null) {
+                    $('#' + id).val('').trigger('clear');
+                    $('#suggest_' + id).val('');
+                } else {
+                    //alert('hola'+ui.item.id);
+                    $('#' + id).val(ui.item.id).trigger('change');
+                    $("#plan_cobertura").load('trae_plan_cobertura.php?id_cobertura='+ui.item.id);
+                }
+            }
+        }) ;
+}
 
 function guardar_edicion_relacion(relacion){
     if($("#id_persona").val()==''){

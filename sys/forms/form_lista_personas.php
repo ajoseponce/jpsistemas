@@ -2,11 +2,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Listado de Clientes
+            Listado de Personas
             <small>=</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i>Listado de Clientes</a></li>
+            <li><a href="#"><i class="fa fa-dashboard"></i>Listado de personas</a></li>
 
             <li class="active">Alta</li>
         </ol>

@@ -2,11 +2,11 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-               Clientes
+               Persona
                 <small>Preview</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Clientes</a></li>
+                <li><a href="#"><i class="fa fa-dashboard"></i> Personas</a></li>
 
                 <li class="active">Alta</li>
             </ol>
@@ -76,8 +76,21 @@
                                 <label>Email</label>
                                 <input class="form-control"  value="<?php echo (isset($result->mail))?$result->mail:""; ?>" name="mail" id="mail" placeholder="Ingrese mail">
                             </div>
-
-
+                            <div class="form-group">
+                                  <label>Cobertura</label>
+                                  <input class="form-control" id="suggest_cobertura" value="<?php echo $result->cobertura?>">
+                                  <input type="hidden" id="cobertura" name="cobertura" value="<?php echo $result->id_cobertura?>">
+                            </div>
+                            <div class="form-group">
+                                  <label>Plan Cobertura</label>
+                                  <select style="width: 200px;"  class="form-control" id="plan_cobertura" name="plan_cobertura">
+                                      <option value="<?php echo $result->id_plan_cobertura; ?>"><?php echo $result->plan_cobertura; ?></option>
+                                  </select>
+                            </div>
+                            <div class="form-group">
+                                  <label>Numero Afiliado</label>
+                                  <input class="form-control"  type="text" id="numero_cobertura" name="numero_cobertura" value="<?php echo $result->numero_cobertura?>">
+                            </div>
 
                             <?php
                             if($result->id_persona){
@@ -93,6 +106,7 @@
                             <?php } ?>
                             <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_persona'); ?>" />
                             <input type="hidden" id="id_persona_dias" name="id_persona_dias" value="<?php echo (isset($result->id_persona_dias))?$result->id_persona_dias:""; ?>" />
+                            <input type="hidden" id="id_persona_cobertura" name="id_persona_cobertura" value="<?php echo (isset($result->id_persona_cobertura))?$result->id_persona_cobertura:""; ?>" />
                             <input type="hidden" id="id_persona" id="id_persona"  name="id_persona" value="<?php echo (isset($result->id_persona))?$result->id_persona:""; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-primary" value="Guardar Datos" />
                             <button onclick="volver_listado('<?php echo base64_encode('listar_personas'); ?>')" type="reset"  class="btn btn-default">Volver</button>
@@ -170,8 +184,12 @@
     $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     $("[data-mask]").inputmask();
 </script>
+<script>
+    $(function() {
+        autocomleteINI_coberturas('cobertura', 'ajax/suggestCobertura.php');
+    });
+</script>
 <!-- InputMask -->
 
 <!-- ./wrapper -->
 <?php include 'footer.php'; ?>
-

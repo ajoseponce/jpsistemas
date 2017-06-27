@@ -17,6 +17,18 @@
                     <input type="text" name="descripcion_problema" id="descripcion_problema" value="">
                 </div>
             </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Tipo Diagnostico</label>
+                  </br>
+                  <input value='PA' type="radio" class="minimal" name="tipo_diagnostico" id="tipo_diagnostico" checked> Activo
+                  </br>
+                  <input value='CB' type="radio" name="tipo_diagnostico" id="tipo_diagnostico" class="minimal">Comorbilidades
+                </label>
+
+              </div>
+
+            </div>
             </form>
             <div class="modal-footer">
                 <button type="button" onclick="guardar_problema()" class="btn btn-primary">Guardar Problema</button>
