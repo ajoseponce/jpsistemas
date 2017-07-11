@@ -218,6 +218,22 @@ class Consultas
                 return 0;
             }
         }
+
+				function save_persona_auto($id_persona,$data){
+
+            $table = new Table($this->db, 'persona_auto');
+
+						$table->id_persona = $id_persona;
+            $table->id_marca= $data['marca'];
+						$table->patente = $data['patente'];
+						$table->modelo = $data['modelo'];
+            $table->estado = 'A';
+            if($table->save()){
+                return $table->id_relacion;
+            }else{
+                return 0;
+            }
+        }
         function getUser($iddata,$clave){
 
         $query = "SELECT u.*,d.descripcion nombre_dominio,d.aplicativo,d.id_dominio FROM c0580050_jp.usuarios u
@@ -242,6 +258,16 @@ class Consultas
         else
             return false;
     }
+		function getPrestaciones(){
+        $query = "SELECT a.* "
+            . "  FROM prestaciones a WHERE 1 AND id_dominio='".$_SESSION['dominio']."' ORDER BY descripcion ASC " ;
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
+        else
+            return false;
+    }
     function getcontarproductos(){
         $query = "SELECT COUNT(a.id_producto) total "
             . "  FROM productos a WHERE 1 AND id_dominio='".$_SESSION['dominio']."' ORDER BY descripcion ASC " ;
@@ -254,6 +280,12 @@ class Consultas
     }
     function eliminar_persona($id_persona){
         $query = "DELETE FROM personas WHERE id_persona='".$id_persona."'";
+        //$conn->execute($sql);
+        $this->db->query($query);
+
+    }
+		function eliminar_vehiculo_persona($id_relacion){
+        $query = "DELETE FROM persona_auto WHERE id_relacion='".$id_relacion."'";
         //$conn->execute($sql);
         $this->db->query($query);
 
@@ -441,6 +473,29 @@ class Consultas
         $result = $this->db->loadObjectList($query);
         if($result[0]->total==0)
             return true;
+        else
+            return false;
+    }
+		function chequeaPatente($id_cliente,$marca,$patente){
+        $query = "SELECT COUNT(r.id_relacion) total "
+            . "  FROM persona_auto r " ;
+        $query .= " WHERE r.id_persona='".$id_cliente."' AND r.patente='".$patente."'  AND r.id_marca='".$marca."' ";
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result[0]->total==0)
+            return true;
+        else
+            return false;
+    }
+		function getAutoByPersona($id_cliente){
+        $query = "SELECT pa.*,m.descripcion marca "
+            . "  FROM persona_auto pa
+									INNER JOIN marcas m ON m.id_marca=pa.id_marca " ;
+        $query .= " WHERE pa.id_persona='".$id_cliente."'";
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
         else
             return false;
     }
@@ -994,7 +1049,7 @@ class Consultas
     }
     function getEvoluciones($id_registro){
 
-        $query = "SELECT e.*,date_format(e.fecha_hora, '%d/%m/%Y') fecha_evolucion ,CONCAT_WS(' ',p.nombre, p.apellido) paciente,u.nombre_persona nombre_usuario "
+        $query = "SELECT e.*,date_format(e.fecha_hora, '%d/%m/%Y %H/%i') fecha_evolucion ,CONCAT_WS(' ',p.nombre, p.apellido) paciente,u.nombre_persona nombre_usuario "
             . " FROM evoluciones e "
             . " INNER JOIN personas p ON p.id_persona=e.id_persona "
             . " INNER JOIN dominio d ON d.id_dominio=e.id_dominio "
@@ -1007,7 +1062,8 @@ class Consultas
         else
             return false;
     }
-    public function getTurnos($persona=null) {
+    public function getTurnos($persona=null,$fecha_desde=null,$fecha_hasta=null) {
+			session_start();
         $query = "SELECT t.* , date_format(t.fecha_turno, '%d/%m/%Y') fecha,
 									date_format(t.fecha_turno, '%H/%i') hora,
 									m.descripcion motivo,
@@ -1015,10 +1071,24 @@ class Consultas
                   FROM turnos t
                   LEFT JOIN motivos_turno m ON m.id_motivo=t.id_motivo
 									  LEFT JOIN personas p ON p.id_persona=t.id_persona
-									WHERE 1 ";
+									WHERE 1 AND t.id_dominio='".$_SESSION['dominio']."' ";
 				if($persona){
 					$query .= " AND t.id_persona = $persona";
 				}
+				if($fecha_desde && $fecha_hasta==null){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $query .=" AND t.fecha_turno>='".$fecha_desde."'";
+        }
+        if($fecha_desde==null && $fecha_hasta){
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND t.fecha_turno<='".$fecha_hasta."'";
+        }
+
+        if($fecha_desde && $fecha_hasta){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND (t.fecha_turno between '".$fecha_desde."' AND '".$fecha_hasta."')";
+        }
 				$query .= " ORDER BY  t.fecha_turno DESC";
 				//echo $query;
         $resutlt = $this->db->loadObjectList($query);
@@ -1050,9 +1120,26 @@ class Consultas
         }
     }
     public function getMotivos(){
-        $query = "SELECT *
+			session_start();
+        $query = "SELECT m.*
                   FROM  motivos_turno m
-                  WHERE 1 ";
+                  WHERE 1 AND m.id_dominio='".$_SESSION['dominio']."' ";
+        $resutlt = $this->db->loadObjectList($query);
+        if ($resutlt) {
+            return $resutlt;
+        }
+        return array();
+    }
+
+		public function getTurnera(){
+			$fecha_desde=date('Y')."-".date('m')."-".date('d')." 00:00:00";
+			$fecha_hasta=date('Y')."-".date('m')."-".date('d')." 23:59:00";
+        $query = "SELECT CONCAT_WS(' ',p.apellido,p.nombre) cliente
+                  FROM turnos t
+									LEFT JOIN personas p ON p.id_persona=t.id_persona
+                  WHERE t.estado='Llamando' ";
+									$query .=" AND (t.fecha_turno between '".$fecha_desde."' AND '".$fecha_hasta."')";
+								//	echo $query;
         $resutlt = $this->db->loadObjectList($query);
         if ($resutlt) {
             return $resutlt;
@@ -1142,7 +1229,7 @@ class Consultas
         }
         //$query .= " ORDER BY p.apellido, p.nombre ASC " ;
 
-        echo $query;
+        //echo $query;
         $result = $this->db->loadObjectList($query);
         if($result) {
             return $result;
@@ -1295,6 +1382,106 @@ class Consultas
         }else{
             return false;
         }
+    }
+		function save_evolucion($data){
+				$table = new Table($this->db, 'evoluciones');
+				$table->id_persona = $data['id_persona'];
+				$table->descripcion = $data['evolucion_texto'];
+				$table->fecha_hora = date('Y-m-d H:i:s');
+				$table->fecha_hora_modificacion = date('Y-m-d H:i:s');
+				$table->estado = 'A';
+				$table->usuario = $_SESSION['id'];
+				$table->id_dominio = $_SESSION['dominio'];
+				if($table->save()){
+						return $table->id_evolucion;
+				}else{
+						return 0;
+				}
+		}
+		function save_evolucion_problemas($id_evolucion, $id_problema){
+
+				$table = new Table($this->db, 'problemas_evoluciones');
+				$table->id_evolucion = $id_evolucion;
+				$table->id_problema = $id_problema;
+				$table->usuario = $_SESSION['id'];
+				if($table->save()){
+						return $table->id_relacion;
+				}else{
+						return 0;
+				}
+		}
+		function getProblemasEvolucion($id_evolucion){
+
+        $query = "SELECT pe.*, p.descripcion "
+            . " FROM problemas_evoluciones pe "
+            . " INNER JOIN problemas p ON p.id_problema=pe.id_problema "
+            . " WHERE pe.id_evolucion='".$id_evolucion."' ";
+      //  echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
+        else
+            return false;
+    }
+		function presente_turno($idTurno, $estado){
+			switch ($estado) {
+				case "Asignado":
+						$estado='Presente';
+				break;
+				case "Presente":
+						$estado='Llamando';
+				break;
+				case "cancela_presente":
+						$estado='Asignado';
+				break;
+				case "Llamando":
+						$estado='Atendido';
+				break;
+				case "Cancelado":
+						$estado='Cancelado';
+				break;
+			}
+        $query = "UPDATE turnos
+                      SET estado='".$estado."'
+                      WHERE id_turno='$idTurno'";
+        $this->db->query($query);
+
+    }
+		function save_marca($data){
+        $table = new Table($this->db, 'marcas');
+        if(isset($data['id_marca'])){
+            $table->find($data['id_marca']);
+        }
+        $table->descripcion = $data['descripcion'];
+				if($data['estado']){
+            $table->estado = $data['estado'];
+        }else{
+            $table->estado = 'A';
+        }
+        if($table->save()){
+            return $table->id_marca;
+        }else{
+            return 0;
+        }
+    }
+		function getMarcas(){
+        $query = "SELECT a.* FROM marcas a WHERE 1 ORDER BY descripcion ASC " ;
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
+        else
+            return false;
+    }
+		function getMarcabyid($id_registro){
+
+        $query = "SELECT r.* FROM marcas r  WHERE r.id_marca='".$id_registro."' ";
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result[0];
+        else
+            return false;
     }
 
 }

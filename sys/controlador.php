@@ -22,19 +22,33 @@ $action = base64_decode($_REQUEST["action"]);
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');
             include 'header.php';
-
             include "nav.php";
-
             include 'menu.php';
-//print_r($_REQUEST);
+
             $id_persona= $consultas->save_persona($_REQUEST);
+
             $id_persona_persona= $consultas->save_persona_cobertura($_REQUEST['id_persona_cobertura'],$id_persona,$_REQUEST);
 
-            $mensaje="La operacion se realizo correctamente.";
-            //$result= $consultas->getpersonas();
+
+            if($_REQUEST['patente']){
+                if($consultas->chequeaPatente($id_persona,$_REQUEST['marca'],$_REQUEST['patente'])){
+                    $consultas->save_persona_auto($id_persona,$_REQUEST);
+                }
+            }
+
+            $result= $consultas->getPersonasbyid($id_persona);
+
+
+            /**********problemas***********/
+            $problemas= $consultas->getProblemas();
+            $problemas= $consultas->getProblemas();
+            $problemas_persona= $consultas->getProblemasByPersona($id_persona);
+
+            $evo_morales= $consultas->getEvoluciones($id_persona);
+            $turnos= $consultas->getTurnos($id_persona);
             /*********************/
 
-            $formulario='forms/form_lista_personas.php';
+            $formulario='forms/form_persona_all.php';
         break;
         case "eliminar_persona":
             /***************includes******************/
@@ -53,6 +67,27 @@ $action = base64_decode($_REQUEST["action"]);
 
             $formulario='forms/form_lista_personas.php';
             break;
+          case "eliminar_vehiculo_persona":
+              /***************includes******************/
+              include('../lib/DB_Conectar.php');
+              include('classes/consultas.php');
+              include 'header.php';
+
+              include "nav.php";
+
+              include 'menu.php';
+
+              /*********************/
+              $consultas->eliminar_vehiculo_persona($_REQUEST['id_relacion']);
+              $mensaje="La operacion se realizo correctamente.";
+              $marcas= $consultas->getMarcas();
+
+              $autoCliente= $consultas->getAutoByPersona($_REQUEST['id_persona']);
+
+              $result= $consultas->getPersonasbyid($_REQUEST['id_persona']);
+
+              $formulario='forms/form_personas.php';
+              break;
         case "carga_personas":
             //echo "si bueno tibago";
             include('../lib/DB_Conectar.php');
@@ -65,7 +100,7 @@ $action = base64_decode($_REQUEST["action"]);
             include 'menu.php';
 
 //            $productos= $consultas->getproductos();
-//            $proviene= $consultas->getProviene();
+            $marcas= $consultas->getMarcas();
             $formulario='forms/form_personas.php';
         break;
         case "edita_persona":
@@ -74,6 +109,10 @@ $action = base64_decode($_REQUEST["action"]);
             include 'header.php';
             include "nav.php";
             include 'menu.php';
+            $marcas= $consultas->getMarcas();
+
+            $autoCliente= $consultas->getAutoByPersona($_REQUEST['id_persona']);
+
             $result= $consultas->getPersonasbyid($_REQUEST['id_persona']);
             //$planes= $consultas->getPersonasbyid($_REQUEST['id_persona']);
 
@@ -89,7 +128,7 @@ $action = base64_decode($_REQUEST["action"]);
 
             include 'menu.php';
 
-            //$result= $consultas->getpersonas();
+            $result= $consultas->getpersonas();
 
             $formulario='forms/form_lista_personas.php';
         break;
@@ -148,6 +187,59 @@ $action = base64_decode($_REQUEST["action"]);
 
             $result= $consultas->getProductobyid($_REQUEST['id_producto']);
             $formulario='forms/form_productos.php';
+        break;
+
+        /************marcas***************/
+        case "listar_marcas":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getMarcas();
+
+            $formulario='forms/form_lista_marcas.php';
+            break;
+        case "carga_marcas":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+            $formulario='forms/form_marcas.php';
+            break;
+        case "guardar_marca":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $id_producto = $consultas->save_marca($_REQUEST);
+            //borrar_relacion($id_producto);
+            $result = $consultas->getMarcas();
+            /*********************/
+            $mensaje="La operacion se realizo correctamente.";
+            $formulario='forms/form_lista_marcas.php';
+            break;
+        case "edita_marca":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getMarcabyid($_REQUEST['id_marca']);
+            $formulario='forms/form_marcas.php';
         break;
         /*****************************/
         case "lista_relaciones":
@@ -918,6 +1010,92 @@ $action = base64_decode($_REQUEST["action"]);
                 include('classes/consultas.php');
                 echo $consultas->save_problema($_REQUEST);
             break;
+        case "guardar_evolucion":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                //$html=array ();
+
+                //print_r($_REQUEST);
+                $id_evolucion = $consultas->save_evolucion($_REQUEST);
+                $diag=explode(',', $_REQUEST['problemas_diagnosticos']) ;
+                foreach ($diag as $key => $value) {
+                  $consultas->save_evolucion_problemas($id_evolucion, $value);
+                }
+                echo  json_encode($id_evolucion);
+        break;
+        case "edita_estado_turno":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                $consultas->presente_turno($_REQUEST['turno'],$_REQUEST['estado']);
+                echo "1";
+            break;
+        case "listado_turnos":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getTurnera();
+
+                $formulario='forms/form_turnera.php';
+        break;
+        /************prodccutos***************/
+        case "listar_prestaciones":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getprestaciones();
+
+            $formulario='forms/form_lista_prestaciones.php';
+            break;
+        case "carga_prestaciones":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+            $formulario='forms/form_prestaciones.php';
+            break;
+        case "guardar_prestacion":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $id_producto = $consultas->save_prestacion($_REQUEST);
+            //borrar_relacion($id_producto);
+            $result = $consultas->getprestaciones();
+            /*********************/
+            $mensaje="La operacion se realizo correctamente.";
+            $formulario='forms/form_lista_prestaciones.php';
+            break;
+        case "edita_prestacion":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getPrestacionbyid($_REQUEST['id_prestacion']);
+            $formulario='forms/form_prestacion.php';
+        break;
+
+
     }
 
 if($formulario){

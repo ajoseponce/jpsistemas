@@ -32,7 +32,25 @@
 
                 <!-- /.panel-heading -->
                 <div class="panel-body">
+
                     <div class="dataTable_wrapper">
+                        <table class="table table-striped table-bordered table-hover" >
+                            <tr>
+                                <td>Fecha Desde
+                                    <input type="text"  value="" id="fecha_desde"  name="fecha_desde" type="text">
+                                </td>
+                                <td>Fecha Hasta
+                                    <input type="text"  value="" id="fecha_hasta"  name="fecha_hasta" type="text">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;
+                                </td>
+                                <td>&nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="table-container" id="tabla_listado">
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr>
@@ -41,6 +59,7 @@
                                 <th>cliente</th>
                                 <th>Motivo</th>
                                 <th>Observacion</th>
+                                <th>Estado</th>
                                 <th>&nbsp;</th>
 
                             </tr>
@@ -52,21 +71,37 @@
                                     $color_linea='style="background:#f2a4a4;"';
                                   }
                                      ?>
-                                    <tr class="odd gradeX" <?php echo $color_linea; ?> >
-                                      <td>
-                                      <a href="controlador.php?action=<?php echo base64_encode('visita_turno'); ?>&id_persona=<?php echo $v->id_persona; ?>"><img src="img/agrega_nota.png"/></a>
-                                      </td>
-                                        <td><?php echo $v->fecha; ?></td>
-                                        <td><?php echo $v->cliente; ?></td>
-                                        <td><?php echo $v->motivo; ?></td>
-                                        <td><?php echo $v->observaciones; ?></td>
-                                        <td>
-                                          <img src="img/delete.png" onclick="cancelar_turno(<?php echo $v->id_turno; ?>)" />
-                                        </td>
-                                    </tr>
+                                     <tr class="odd gradeX" <?php echo $color_linea; ?> >
+                                       <td>
+                                       <?php if($v->estado!='Asignado'){ ?>
+                                           <img src="img/cancela_presente.png" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','cancela_presente')"/>
+                                       <?php }else{ ?>
+                                           <img src="img/presente.png" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','<?php echo $v->estado; ?>')"/>
+                                       <?php } ?>
+
+                                       </td>
+
+                                         <td><?php echo $v->fecha; ?></td>
+                                         <td><?php echo $v->cliente; ?></td>
+                                         <td><?php echo $v->motivo; ?></td>
+                                         <td><?php echo $v->observaciones; ?></td>
+                                         <td><?php echo $v->estado; ?></td>
+                                         <td>
+                                           <?php if($v->estado=='Presente'){ ?>
+                                               <img src="img/llamando.png" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','<?php echo $v->estado; ?>')"/>
+                                           <?php } ?>
+                                           <?php if($v->estado=='Llamando'){ ?>
+                                                <img src="img/atendio.png" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','<?php echo $v->estado; ?>')"/>
+                                           <?php }else{ ?>
+
+                                           <?php } ?>
+                                           <img src="img/cancela_turno.png" onclick="cancelar_turno(<?php echo $v->id_turno; ?>)" />
+                                         </td>
+                                     </tr>
                                 <?php }} ?>
                             </tbody>
                         </table>
+                      </div>
                     </div>
                     <!-- /.table-responsive -->
 
@@ -81,6 +116,26 @@
     <!-- /.row -->
 
     <!-- /.row -->
+    <script>
 
+        //$j=jQuery.noConflict();
+            $("#fecha_desde").datepicker({
+                dateFormat: 'dd-mm-yy',
+                dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+                onSelect:  function(dateText) {
+                    trae_turnos();
+                },
+                monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
+            });
+            $("#fecha_hasta").datepicker({
+                dateFormat: 'dd-mm-yyyy',
+                dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+                onSelect:  function(dateText) {
+                    trae_turnos();
+                },
+                monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
+            });
+
+    </script>
 <?php include 'footer.php'; ?>
 <!-- /#wrapper -->

@@ -205,7 +205,7 @@ class Consultas
         }
         function getUser($iddata,$clave){
 
-            $query = "SELECT u.*,d.descripcion nombre_dominio,d.aplicativo,d.id_dominio FROM c0580050_jp.usuarios u
+            $query = "SELECT u.*,d.descripcion nombre_dominio,d.aplicativo,d.id_dominio,d.tipo tipo_dominio FROM c0580050_jp.usuarios u
             INNER JOIN c0580050_jp.usuario_dominio ud ON ud.id_usuario=u.id_usuario
             INNER JOIN c0580050_jp.dominio d ON d.id_dominio=ud.id_dominio
              WHERE u.nombre='".$iddata."' AND  u.clave='".$clave."'";

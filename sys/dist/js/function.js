@@ -213,6 +213,14 @@ function trae_pagos(){
         $("#tabla_listado").load('trae_pagos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta+'&periodo='+periodo);
 
 }
+function trae_turnos(){
+//  alert('si bueno ');
+        var fecha_desde=$("#fecha_desde").val();
+        var fecha_hasta=$("#fecha_hasta").val();
+        // var periodo=$("#periodo").val();
+        $("#tabla_listado").load('trae_turnos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta);
+
+}
 function trae_turnos_fecha(){
 //  alert('holaaa comenten');
         var fecha_turno=$("#fecha_turno").val();
@@ -253,6 +261,11 @@ function trae_actividades_clientes() {
 function eiminaCliente(persona){
     if(confirm('Usted esta por eliminar un cliente.Desea Continuar?')){
         window.location.assign('controlador.php?action_js=eliminar_persona&id_persona='+persona);
+    }
+}
+function eiminaPatente(registro, persona){
+    if(confirm('Usted esta por eliminar un vehiculo asociado del cliente.Desea Continuar?')){
+        window.location.assign('controlador.php?action_js=eliminar_vehiculo_persona&id_relacion='+registro+'&id_persona='+persona);
     }
 }
 function presente_cliente() {
@@ -555,4 +568,48 @@ function guardar_atencion(){
                 $('#motivos').modal('toggle');
             }
     });
+}
+function guardar_evolucion(){
+
+    var data=$("#form_datos_evolucion").serialize()+"&problemas_diagnosticos="+$("#problemas_persona").val();
+    if($("#evolucion_texto").val()==null){
+        $("#evolucion_texto").addClass( "form-group  has-error" );
+        return false;
+    }
+    $.ajax({
+            url:           "controlador.php",
+            data:         data,
+            type: 'post',
+            success:       function(data){
+                //alert(data);
+                if(data){
+                    $('#mjs').html('La evolucion se guardo correctamente');
+                    $('#mensaje').modal('toggle');
+                      $("#bloque_evoluciones").load('trae_evoluciones.php?id_persona='+$("#id_persona").val());
+                }else{
+                    $('#mjs_error').html('Ocurrio un error');
+                    $('#mensaje_error').modal('toggle');
+                }
+
+            }
+        });
+}
+function edita_estado_turno(turno, estado) {
+
+    $.ajax({
+        url:           "controlador.php",
+        data:          {action_js: "edita_estado_turno",turno: ""+turno+"",estado:   ""+estado+""},
+        dataType:      'json',
+        type: 'get',
+        success:       function(data){
+          $('#mjs').html('El turno se cambio de estado correctamente');
+          $('#mensaje').modal('toggle');
+          trae_turnos();
+        }
+    });
+}
+function turnera(){
+  //alert('hola mundo');
+  $("#turnera").load("turnero.php");
+        //$("#tabla_listado").load('trae_turnos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta);
 }

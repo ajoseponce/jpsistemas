@@ -4,7 +4,9 @@ session_start();
 //print_r($_SESSION);
 include '../lib/DB_Conectar.php';
 include 'classes/consultas.php';
-include 'header.php'; ?>
+include 'header.php';
+//print_r($_SESSION);
+?>
 
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -47,6 +49,3 @@ include 'header.php'; ?>
 </div>
 <!-- ./wrapper -->
 <?php include 'footer.php'; ?>
-
-
-

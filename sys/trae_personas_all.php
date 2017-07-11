@@ -35,6 +35,11 @@ $result = $consultas->getPersonas($_REQUEST['apellidofiltro'],$_REQUEST['nombref
                                             <img  onclick="eiminaCliente('<?php echo (int)$v->id_persona ?>')" style="cursor: pointer;" src="img/delete.png"/>
                                         </td>
                                     </tr>
-                                <?php }} ?>
+                                <?php }}else{ ?>
+                                  <tr class="odd gradeX">
+                                      <td colspan='6'> <strong>No se encontraron resultados</strong></td>
+                                  </tr>
+
+                                <?php } ?>
                             </tbody>
                         </table>

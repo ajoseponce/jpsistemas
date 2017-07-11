@@ -86,6 +86,7 @@
                                                 </div>
                                                 <div class="box-body">
                                                     <div class="box-group" id="accordion">
+                                                        <form action="controlador.php" onsubmit="false" id="form_datos_evolucion" method="post">
                                                         <div class="panel box box-success">
                                                           <div class="form-group">
                                                               <label>Diagnostico <img src="img/add.png" onclick="abrir_pop_problemas()" alt=""></label>
@@ -100,37 +101,47 @@
                                                           </div>
                                                           <div class="form-group">
                                                               <label>Observaciones</label>
-                                                              <textarea name="evolucion" id="evolucion" class="form-control" rows="3" placeholder="Evolucion ..."></textarea>
+                                                              <textarea name="evolucion_texto" id="evolucion_texto" class="form-control" rows="3" placeholder="Evolucion ..."></textarea>
+                                                              <input type="hidden" name="action_js" id="action_js" value="guardar_evolucion" />
+                                                              <input type="hidden" name="id_persona" id="id_persona" value="<?php echo $_REQUEST['id_persona']; ?>" />
+
                                                           </div>
                                                           <button class="btn btn-default"  onclick="guardar_evolucion()" type="button">Guardar Evolucion</button>
 
                                                         </div>
-
+                                                      </form>
                                                     </div>
                                                 </div>
 
                                                 <!-- /.box-body -->
                                             </div>
-                                            <div class="box box-solid">
+                                            <div class="box box-solid" id="bloque_evoluciones">
                                                 <div class="box-header with-border">
                                                     <h3 class="box-title">Evoluciones del paciente <?php echo $result->nombre." ".$result->apellido; ?></h3>
                                                 </div>
                                                 <?php if($evo_morales){ ?>
                                                 <!-- /.box-header -->
-                                                <?php foreach ($evo_morales as $e){  ?>
-                                                <div class="box-body">
+                                                <?php foreach ($evo_morales as $e){
+                                                    $problemas_evolucion=$consultas->getProblemasEvolucion($e->id_evolucion);
+                                                    ?>
+                                                <div class="box-body" style="padding: 2px;">
                                                     <div class="box-group" id="accordion">
                                                         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
                                                         <div class="panel box box-success">
                                                             <div class="box-header with-border">
                                                                 <h4 class="box-title">
                                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $e->id_evolucion; ?>">
-                                                                        <?php echo $e->nombre_usuario." - ".$e->fecha_evolucion; ?>
+                                                                        <?php echo "Usuario: ".$e->nombre_usuario." - Fecha ".$e->fecha_evolucion; ?>
                                                                     </a>
                                                                 </h4>
                                                             </div>
                                                             <div id="collapse_<?php echo $e->id_evolucion; ?>" class="panel-collapse collapse in">
-                                                                <div class="box-body">
+                                                              <div class="box-body" class="error">
+                                                                <?php foreach ($problemas_evolucion as $pe){
+                                                                  echo $pe->descripcion."-" ;
+                                                                } ?>
+                                                              </div>
+                                                              <div class="box-body">
                                                                     <?php echo $e->descripcion; ?>
                                                                 </div>
                                                             </div>
@@ -190,57 +201,30 @@
                             <!-- /.tab-pane -->
 
                             <div class="tab-pane" id="settings">
-                                <form class="form-horizontal">
-                                    <div class="form-group">
-                                        <label for="inputName" class="col-sm-2 control-label">Name</label>
+                              <div class="box-body">
+                                  <div class="box-group" id="accordion">
+                                      <div class="panel box box-success">
+                                        <div class="form-group">
+                                            <label>Medicamento </label>
+                                            <select id="problemas_persona"  name="problemas_persona" class="form-control select2" multiple="multiple"  data-placeholder="Seleccione una opcion" style="width: 100%;">
+                                            <?php
+                                            if($farmacos){
+                                                foreach ($problemas as $m){
+                                                  echo "<option value='".$m->id_medicamento."'>".$pp->descripcion."</option>" ;
+                                                }
+                                            }  ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Observaciones</label>
+                                            <textarea name="indica_text" id="indica_text" class="form-control" rows="3" placeholder="Indica texto ..."></textarea>
+                                        </div>
+                                        <button class="btn btn-default"  onclick="guardar_evolucion()" type="button">Guardar Indicacion Farmacologica</button>
 
-                                        <div class="col-sm-10">
-                                            <input type="email" class="form-control" id="inputName" placeholder="Name">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                                      </div>
 
-                                        <div class="col-sm-10">
-                                            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputName" class="col-sm-2 control-label">Name</label>
-
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputName" placeholder="Name">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputExperience" class="col-sm-2 control-label">Experience</label>
-
-                                        <div class="col-sm-10">
-                                            <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputSkills" class="col-sm-2 control-label">Skills</label>
-
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                            <button type="submit" class="btn btn-danger">Submit</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                  </div>
+                              </div>
                             </div>
                             <!-- /.tab-pane -->
                         </div>

@@ -76,6 +76,7 @@
                                 <label>Email</label>
                                 <input class="form-control"  value="<?php echo (isset($result->mail))?$result->mail:""; ?>" name="mail" id="mail" placeholder="Ingrese mail">
                             </div>
+                            <?php if($_SESSION['tipo']==2){ ?>
                             <div class="form-group">
                                   <label>Cobertura</label>
                                   <input class="form-control" id="suggest_cobertura" value="<?php echo $result->cobertura?>">
@@ -91,7 +92,86 @@
                                   <label>Numero Afiliado</label>
                                   <input class="form-control"  type="text" id="numero_cobertura" name="numero_cobertura" value="<?php echo $result->numero_cobertura?>">
                             </div>
+                            <?php } ?>
+                            <?php if($_SESSION['tipo_dominio']==3){ ?>
+                              <div class="table-container">
+                                  <table class="table table-striped table-bordered table-hover">
+                                      <thead>
+                                      <tr>
+                                          <th>Marca</th>
+                                          <th>Patente</th>
+                                          <th>Modelo</th>
+                                          <th>&nbsp;</th>
+                                      </tr>
+                                      </thead>
 
+                                      <tbody>
+                                      <?php if($autoCliente){
+                                          foreach ($autoCliente as $v) { ?>
+                                              <tr class="odd gradeX">
+                                                  <td>
+                                                      <div id="div_marca_<?php echo $v->id_relacion; ?>">
+                                                          <?php echo $v->marca; ?>
+                                                      </div>
+
+                                                      <div id="div_marca_edita_<?php echo $v->id_relacion; ?>"  style="display: none;">
+                                                          <select style="width: 200px;"  class="form-control" id="id_marca_<?php echo $v->id_relacion; ?>" name="id_marca">
+                                                              <option value="">SELECCIONE UNA MARCA</option>
+                                                              <?php foreach ($marcas as $p) { ?>
+                                                                  <option value="<?php echo $p->id_marca; ?>" <?php echo ($p->id_marca==$v->id_marca)?"selected":"" ?>><?php echo $p->descripcion; ?></option>
+                                                              <?php } ?>
+                                                          </select>
+                                                      </div>
+
+                                                  </td>
+                                                  <td>
+                                                      <div id="div_patente_<?php echo $v->id_relacion; ?>">
+                                                          <?php echo $v->patente; ?>
+                                                      </div>
+                                                      <div id="div_patente_edita_<?php echo $v->id_relacion; ?>" style="display: none;">
+                                                          <input style="width: 200px;" class="form-control" value="<?php echo (isset($v->patente))?$v->patente:""; ?>" id="patente_<?php echo $v->id_relacion; ?>"  name="patente_<?php echo $v->id_relacion; ?>" placeholder="Ingrese patente" type="text">
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                      <div id="div_modelo_<?php echo $v->id_relacion; ?>">
+                                                          <?php echo $v->modelo; ?>
+                                                      </div>
+                                                      <div id="div_patente_edita_<?php echo $v->id_relacion; ?>" style="display: none;">
+                                                          <input style="width: 200px;" class="form-control" value="<?php echo (isset($v->patente))?$v->patente:""; ?>" id="patente_<?php echo $v->id_relacion; ?>"  name="patente_<?php echo $v->id_relacion; ?>" placeholder="Ingrese patente" type="text">
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                      <div id="div_action_<?php echo $v->id_relacion; ?>">
+                                                          <img style="cursor:pointer;" src="./img/delete.png" onclick="eiminaPatente(<?php echo $v->id_relacion; ?>)">
+                                                      </div>
+                                                      <!-- <div id="div_action_edita_<?php echo $v->id_relacion; ?>" style="display: none;">
+                                                          <img style="cursor:pointer;" src="./img/guardar.png" onclick="guardar_patente_relacion(<?php echo $v->id_relacion; ?>)">
+                                                      </div> -->
+                                                  </td>
+
+                                              </tr>
+                                          <?php }} ?>
+
+                                      <tr>
+                                          <th><select style="width: 200px;"  class="form-control" id="marca" name="marca">
+                                                  <option value="">SELECCIONE UNA MARCA</option>
+                                                  <?php foreach ($marcas as $p) { ?>
+                                                      <option value="<?php echo $p->id_marca; ?>" ><?php echo $p->descripcion; ?></option>
+                                                  <?php } ?>
+                                              </select></th>
+                                          <th>
+                                              <input style="width: 200px;" class="form-control" value="" id="patente"  name="patente" placeholder="Ingrese patente" type="text">
+                                          </th>
+                                          <th>
+                                              <input style="width: 200px;" class="form-control" value="" id="modelo"  name="modelo" placeholder="Ingrese modelo" type="text">
+                                          </th>
+                                          <th>&nbsp;</th>
+
+                                      </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                            <?php } ?>
                             <?php
                             if($result->id_persona){
                                 ?>
@@ -107,7 +187,8 @@
                             <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_persona'); ?>" />
                             <input type="hidden" id="id_persona_dias" name="id_persona_dias" value="<?php echo (isset($result->id_persona_dias))?$result->id_persona_dias:""; ?>" />
                             <input type="hidden" id="id_persona_cobertura" name="id_persona_cobertura" value="<?php echo (isset($result->id_persona_cobertura))?$result->id_persona_cobertura:""; ?>" />
-                            <input type="hidden" id="id_persona" id="id_persona"  name="id_persona" value="<?php echo (isset($result->id_persona))?$result->id_persona:""; ?>" />
+                            <!-- <input type="hidden" id="id_persona_auto" name="id_persona_auto" value="<?php echo (isset($result->id_persona_auto))?$result->id_persona_auto:""; ?>" /> -->
+                            <input type="hidden" id="id_persona" id="id_persona"  name="id_persona" value="<?php echo (isset($result->id_persona))?$result->id_persona:$_REQUEST['id_persona']; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-primary" value="Guardar Datos" />
                             <button onclick="volver_listado('<?php echo base64_encode('listar_personas'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->
