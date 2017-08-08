@@ -76,6 +76,47 @@
                             <input class="form-control"  value="<?php echo (isset($result->mail))?$result->mail:""; ?>" name="mail" id="mail" placeholder="Ingrese mail">
                         </div>
                         <div class="form-group">
+                            <label>Nro Socio</label>
+                            <input class="form-control"  value="<?php echo (isset($result->nro_socio))?$result->nro_socio:""; ?>" name="nro_socio" id="nro_socio" placeholder="Ingrese nro Socio">
+                        </div>
+                        <div class="form-group">
+                            <label>Dia Venc Cuota</label>
+                            <select style="width: 200px;"  class="form-control"  name="dia_venc" name="dia_venc">
+                              <option value="" <?php echo ($result->dia_venc=="")?"selected":"" ?>>Seleccione una opcion</option>
+                              <option value="1" <?php echo ($result->dia_venc=="1")?"selected":"" ?>>1</option>
+                              <option value="2" <?php echo ($result->dia_venc=="2")?"selected":"" ?>>2</option>
+                              <option value="3" <?php echo ($result->dia_venc=="3")?"selected":"" ?>>3</option>
+                              <option value="4" <?php echo ($result->dia_venc=="4")?"selected":"" ?>>4</option>
+                              <option value="5" <?php echo ($result->dia_venc=="5")?"selected":"" ?>>5</option>
+                              <option value="6" <?php echo ($result->dia_venc=="6")?"selected":"" ?>>6</option>
+                              <option value="7" <?php echo ($result->dia_venc=="7")?"selected":"" ?>>7</option>
+                              <option value="8" <?php echo ($result->dia_venc=="8")?"selected":"" ?>>8</option>
+                              <option value="9" <?php echo ($result->dia_venc=="9")?"selected":"" ?>>9</option>
+                              <option value="10" <?php echo ($result->dia_venc=="10")?"selected":"" ?>>10</option>
+                              <option value="11" <?php echo ($result->dia_venc=="11")?"selected":"" ?>>11</option>
+                              <option value="12" <?php echo ($result->dia_venc=="12")?"selected":"" ?>>12</option>
+                              <option value="13" <?php echo ($result->dia_venc=="13")?"selected":"" ?>>13</option>
+                              <option value="14" <?php echo ($result->dia_venc=="14")?"selected":"" ?>>14</option>
+                              <option value="15" <?php echo ($result->dia_venc=="15")?"selected":"" ?>>15</option>
+                              <option value="16" <?php echo ($result->dia_venc=="16")?"selected":"" ?>>16</option>
+                              <option value="17" <?php echo ($result->dia_venc=="17")?"selected":"" ?>>17</option>
+                              <option value="18" <?php echo ($result->dia_venc=="18")?"selected":"" ?>>18</option>
+                              <option value="19" <?php echo ($result->dia_venc=="19")?"selected":"" ?>>19</option>
+                              <option value="20" <?php echo ($result->dia_venc=="20")?"selected":"" ?>>20</option>
+                              <option value="21" <?php echo ($result->dia_venc=="21")?"selected":"" ?>>21</option>
+                              <option value="22" <?php echo ($result->dia_venc=="22")?"selected":"" ?>>22</option>
+                              <option value="23" <?php echo ($result->dia_venc=="23")?"selected":"" ?>>23</option>
+                              <option value="24" <?php echo ($result->dia_venc=="24")?"selected":"" ?>>24</option>
+                              <option value="25" <?php echo ($result->dia_venc=="25")?"selected":"" ?>>25</option>
+                              <option value="26" <?php echo ($result->dia_venc=="26")?"selected":"" ?>>26</option>
+                              <option value="27" <?php echo ($result->dia_venc=="27")?"selected":"" ?>>27</option>
+                              <option value="28" <?php echo ($result->dia_venc=="28")?"selected":"" ?>>28</option>
+                              <option value="29" <?php echo ($result->dia_venc=="29")?"selected":"" ?>>29</option>
+                              <option value="30" <?php echo ($result->dia_venc=="30")?"selected":"" ?>>30</option>
+                              <option value="31" <?php echo ($result->dia_venc=="31")?"selected":"" ?>>31</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>Proviene de: </label>
                             <div>
                                 <select style="width: 200px;"  class="form-control"  name="id_proviene" name="id_proviene">
@@ -177,6 +218,7 @@
                                             <div id="div_action_edita_<?php echo $v->id_relacion; ?>" style="display: none;">
                                                 <img style="cursor:pointer;" src="./img/guardar.png" onclick="guardar_edicion_relacion(<?php echo $v->id_relacion; ?>)">
                                             </div>
+                                            
                                         </td>
 
                                     </tr>
@@ -283,4 +325,3 @@
 
 <!-- ./wrapper -->
 <?php include 'footer.php'; ?>
-

@@ -29,7 +29,6 @@ $action = base64_decode($_REQUEST["action"]);
 
             $id_persona_persona= $consultas->save_persona_cobertura($_REQUEST['id_persona_cobertura'],$id_persona,$_REQUEST);
 
-
             if($_REQUEST['patente']){
                 if($consultas->chequeaPatente($id_persona,$_REQUEST['marca'],$_REQUEST['patente'])){
                     $consultas->save_persona_auto($id_persona,$_REQUEST);
@@ -892,11 +891,13 @@ $action = base64_decode($_REQUEST["action"]);
 
         case "asistencia":
 
-            include('../lib/DB_Conectar.php');
-            include('classes/consultas.php');
+          //  include('../lib/DB_Conectar.php');
+            //include('classes/consultas.php');
             //print_r($_SESSION);
-            include 'header.php';
+            //include 'header.php';
+            $_REQUEST['dominio']=$_SESSION[dominio];
             $formulario='forms/form_asistencias.php';
+
             break;
         case "cambiar_contrasenia":
 
@@ -954,21 +955,7 @@ $action = base64_decode($_REQUEST["action"]);
             /***************includes******************/
             echo $result;
             break;
-        /***************************************/
-        case "listar_asistencias":
 
-            include('../lib/DB_Conectar.php');
-            include('classes/consultas.php');
-            include 'header.php';
-
-            include "nav.php";
-
-            include 'menu.php';
-
-            $result= $consultas->getAsistencias();
-            //exit();
-            $formulario='forms/form_lista_asistencias.php';
-            break;
         case "listar_turnos":
                // echo "bueno";
             include('../lib/DB_Conectar.php');
@@ -1042,7 +1029,7 @@ $action = base64_decode($_REQUEST["action"]);
 
                 $formulario='forms/form_turnera.php';
         break;
-        /************prodccutos***************/
+        /************prestaciones***************/
         case "listar_prestaciones":
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');
@@ -1052,7 +1039,7 @@ $action = base64_decode($_REQUEST["action"]);
 
             include 'menu.php';
 
-            $result= $consultas->getprestaciones();
+            $result= $consultas->getPrestaciones();
 
             $formulario='forms/form_lista_prestaciones.php';
             break;
@@ -1075,9 +1062,9 @@ $action = base64_decode($_REQUEST["action"]);
 
             include 'menu.php';
 
-            $id_producto = $consultas->save_prestacion($_REQUEST);
+            $id_producto = $consultas->save_prestaciones($_REQUEST);
             //borrar_relacion($id_producto);
-            $result = $consultas->getprestaciones();
+            $result = $consultas->getPrestaciones();
             /*********************/
             $mensaje="La operacion se realizo correctamente.";
             $formulario='forms/form_lista_prestaciones.php';
@@ -1091,11 +1078,230 @@ $action = base64_decode($_REQUEST["action"]);
 
             include 'menu.php';
 
-            $result= $consultas->getPrestacionbyid($_REQUEST['id_prestacion']);
-            $formulario='forms/form_prestacion.php';
+            $result= $consultas->getPrestacionesByid($_REQUEST['id_prestacion']);
+            $formulario='forms/form_prestaciones.php';
         break;
 
+        /*****************Clientes********************/
+        case "guardar_cliente":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+            include "nav.php";
+            include 'menu.php';
 
+            $id_cliente= $consultas->save_cliente($_REQUEST);
+              $mensaje="El cliente se guardo correctamente se realizo correctamente.";
+            $result= $consultas->getClientes();
+
+            $formulario='forms/form_lista_clientes.php';
+        break;
+        case "eliminar_clientes":
+            /***************includes******************/
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            /*********************/
+            $consultas->eliminar_cliente($_REQUEST['id_cliente']);
+            $mensaje="La operacion se realizo correctamente.";
+            $result= $consultas->getClientes();
+
+            $formulario='forms/form_lista_clientes.php';
+            break;
+        case "carga_clientes":
+            //echo "si bueno tibago";
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            //print_r($_SESSION);
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $formulario='forms/form_clientes.php';
+        break;
+        case "edita_cliente":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+            include "nav.php";
+            include 'menu.php';
+
+            $result= $consultas->getClientesByid($_REQUEST['id_cliente']);
+
+            $formulario='forms/form_clientes.php';
+        break;
+        case "listar_clientes":
+           // echo "bueno";
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getClientes();
+
+            $formulario='forms/form_lista_clientes.php';
+        break;
+        /*******************solicitud de pedidos***************************/
+        case "cargar_pedido":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $cliente= $consultas->getClientesByid($_REQUEST['id_cliente']);
+
+            $formulario='forms/form_pedido.php';
+        break;
+        /*******************solicitud de pedidos***************************/
+        case "guardar_pedido":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $id_pedido= $consultas->save_pedido($_REQUEST);
+            foreach ($_POST['producto_reserva'] as $key => $value) {
+              # code...['producto']
+              $consultas->save_pedido_detalle($id_pedido, $value, $_POST['cantidad'][$key], $_POST['unidad'][$key], $_POST['precio'][$key]);
+              // echo "producto ".$value." precio ".$_POST['precio'][$key]. " unidad ".$_POST['unidad'][$key]. " cantidad ".$_POST['cantidad'][$key]. "<br>";
+            }
+            $result= $consultas->getPedidos();
+          $formulario='forms/form_lista_pedido.php';
+        break;
+        case "listar_pedido":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getPedidos();
+          $formulario='forms/form_lista_pedidos.php';
+        break;
+        case "estadistica_act_personas":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            //$result= $consultas->getPedidos();
+          $formulario='forms/form_estadistica_actividades.php';
+        break;
+        /*******************comprobantes  de prestaciones***************************/
+        case "guardar_comprobantes":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $id_comprobante= $consultas->save_comprobante($_REQUEST);
+            foreach ($_POST['prestacion_comprobante'] as $key => $value) {
+              # code...['producto']
+              $consultas->save_comprobante_detalle($id_comprobante, $value, $_POST['cantidad'][$key], $_POST['costo'][$key], $_POST['precio'][$key]);
+            }
+            $result= $consultas->getComprobantes();
+          $formulario='forms/form_lista_comprobante.php';
+        break;
+        case "listar_comprobantes":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getComprobantes();
+          $formulario='forms/form_lista_comprobantes.php';
+        break;
+        case "carga_comprobante":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+          //  $result= $consultas->getComprobanteByID();
+          $formulario='forms/form_comprobante.php';
+        break;
+        /********************Asistencias istema de gimnacios*******************/
+        case "listar_asistencias":
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getAsistencias();
+            //exit();
+            $formulario='forms/form_lista_asistencias.php';
+            break;
+            /********************productos stock****************/
+            case "listar_producto_stock":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getStock();
+              $formulario='forms/form_lista_stock.php';
+            break;
+            case "cargar_stock":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+              $formulario='forms/form_producto_stock.php';
+            break;
+            case "guardar_producto_stock":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+                $consultas->save_stock($_REQUEST);
+                $result = $consultas->getStock();
+                /*********************/
+                $mensaje="La operacion se realizo correctamente.";
+             $formulario='forms/form_lista_stock.php';
+            break;
     }
 
 if($formulario){

@@ -29,7 +29,9 @@ $result = $consultas->getPagos($_REQUEST['fecha_desde'],$_REQUEST['fecha_hasta']
             $suma=$v->monto+$suma;
             ?>
             <tr class="odd gradeX">
-                <td><?php echo $cant; ?></td>
+                <td><?php echo $cant; ?>
+                  <img src="img/printer.png"  data-toggle="tooltip" title="Imprimir Comprobante" onclick="imprimir_pago('<?php echo $v->id_pago; ?>')" />
+                </td>
                 <td><?php echo $v->cliente; ?></td>
                 <td><?php echo $v->actividad; ?></td>
                 <td><?php echo $v->periodo; ?></td>

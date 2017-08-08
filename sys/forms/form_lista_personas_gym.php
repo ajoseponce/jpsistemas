@@ -70,7 +70,7 @@
                                     if($cant_pg>0) {
                                         $color=" ";
                                     }else{
-                                        if(date<11){
+                                        if(date('d')<=$v->dia_venc){
                                             $color=" background-color: yellow;";
                                         }else{
                                             $color=" background-color: red;";
@@ -141,4 +141,3 @@
 <!-- /#wrapper -->
 
 <!-- jQuery -->
-

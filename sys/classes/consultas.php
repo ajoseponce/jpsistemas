@@ -184,7 +184,9 @@ class Consultas
             $table->domicilio_dni = $data['domicilio'];
             $table->telefono_particular = $data['telefono_particular'];
             $table->telefono_celular = $data['telefono_celular'];
-            $table->mail = $data['mail'];
+						$table->mail = $data['mail'];
+						$table->nro_socio = $data['nro_socio'];
+            $table->dia_venc = $data['dia_venc'];
             if($data['estado']){
                 $table->cod_estado = $data['estado'];
             }else{
@@ -258,16 +260,7 @@ class Consultas
         else
             return false;
     }
-		function getPrestaciones(){
-        $query = "SELECT a.* "
-            . "  FROM prestaciones a WHERE 1 AND id_dominio='".$_SESSION['dominio']."' ORDER BY descripcion ASC " ;
-        //echo $query;
-        $result = $this->db->loadObjectList($query);
-        if($result)
-            return $result;
-        else
-            return false;
-    }
+
     function getcontarproductos(){
         $query = "SELECT COUNT(a.id_producto) total "
             . "  FROM productos a WHERE 1 AND id_dominio='".$_SESSION['dominio']."' ORDER BY descripcion ASC " ;
@@ -511,8 +504,9 @@ class Consultas
 
     }
     function getPagosPeriodo($periodo,$cliente){
+			$periodoMas=$periodo++;
         $query = "SELECT COUNT(p.id_pago) total FROM pagos p  " ;
-        $query .= " WHERE p.periodo='".$periodo."' AND  p.id_cliente='".$cliente."' ";
+        $query .= " WHERE (p.periodo='".$periodo."' OR p.periodo='".$periodoMas."') AND  p.id_cliente='".$cliente."' ";
         $result = $this->db->loadObjectList($query);
         if($result)
             return $result[0]->total;
@@ -581,13 +575,13 @@ class Consultas
             return false;
 
     }
-    function getProductosByClientesDNI($dni_cliente){
+    function getProductosByClientesDNI($dni_cliente, $dominio){
         $query = "SELECT r.*, pr.descripcion producto "
             . "  FROM relaciones r
                INNER JOIN personas p ON p.id_persona=r.id_persona
                INNER JOIN productos pr ON pr.id_producto=r.id_producto
                 " ;
-        $query .= " WHERE p.dni='".$dni_cliente."' ";
+        $query .= " WHERE p.dni='".$dni_cliente."' AND p.id_dominio='".$dominio."' ";
         //echo $query;
         $result = $this->db->loadObjectList($query);
         if($result)
@@ -608,9 +602,9 @@ class Consultas
             return false;
 
     }
-    function getDatosClientesPeriodo($cliente){
+    function getDatosClientesPeriodo($cliente, $dominio){
         $query = "SELECT CONCAT_WS(' ', p.nombre,p.apellido) cliente,p.id_persona FROM  personas p " ;
-        $query .= " WHERE  p.dni='".$cliente."' ";
+        $query .= " WHERE  p.dni='".$cliente."' AND  p.id_dominio='".$dominio."'  ";
         $result = $this->db->loadObjectList($query);
         if($result)
             return $result[0];
@@ -618,13 +612,13 @@ class Consultas
             return false;
 
     }
-    function save_presente($id_cliente,$id_actividad){
+    function save_presente($id_cliente,$id_actividad,$dominio){
         session_start();
         $table = new Table($this->db, 'presente_cliente');
         $table->id_cliente = $id_cliente;
-        $table->id_producto = $id_actividad;
+        $table->id_actividad = $id_actividad;
         $table->fecha_hora = date('Y-m-d H:i:s');
-        $table->id_dominio = $_SESSION['dominio'];
+        $table->id_dominio = $dominio;
         if($table->save()){
             return $table->id_presente;
         }else{
@@ -1062,7 +1056,7 @@ class Consultas
         else
             return false;
     }
-    public function getTurnos($persona=null,$fecha_desde=null,$fecha_hasta=null) {
+    public function getTurnos($persona=null,$fecha_desde=null,$fecha_hasta=null,$apellidofiltro=null,$nombrefiltro=null,$dnifiltro=null,$motivofiltro=null) {
 			session_start();
         $query = "SELECT t.* , date_format(t.fecha_turno, '%d/%m/%Y') fecha,
 									date_format(t.fecha_turno, '%H/%i') hora,
@@ -1075,6 +1069,22 @@ class Consultas
 				if($persona){
 					$query .= " AND t.id_persona = $persona";
 				}
+				if($apellidofiltro){
+            $query .=" AND p.apellido like '%$apellidofiltro%'";
+        }
+        if($nombrefiltro){
+            $query .=" AND p.nombre like '%$nombrefiltro%'";
+        }
+        if($dnifiltro){
+            $query .=" AND p.dni like '%$dnifiltro%'";
+        }
+				if($motivofiltro){
+            $query .=" AND t.id_motivo like '%$motivofiltro%'";
+        }
+				if($fecha_desde==null && $fecha_hasta==null){
+            //$fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $query .=" AND (t.fecha_turno between '".date('Y-m-d')." 00:00:00' AND '".date('Y-m-d')." 23:59:50')";
+        }
 				if($fecha_desde && $fecha_hasta==null){
             $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
             $query .=" AND t.fecha_turno>='".$fecha_desde."'";
@@ -1097,6 +1107,23 @@ class Consultas
         }
         return array();
     }
+		public function getDatosTurno($id_turno=null) {
+			session_start();
+        $query = "SELECT t.* , date_format(t.fecha_turno, '%d/%m/%Y') fecha, date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento,
+									date_format(t.fecha_turno, '%H/%i') hora,
+									m.descripcion motivo, p.dni,
+									CONCAT_WS(' ',p.apellido,p.nombre) cliente
+                  FROM turnos t
+                  LEFT JOIN motivos_turno m ON m.id_motivo=t.id_motivo
+									  LEFT JOIN personas p ON p.id_persona=t.id_persona
+									WHERE 1 AND t.id_turno='".$id_turno."' ";
+				//echo $query;
+        $resutlt = $this->db->loadObjectList($query);
+        if ($resutlt) {
+            return $resutlt[0];
+        }
+        return array();
+    }
     function save_turno_persona($data){
         $fecha=substr($data['fecha_turno'], 6, 4)."-".substr($data['fecha_turno'], 3, 2)."-".substr($data['fecha_turno'], 0, 2)."-".substr($data['hora'], 0, 5).":00";
         $table = new Table($this->db, 'turnos');
@@ -1114,7 +1141,7 @@ class Consultas
 
 
         if($table->save()){
-            return true;
+            return $table->id_turno;
         }else{
             return false;
         }
@@ -1131,15 +1158,17 @@ class Consultas
         return array();
     }
 
-		public function getTurnera(){
+		public function getTurnera($dominio){
 			$fecha_desde=date('Y')."-".date('m')."-".date('d')." 00:00:00";
 			$fecha_hasta=date('Y')."-".date('m')."-".date('d')." 23:59:00";
         $query = "SELECT CONCAT_WS(' ',p.apellido,p.nombre) cliente
                   FROM turnos t
 									LEFT JOIN personas p ON p.id_persona=t.id_persona
                   WHERE t.estado='Llamando' ";
-									$query .=" AND (t.fecha_turno between '".$fecha_desde."' AND '".$fecha_hasta."')";
-								//	echo $query;
+									$query .=" AND t.id_dominio='".$dominio."' AND (t.fecha_turno between '".$fecha_desde."' AND '".$fecha_hasta."')";
+
+									$query .=" ORDER BY t.fecha_llamado DESC";
+									//echo $query;
         $resutlt = $this->db->loadObjectList($query);
         if ($resutlt) {
             return $resutlt;
@@ -1203,40 +1232,7 @@ class Consultas
             return 0;
         }
     }
-    function getAsistencias($fecha_desde=null, $fecha_hasta=null, $dni=null){
-        session_start();
-        $query = "SELECT CONCAT_WS(' ',p.apellido,p.nombre) persona,
-                        date_format(pp.fecha_hora, '%d/%m/%Y') fecha_h "
-            . "  FROM personas p
-            INNER JOIN presente_cliente pp ON pp.id_cliente=p.id_persona
-            WHERE 1 AND pp.id_dominio='".$_SESSION['dominio']."' ";
-        if($fecha_desde && $fecha_hasta==null){
-            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
-            $query .=" AND pp.fecha_hora>='".$fecha_desde."'";
-        }
-        if($fecha_desde==null && $fecha_hasta){
-            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
-            $query .=" AND pp.fecha_hora<='".$fecha_hasta."'";
-        }
 
-        if($fecha_desde && $fecha_hasta){
-            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
-            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
-            $query .=" AND (pp.fecha_hora between '".$fecha_desde."' AND '".$fecha_hasta."')";
-        }
-        if($dni){
-            $query .=" AND p.dni like '%$dni%'";
-        }
-        //$query .= " ORDER BY p.apellido, p.nombre ASC " ;
-
-        //echo $query;
-        $result = $this->db->loadObjectList($query);
-        if($result) {
-            return $result;
-
-        }else
-            return false;
-    }
 		function getCountTurnosDia($fecha_turno){
 			session_start();
 			$fecha_desde=substr($fecha_turno, 6, 4)."-".substr($fecha_turno, 3, 2)."-".substr($fecha_turno, 0, 2)." 00:00:00";
@@ -1437,13 +1433,19 @@ class Consultas
 				case "Llamando":
 						$estado='Atendido';
 				break;
+				case "cancelar_llamada":
+						$estado='Presente';
+				break;
 				case "Cancelado":
 						$estado='Cancelado';
 				break;
 			}
         $query = "UPDATE turnos
-                      SET estado='".$estado."'
-                      WHERE id_turno='$idTurno'";
+                      SET estado='".$estado."' ";
+											if($estado=="Llamando"){
+												$query.=" , fecha_llamado=NOW() ";
+											}
+                      $query.=" WHERE id_turno='$idTurno'";
         $this->db->query($query);
 
     }
@@ -1482,6 +1484,344 @@ class Consultas
             return $result[0];
         else
             return false;
+    }
+		/***************************************************/
+		function save_prestaciones($data){
+        $table = new Table($this->db, 'prestaciones');
+        if(isset($data['id_prestacion'])){
+            $table->find($data['id_prestacion']);
+        }
+        $table->descripcion = $data['descripcion'];
+				$table->precio = $data['precio'];
+				$table->costo = $data['costo'];
+				$table->id_dominio = $_SESSION['dominio'];
+				if($data['estado']){
+            $table->estado = $data['estado'];
+        }else{
+            $table->estado = 'A';
+        }
+        if($table->save()){
+            return $table->id_marca;
+        }else{
+            return 0;
+        }
+    }
+		function getPrestaciones(){
+        $query = "SELECT a.* FROM prestaciones a WHERE 1 ORDER BY descripcion ASC " ;
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
+        else
+            return false;
+    }
+		function getPrestacionesByid($id_registro){
+
+        $query = "SELECT r.* FROM prestaciones r  WHERE r.id_prestacion='".$id_registro."' ";
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result[0];
+        else
+            return false;
+    }
+		/***************************************************/
+		/*************************clientes**************************/
+		function save_cliente($data){
+				$fecha_nac=substr($data['fecha_nacimiento'], 6, 4)."-".substr($data['fecha_nacimiento'], 3, 2)."-".substr($data['fecha_nacimiento'], 0, 2);
+				$table = new Table($this->db, 'clientes');
+				if(isset($data['id_cliente'])){
+						$table->find($data['id_cliente']);
+
+						//$table->fecha_modificacion = date('Y-m-d H:i:s');
+				}else{
+						$table->fecha_alta = date('Y-m-d H:i:s');
+
+				}
+				$table->nombre = $data['nombre'];
+				$table->apellido = $data['apellido'];
+				$table->dni = $data['dni'];
+				$table->cuit = $data['cuit'];
+				$table->razon_social = $data['razon_social'];
+				$table->fecha_nacimiento = $fecha_nac;
+				$table->domicilio_dni = $data['domicilio'];
+				$table->telefono_particular = $data['telefono_particular'];
+				$table->telefono_celular = $data['telefono_celular'];
+				$table->mail = $data['mail'];
+				if($data['estado']){
+						$table->cod_estado = $data['estado'];
+				}else{
+						$table->cod_estado = 'A';
+				}
+				$table->id_proviene = $data['id_proviene'];
+				$table->id_dominio = $_SESSION['dominio'];
+				$table->usuario = $_SESSION['id'];
+				$table->fecha_alta = date('Y-m-d H:i:s');
+				if($table->save()){
+						return $table->id_cliente;
+				}else{
+						return 0;
+				}
+		}
+		function getClientes(){
+				//session_start();
+				$query = "SELECT d.*,date_format(d.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento FROM clientes d "
+						. "WHERE cod_estado='A' ORDER BY apellido, nombre ASC ";
+				//echo $query;
+				$result = $this->db->loadObjectList($query);
+				if($result)
+						return $result;
+				else
+						return false;
+		}
+		function getClientesByid($id_registro){
+
+		$query = "SELECT r.* "
+										. " FROM clientes r"
+										. " WHERE r.id_cliente='".$id_registro."' ";
+		//echo $query;
+						$result = $this->db->loadObjectList($query);
+		if($result)
+		return $result[0];
+		else
+		return false;
+		}
+
+		function save_importar_stock($producto, $unidad, $precio){
+
+        $table = new Table($this->db, 'productos_stock');
+
+        $table->descripcion = ucfirst($producto);
+				$table->unidad_medida = $unidad;
+        $table->precio = $precio;
+				$table->estado = 'A';
+        $table->id_dominio = 5;
+
+        if($table->save()){
+            return $table->id_producto_stock;
+        }else{
+            return 0;
+        }
+    }
+		function save_pedido($data){
+			$fecha_retiro=substr($data['fecha_retiro'], 6, 4)."-".substr($data['fecha_retiro'], 3, 2)."-".substr($data['fecha_retiro'], 0, 2);
+			$table = new Table($this->db, 'pedidos');
+
+			$table->id_cliente = $data['clientes'];
+			$table->fecha_retiro = $fecha_retiro;
+			$table->hora_retiro = $data['hora'];
+			$table->nota = $data['nota'];
+			$table->fecha_hora = date('Y-m-d H:i:s');
+			$table->usuario_carga = $_SESSION['id'];
+			$table->estado = 'nuevo';
+			$table->id_dominio = $_SESSION['dominio'];
+
+			if($table->save()){
+					return $table->id_pedido;
+			}else{
+					return 0;
+			}
+		}
+		function save_pedido_detalle($pedido, $producto, $cantidad, $unidad, $precio){
+		//$fecha_retiro=substr($data['fecha_retiro'], 6, 4)."-".substr($data['fecha_retiro'], 3, 2)."-".substr($data['fecha_retiro'], 0, 2);
+			$table = new Table($this->db, 'pedidos_detalle');
+
+			$table->id_pedido = $pedido;
+			$table->id_producto_stock = $producto;
+			$table->unidad = $unidad;
+			$table->cantidad = $cantidad;
+			$table->precio_aprox = $precio;
+
+
+			if($table->save()){
+					return $table->id_pedido;
+			}else{
+					return 0;
+			}
+		}
+		public function getDatosPago($id_pago=null) {
+			session_start();
+        $query = "SELECT t.* ,
+				date_format(t.fecha_hora, '%d/%m/%Y') fecha, date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento,
+									date_format(t.fecha_hora, '%H:%i') hora,
+									m.descripcion actividad, p.dni,
+									CONCAT_WS(' ',p.apellido,p.nombre) cliente
+                  FROM pagos t
+                  LEFT JOIN productos m ON m.id_producto=t.id_producto
+									  LEFT JOIN personas p ON p.id_persona=t.id_cliente
+									WHERE 1 AND t.id_pago='".$id_pago."' ";
+				//echo $query;
+        $resutlt = $this->db->loadObjectList($query);
+        if ($resutlt) {
+            return $resutlt[0];
+        }
+        return array();
+    }
+		function getPedidos($fecha_desde=null, $fecha_hasta=null){
+        session_start();
+        $query = "SELECT p.*, date_format(p.fecha_retiro, '%d/%m/%Y') fecha, date_format(p.hora_retiro, '%d/%m/%Y') hora ,  CONCAT_WS(' ',pr.apellido, pr.nombre) cliente
+                  FROM pedidos p
+                  INNER JOIN clientes pr ON pr.id_cliente=p.id_cliente
+                  WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' " ;
+        if($fecha_desde && $fecha_hasta==null){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $query .=" AND p.fecha_hora>='".$fecha_desde."'";
+        }
+        if($fecha_desde==null && $fecha_hasta){
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND p.fecha_hora<='".$fecha_hasta."'";
+        }
+
+        if($fecha_desde && $fecha_hasta){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND (p.fecha_hora between '".$fecha_desde."' AND '".$fecha_hasta."')";
+        }
+
+        //$query .= " WHERE p.periodo='".$periodo."' ";
+      //  echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
+        else
+            return false;
+
+    }
+		function save_comprobante($data){
+			//$fecha_retiro=substr($data['fecha_retiro'], 6, 4)."-".substr($data['fecha_retiro'], 3, 2)."-".substr($data['fecha_retiro'], 0, 2);
+			$table = new Table($this->db, 'comprobantes');
+
+			$table->id_persona = $data['clientes'];
+			//$table->fecha_retiro = $fecha_retiro;
+			$table->precio = $data['hora'];
+			$table->id_turno = $data['id_turno'];
+			$table->fecha_hora = date('Y-m-d H:i:s');
+
+			$table->id_dominio = $_SESSION['dominio'];
+
+			if($table->save()){
+					return $table->id_comprobante;
+			}else{
+					return 0;
+			}
+		}
+		function save_comprobante_detalle($comprobante, $prestacion, $cantidad, $costo, $precio){
+		//$fecha_retiro=substr($data['fecha_retiro'], 6, 4)."-".substr($data['fecha_retiro'], 3, 2)."-".substr($data['fecha_retiro'], 0, 2);
+			$table = new Table($this->db, 'comprobantes_detalle');
+
+			$table->id_pedido = $pedido;
+			$table->id_prestacion = $producto;
+			$table->costo = $costo;
+			$table->cantidad = $cantidad;
+			$table->precio = $precio;
+
+
+			if($table->save()){
+					return $table->id_comprobante_detalle;
+			}else{
+					return 0;
+			}
+		}
+		function getComprobantes($fecha_desde=null, $fecha_hasta=null){
+        session_start();
+        $query = "SELECT p.*, date_format(p.fecha_hora, '%d/%m/%Y') fecha,  CONCAT_WS(' ',pr.apellido, pr.nombre) cliente
+                  FROM comprobantes p
+                  INNER JOIN personas pr ON pr.id_persona=p.id_cliente
+                  WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' " ;
+        if($fecha_desde && $fecha_hasta==null){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $query .=" AND p.fecha_hora>='".$fecha_desde."'";
+        }
+        if($fecha_desde==null && $fecha_hasta){
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND p.fecha_hora<='".$fecha_hasta."'";
+        }
+
+        if($fecha_desde && $fecha_hasta){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND (p.fecha_hora between '".$fecha_desde."' AND '".$fecha_hasta."')";
+        }
+
+        //$query .= " WHERE p.periodo='".$periodo."' ";
+      //  echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
+        else
+            return false;
+
+    }
+		function getAsistencias($fecha_desde=null, $fecha_hasta=null){
+        session_start();
+        $query = "SELECT CONCAT_WS(' ',p.apellido,p.nombre) cliente,
+                        date_format(pp.fecha_hora, '%d/%m/%Y') fecha , date_format(pp.fecha_hora, '%H:%i') hora, pr.descripcion actividad "
+            . "  FROM presente_cliente pp
+            INNER JOIN personas p ON p.id_persona=pp.id_cliente
+						INNER JOIN productos pr ON pr.id_producto=pp.id_actividad
+            WHERE 1 AND pp.id_dominio='".$_SESSION['dominio']."' ";
+        if($fecha_desde && $fecha_hasta==null){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $query .=" AND pp.fecha_hora>='".$fecha_desde."'";
+        }
+        if($fecha_desde==null && $fecha_hasta){
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND pp.fecha_hora<='".$fecha_hasta."'";
+        }
+
+        if($fecha_desde && $fecha_hasta){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND (pp.fecha_hora between '".$fecha_desde."' AND '".$fecha_hasta."')";
+        }
+
+        $result = $this->db->loadObjectList($query);
+        if($result) {
+            return $result;
+
+        }else
+            return false;
+    }
+		//---------------------------- todo de stock
+		function getStock(){
+        $query = "SELECT p.* , u.descripcion unidad "
+            . "  FROM productos_stock p
+						INNER JOIN unidad_medida u ON u.id_unidad=p.unidad_medida
+						WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' ";
+						if($nombrefiltro){
+								$query .=" AND p.descripcion like '%$nombrefiltro%'";
+						}
+
+						$query .=" ORDER BY p.descripcion ASC " ;
+        //echo $query;
+        $result = $this->db->loadObjectList($query);
+        if($result)
+            return $result;
+        else
+            return false;
+    }
+		function save_stock($data){
+        $table = new Table($this->db, 'productos_stock');
+        if(isset($data['id_producto_stock'])){
+            $table->find($data['id_producto_stock']);
+
+        }
+        $table->descripcion = $data['descripcion'];
+				$table->precio = $data['precio'];
+				$table->costo = $data['costo'];
+        $table->unidad_medida = $data['unidad_medida'];
+
+        if($data['estado']){
+            $table->estado = $data['estado'];
+        }else{
+            $table->estado = 'A';
+        }
+        $table->id_dominio = $_SESSION['dominio'];
+        if($table->save()){
+            return $table->id_producto_stock;
+        }else{
+            return 0;
+        }
     }
 
 }

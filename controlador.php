@@ -7,7 +7,7 @@ requireLogin();
 $action = $_REQUEST["action"];
 //print_r($_REQUEST);
     switch ($action) {
-        
+
      //crga el categorias
         case "logout":
             /***************includes******************/
@@ -803,10 +803,9 @@ $action = $_REQUEST["action"];
             break;
         /***************************************/
     }
-   
-if($formulario){    
+
+if($formulario){
     include($formulario);
-}    
+}
 //include 'footer.php';
-?>   
-    
+?>

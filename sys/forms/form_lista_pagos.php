@@ -93,7 +93,7 @@
                                     ?>
                                     <tr class="odd gradeX">
 
-                                        <td><?php echo $cant; ?></td>
+                                        <td><?php echo $cant; ?>  <img src="img/printer.png"  data-toggle="tooltip" title="Imprimir Comprobante" onclick="imprimir_pago('<?php echo $v->id_pago; ?>')" /></td>
                                         <td><?php echo $v->cliente; ?></td>
                                         <td><?php echo $v->actividad; ?></td>
                                         <td><?php echo $v->periodo; ?></td>
@@ -171,7 +171,7 @@
             monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
         });
         $("#fecha_hasta").datepicker({
-            dateFormat: 'dd-mm-yyyy',
+            dateFormat: 'dd-mm-yy',
             dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
             onSelect:  function(dateText) {
                 trae_pagos();

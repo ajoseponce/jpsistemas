@@ -15,7 +15,7 @@
     <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a href="controlador.php?<?php echo base64_encode('cargar_prestacion'); ?>">Agregar <img src="img/agregar.png"></a>
+                    <a href="controlador.php?action=<?php echo base64_encode('carga_prestaciones'); ?>">Agregar <img src="img/agregar.png"></a>
                 </div>
                 <?php if($mensaje){ ?>
                     <div class="alert alert-success alert-dismissable">
@@ -37,6 +37,7 @@
                             <tr>
                                 <th>Descripcion</th>
                                 <th>Precio</th>
+                                <th>Costo</th>
                                 <th>Estado</th>
                                 <th>&nbsp;</th>
                             </tr>
@@ -49,6 +50,7 @@
 
                                         <td><?php echo $v->descripcion; ?></td>
                                         <td><?php echo $v->precio; ?></td>
+                                        <td><?php echo $v->costo; ?></td>
                                         <td><?php echo ($v->estado=='A')?"Alta":"Baja"; ?></td>
                                         <td><a href="controlador.php?action=<?php echo base64_encode('edita_prestacion'); ?>&id_prestacion=<?php echo $v->id_prestacion; ?>"><img src="img/edit.png"/></a></td>
                                     </tr>

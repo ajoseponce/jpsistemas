@@ -1,3 +1,4 @@
+var i=0;
 function volver_listado(relacion){
  window.location.href = 'controlador.php?action='+relacion;
 }
@@ -12,10 +13,7 @@ function guardar_datos(){
 }
 
 function guardar_producto(){
-    // if($("#descripcion").val()==''){
-    //     alert("cargue una descripcion por favor");
-    //     return false;
-    // }
+
     $("#form_datos").submit();
 }
 function guardar_relacion(){
@@ -74,6 +72,124 @@ function autocomleteINI_productos(id, path) {
             }
         }) ;
 }
+function autocomleteINI_prod_pedido(id, path) {
+    $('#suggest_' + id).autocomplete(
+        { messages: { noResults: 'nadaaa', results: function() {} },
+            source: function (request, response) {
+                $.getJSON( path, { term: this.term }, response );
+            }, minLength: 2,
+            select: function (event, ui) {
+                // /console.log(ui); i
+                if (ui.item == null) {
+                    $('#' + id).val('').trigger('clear');
+                    $('#suggest_' + id).val('');
+                } else {
+                    //alert('hola'+ui.item.id);
+                    $('#' + id).val(ui.item.id).trigger('change');
+                    $('#precio_' + id).val(ui.item.precio).trigger('change');
+                    $('#unidad_' + id).val(ui.item.unidad).trigger('change');
+                    $('#unidad_medida').html(ui.item.unidad_div).trigger('change');
+                    $('#precio_productos_div').html(ui.item.precio+'$ x '+ui.item.unidad_div).trigger('change');
+
+                    $( "#cantidad" ).focus();
+
+                }
+            }
+        }) ;
+}
+
+function agrega_carrito(){
+  if($('#cantidad').val()==''){
+    alert('Ingrese una cantidad');
+    return false;
+  }
+  var producto=$('#suggest_productos').val();
+  var id_producto=$('#productos').val();
+  var unidad=$('#unidad_productos').val();
+  var cantidad=$('#cantidad').val();
+  var precio=$('#precio').val();
+  v2=parseFloat(precio);
+  precio=v2.toFixed(2)
+  i++;
+  $("#prestaciones_comprobante").append('<tr><td>'+producto+'<input name="producto_reserva['+i+']" id="producto_reserva_'+i+'" value="'+id_producto+'" type="hidden"/><input name="unidad['+i+']" id="unidad_'+i+'" value="'+unidad+'" type="hidden"/></td><td><input class="form-control" name="cantidad['+i+']" id="cantidad_'+i+'" value="'+cantidad+'" type="hidden"/><div id="cantidad_prod'+i+'">'+cantidad+'</div></td><td><div id="etiqueta_precio_'+i+'">'+precio+'</div><input type="hidden" name="precio['+i+']" id="precio_'+i+'" value="'+precio+'"/></td><td><button type="button" class="btn btn-danger btn-borrar-fila" onclick="resta('+i+')">x</button></td></tr>');
+  $('#suggest_productos').val("");
+  $('#productos').val("");
+  $('#precio').val("");
+  $('#cantidad').val("");
+  $( "#suggest_productos" ).focus();
+
+  v1=parseFloat($("#precio_aprox").val());
+    // alert($("#precio_aprox").val());
+  v2=parseFloat(precio);
+  v3=v2+v1;
+  $("#precio_aprox").val(v3.toFixed(2));
+}
+function resta(vale){
+  v1=parseFloat($("#precio_aprox").val());
+  var precio=$('#precio_'+vale).val();
+  v2=parseFloat(precio);
+  v3=v1-v2;
+  $("#precio_aprox").val(v3.toFixed(2));
+}
+function autocomleteINI_prod_negocio(id, path) {
+    $('#suggest_' + id).autocomplete(
+        { messages: { noResults: 'nadaaa', results: function() {} },
+            source: function (request, response) {
+                $.getJSON( path, { term: this.term }, response );
+            }, minLength: 2,
+            select: function (event, ui) {
+                // /console.log(ui); i
+                if (ui.item == null) {
+                    $('#' + id).val('').trigger('clear');
+                    $('#suggest_' + id).val('');
+                } else {
+                    //alert('hola'+ui.item.id);
+                    $('#' + id).val(ui.item.id).trigger('change');
+                    i++;
+                    var unidad_medida;
+                    $("#prestaciones_comprobante").append('<tr><td>'+ui.item.label+'<input name="producto['+i+']" id="producto_'+i+'" value="'+ui.item.id+'" type="hidden"/></td><td><input class="form-control"  onchange="calculadora_precio('+i+')" name="cantidad['+i+']" id="cantidad_'+i+'" value="1"/></td><td><div id="etiqueta_precio_'+i+'">'+ui.item.precio+'</div><input type="hidden" name="precio['+i+']" id="precio_'+i+'" value="'+ui.item.precio+'"/></td><td><button type="button"  class="btn btn-danger btn-borrar-fila" >x</button></td></tr>');
+                    $("#productos").attr("value", "");
+                    $("#suggest_productos").attr("value", "");
+                }
+            }
+        }) ;
+}
+function calculadora_precio(){
+//alert($("#precio_"+value).val()*$("#cantidad_"+value).val());
+if($("#unidad_productos").val()==1){
+  var valor=($("#precio_productos").val()*$("#cantidad").val())/1000;
+}
+if($("#unidad_productos").val()==2){
+  var valor=($("#precio_productos").val()/6)*$("#cantidad").val();
+}
+if($("#unidad_productos").val()==3){
+  var valor=$("#precio_productos").val()*$("#cantidad").val();
+}
+if($("#unidad_productos").val()==4){
+  var valor=($("#precio_productos").val()/12)*$("#cantidad").val();
+}
+$("#precio").val(valor);
+//$("#etiqueta_precio").html(valor);
+}
+function autocomleteINI_datos(id, path) {
+    $('#suggest_' + id).autocomplete(
+        { messages: { noResults: 'nadaaa', results: function() {} },
+            source: function (request, response) {
+                $.getJSON( path, { term: this.term }, response );
+            }, minLength: 2,
+            select: function (event, ui) {
+                // /console.log(ui); i
+                if (ui.item == null) {
+                    $('#' + id).val('').trigger('clear');
+                    $('#suggest_' + id).val('');
+                } else {
+                    //alert('hola'+ui.item.id);
+                    $('#' + id).val(ui.item.id).trigger('change');
+                    $("#id_producto").load('trae_productos.php?id_cliente='+ui.item.id);
+                }
+            }
+        }) ;
+}
 function autocomleteINI_coberturas(id, path) {
     $('#suggest_' + id).autocomplete(
         { messages: { noResults: 'No', results: function() {} },
@@ -93,7 +209,25 @@ function autocomleteINI_coberturas(id, path) {
             }
         }) ;
 }
-
+function autocomleteINI_prestacion(id, path) {
+    $('#suggest_' + id).autocomplete(
+        { messages: { noResults: 'No', results: function() {} },
+            source: function (request, response) {
+                $.getJSON( path, { term: this.term }, response );
+            }, minLength: 2,
+            select: function (event, ui) {
+                // /console.log(ui); i
+                if (ui.item == null) {
+                    $('#' + id).val('').trigger('clear');
+                    $('#suggest_' + id).val('');
+                } else {
+                    //alert('hola'+ui.item.id);
+                    $('#' + id).val(ui.item.id).trigger('change');
+                    $("#prestaciones_comprobante").append('<tr><td>'+ui.item.label+'</td><td>1</td><td>'+ui.item.precio+'</td><td><button type="button"  class="btn btn-danger btn-borrar-fila">x</button></td></tr>');
+                }
+            }
+        }) ;
+}
 function guardar_edicion_relacion(relacion){
     if($("#id_persona").val()==''){
         alert("La Persona debe estar cargada");
@@ -217,8 +351,13 @@ function trae_turnos(){
 //  alert('si bueno ');
         var fecha_desde=$("#fecha_desde").val();
         var fecha_hasta=$("#fecha_hasta").val();
+
+        var apellido_filtro=$("#apellido_filtro").val();
+        var nombre_filtro=$("#nombre_filtro").val();
+        var dni_filtro=$("#dni_filtro").val();
+        var motivo_filtro=$("#motivo_filtro").val();
         // var periodo=$("#periodo").val();
-        $("#tabla_listado").load('trae_turnos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta);
+        $("#tabla_listado").load('trae_turnos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta+'&apellido_filtro='+apellido_filtro+'&nombre_filtro='+nombre_filtro+'&dni_filtro='+dni_filtro+'&motivo_filtro='+motivo_filtro);
 
 }
 function trae_turnos_fecha(){
@@ -230,23 +369,25 @@ function trae_turnos_fecha(){
 }
 function trae_actividades_clientes() {
     var dni=$("#dni").val();
-    $("#id_producto").load('trae_productos_dni.php?dni_cliente='+dni);
+    var dominio=$("#dominio").val();
+    $("#id_producto").load('trae_productos_dni.php?dni_cliente='+dni+'&dominio='+dominio);
     //$("#mjs").load('busca_pagos_dni.php?dni_cliente='+dni);
 
     $.ajax({
         url:           "busca_pagos_dni.php",
-        data:          {dni_cliente: ""+$("#dni").val()},
+        data:          {dni_cliente: ""+$("#dni").val(), dominio: ""+dominio},
         dataType:      'json',
         type: 'get',
         success:       function(data){
+          //alert(data.mjs);
             if(data.error==1){
-                $("#mjs").html(data.mjs);
+                $("#mjs_asistencia").html(data.mjs);
                 $("#boton_guarda").hide();
                 $("#boton_sig").show();
                 $("#div_prod").hide();
                 $("#dni").val("");
             }else{
-                $("#mjs").html(data.mjs);
+                $("#mjs_asistencia").html(data.mjs);
                 $("#boton_guarda").show();
                 $("#boton_sig").hide();
                 $("#div_prod").show();
@@ -270,9 +411,10 @@ function eiminaPatente(registro, persona){
 }
 function presente_cliente() {
     var dni=$("#dni").val();
+    var dominio=$("#dominio").val();
     $.ajax({
         url:           "presente.php",
-        data:          { dni_cliente: ""+$("#dni").val()+"", actividad: ""+$("#id_producto").val()},
+        data:          { dni_cliente: ""+$("#dni").val()+"", actividad: ""+$("#id_producto").val(), dominio: ""+dominio},
         type: 'get',
         success:       function(data) {
             //alert(data);
@@ -295,7 +437,7 @@ function presente_cliente() {
 
 }
 function refrescar() {
-    location.href= 'controlador.php?action_js=asistencia';
+    location.reload();
 
 }
 function IsNumeric(valor)
@@ -427,7 +569,7 @@ function guardar_cambio_contrasenia(){
         success:       function(data){
             alert('La aplicacion se cerrara vuelva a ingresar .Gracias');
             //location.reload();
-            window.location.href = 'controlador.php?action=logout';
+            window.location.href = 'controlador.php?action_js=logout';
         }
     });
 }
@@ -456,10 +598,12 @@ function guardar_turno(){
             data:          {action_js: "guardar_turno",id_persona: ""+$("#id_persona").val()+"",fecha_turno: ""+$("#fecha_turno").val()+"",tipo_turno: ""+$("#tipo_turno").val()+"",hora: ""+$("#hora").val()+"",observaciones: ""+$("#observaciones").val()+"",motivo: ""+$("#motivo").val()+""},
             type: 'post',
             success:       function(data){
-                //alert(data);
+              //  alert(data);
                 if(data){
                     $('#mjs').html('El turno se reservo correctamente');
                     $('#mensaje').modal('toggle');
+                    $('#id_turno').attr('value', data);
+                    $('#boton_impresion').show();
                 }else{
                     $('#mjs_error').html('Ocurrio un error');
                     $('#mensaje_error').modal('toggle');
@@ -612,4 +756,29 @@ function turnera(){
   //alert('hola mundo');
   $("#turnera").load("turnero.php");
         //$("#tabla_listado").load('trae_turnos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta);
+}
+function imprimir_bono(turno){
+  if(turno){
+
+  }else{
+    var turno=$("#id_turno").val();
+  }
+    window.open('impresion/bono_turno.php?turno='+turno, '_blank');
+    $('#boton_impresion').hide();
+}
+function imprimir_pago(pago){
+  if(pago){
+
+  }else{
+    var pago=$("#id_pago").val();
+  }
+    window.open('impresion/bono_pago.php?pago='+pago, '_blank');
+    $('#boton_impresion').hide();
+}
+function trae_asistencias(){
+        var fecha_desde=$("#fecha_desde").val();
+        var fecha_hasta=$("#fecha_hasta").val();
+        // var periodo=$("#periodo").val();
+        $("#tabla_listado").load('trae_asistencias.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta);
+
 }

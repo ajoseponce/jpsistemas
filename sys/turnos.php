@@ -21,7 +21,7 @@
 
                         </select>
                     </div>
-                        <div class="form-group" id="fechaDiv" >
+                    <div class="form-group" id="fechaDiv" >
                         <label>Dia:</label>
                         <div class="input-group date">
                             <div class="input-group-addon">
@@ -66,7 +66,7 @@
         minDate: "D",
         dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
         onSelect:  function(dateText) {
-            trae_turnos_fecha();
+            //trae_turnos_fecha();
         },
         monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
     });

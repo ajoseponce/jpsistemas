@@ -1,137 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
+<?php include 'header_print.php';
+include('../../lib/DB_Conectar.php');
+include('../classes/consultas.php');
+//require_once('barcode.inc.php');
+// $result = $consultas->getTurnos($_REQUEST['fecha_desde'],$_REQUEST['fecha_hasta'],$_REQUEST['periodo']);
 
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+//$id_turno = base64_decode($_REQUEST["turno"]);
 
-  <base href="{{ @BASEHREF }}">
+$id_turno = $_REQUEST["turno"];
+$r= $consultas->getDatosTurno($id_turno);
 
-  <title>{{ @titulo }}</title>
-
-  <!--
-  _____ _      _                __        __   _
-  |  ___| | ___| |__   ___  ___  \ \      / /__| |__
-  | |_  | |/ _ \ '_ \ / _ \/ __|  \ \ /\ / / _ \ '_ \
-  |  _| | |  __/ |_) |  __/\__ \   \ V  V /  __/ |_) |
-  |_|   |_|\___|_.__/ \___||___/    \_/\_/ \___|_.__/
-                                       ____  _            _
-                                      |  _ \| | ___  ___ | |_ ___  ___
-                                      | |_) | |/ _ \/ _ \| __/ _ \/ __|
-                                      |  __/| |  __/ (_) | ||  __/ (__
-                                      |_|   |_|\___|\___/ \__\___|\___|
-  -->
-
-  <meta name="robots" content="noindex,  nofollow">
-
-  <link rel="shortcut icon" type="image/x-icon" href="des.ico">
-
-
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/font-awesome.min.css">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/jstree/default/style.min.css">
-
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js?{{ @VERSION_INT }}"></script>
-
-
-  <style>
-    @media screen {
-
-      body {
-        background-color: #808080 !important;
-      }
-
-      .page {
-        background-color: #FFF;
-        border: 1px solid #000;
-        box-shadow: 5px 5px 10px #333;
-        margin: 10px auto;
-
-      }
-
-      #print-box {
-        background-color: #1e1e1e;
-        border-radius: 5px;
-        border-color: #000;
-        box-shadow: 0 0 5px #000;
-
-        bottom: 2%;
-        left: 90%;
-        padding: 10px;
-        position: fixed;
-        width: 100px;
-        z-index: 2000;
-      }
-
-    }
-
-    @media print {
-
-      body {
-        background-color: #FFF !important;
-      }
-
-      #print-box {
-        display: none;
-      }
-    }
-
-    @media print, screen {
-
-      @page {
-        margin: 0mm;
-        size: {{ @pagesize }} {{ @orientacion }};
-      }
-
-      .page {
-        position: relative !important;
-        page-break-after: always !important;
-        padding: 10mm;
-
-        height: {{ @orientacion=='landscape' ? @pagewidth : @pageheight }};
-        width: {{ @orientacion=='landscape' ? @pageheight : @pagewidth }};
-      }
-
-      .sub-page {
-        height: 100%;
-        position: relative !important;
-        width: 100%;
-      }
-
-      .header {
-        max-height: 35mm;
-      }
-      .logo-header {
-        max-height: 20mm;
-      }
-      .logo-flebes {
-        max-height: 10mm;
-      }
-
-      .footer {
-        bottom: 0 !important;
-        position: absolute !important;
-        width: 100%;
-      }
-
-      .est-font {
-        font-size: 11px;
-      }
-      .est-cell {
-        width: 65px;
-      }
-      .min-col {
-        word-break: keep-all;
-        -moz-word-break: keep-all;
-        width: 10px;
-      }
-    }
-  </style>
-
-</head>
+ ?>
 <body>
 <style>
   .form-group input,
@@ -150,99 +30,103 @@
     padding-right: 5px;
   }
 </style>
-
+<script src="JsBarcode.all.js"></script>
+<script>
+  Number.prototype.zeroPadding = function(){
+    var ret = "" + this.valueOf();
+    return ret.length == 1 ? "0" + ret : ret;
+  };
+</script>
 <script type="text/javascript">
   $(document).ready(function () {
-    $('.form-control').attr('readonly', '');
+     $('.form-control').attr('readonly', '');
     $('.form-control').css('background-color', '#FFF');
   });
 </script>
-<div class="content">
-    <div class="box" style="margin-top: {{ @MARGINTOP }}px"></div>
-    <div class="clearfix"></div>
+  <div class="page">
+      <div class="sub-page">
+          <div class="header">
+            <div class="row">
+              <div class="form-group col-xs-6">
+                <h3>Comprobante de turno</h3>
+              </div>
+              <div class="col-xs-6"><img class="logo-header logo" src="../img/logos/dominio_impresion_<?php echo $_SESSION['dominio']; ?>.jpg" alt="logo" style="max-height: 65px;"></div>
+            </div>
+          </div><!-- /div.header -->
+          <div class="content">
+              <div class="box" >
+                <div id="codigo_presente" class="form-group col-xs-12">
+                  <div>
+                    <img style="height:100px;" id="barcode1"/>
+                    <script>JsBarcode("#barcode1", "<?php echo  $r->id_turno."-".$r->fecha."-Presente"; ?>");</script>
+                  </div>
+                </div>
+              </div>
+              <div class="box">
+                <div class="form-group col-xs-12">
+                  <div class="input-group">
+                    <span class="input-group-addon">Nombre y Apellido</span>
+                    <input type="text" class="form-control" value="<?php echo  $r->cliente; ?>">
+                  </div>
+                </div>
+              </div>
 
-    <div class="box">
-      <div class="form-group col-xs-12">
-        <div class="input-group">
-          <span class="input-group-addon">Nombre y Apellido</span>
-          <input type="text" class="form-control" value="{{ @paciente.nombrecompleto }}">
-        </div>
-      </div>
-    </div>
+              <div class="box">
+                <div class="form-group col-xs-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Documento.</span>
+                    <input type="text" class="form-control" value="<?php echo  $r->dni; ?>">
+                  </div>
+                </div>
+                <div class="form-group col-xs-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Motivo</span>
+                    <input type="text" class="form-control" value="<?php echo  $r->motivo; ?>">
 
-    <div class="box">
-      <div class="form-group col-xs-6">
-        <div class="input-group">
-          <span class="input-group-addon">C.I.</span>
-          <input type="text" class="form-control" value="{{ @paciente.personanrodocumento }}">
-        </div>
-      </div>
-      <div class="form-group col-xs-6">
-        <div class="input-group">
-          <span class="input-group-addon">F. Nacimiento</span>
-          <input type="text" class="form-control" value="{{ @paciente.personafechanacimiento }}">
-        </div>
-      </div>
-    </div>
+                  </div>
+                </div>
+              </div>
 
-    <div class="box">
-      <div class="form-group col-xs-6">
-        <div class="input-group">
-          <span class="input-group-addon">Domicilio</span>
-          <input type="text" class="form-control" value="{{ @paciente.domicilio }}">
-        </div>
-      </div>
-      <div class="form-group col-xs-6">
-        <div class="input-group">
-          <span class="input-group-addon">Localidad</span>
-          <input type="text" class="form-control" value="{{ @paciente.localidad }}">
-        </div>
-      </div>
-    </div>
 
-    <div class="box">
-      <div class="form-group col-xs-12">
-        <div class="input-group">
-          <span class="input-group-addon">E-mail</span>
-          <input type="text" class="form-control" value="{{ @paciente.email }}">
-        </div>
-      </div>
-    </div>
+              <div class="box">
+                <div class="form-group col-xs-4">
+                  <div class="input-group">
+                    <span class="input-group-addon">Fecha Turno</span>
+                    <input type="text" class="form-control" value="<?php echo  $r->fecha; ?>">
 
-    <div class="box">
-      <div class="form-group col-xs-4">
-        <div class="input-group">
-          <span class="input-group-addon">Tel. particular</span>
-          <input type="text" class="form-control" value="{{ @paciente.telefono }}">
-        </div>
-      </div>
-      <div class="form-group col-xs-4">
-        <div class="input-group">
-          <span class="input-group-addon">Celular</span>
-          <input type="text" class="form-control" value="{{ @paciente.celular }}">
-        </div>
-      </div>
-      <div class="form-group col-xs-4">
-        <div class="input-group">
-          <span class="input-group-addon">Tel. Laboral</span>
-          <input type="text" class="form-control" value="{{ @paciente.telefonolaboral }}">
-        </div>
-      </div>
-    </div>
+                  </div>
+                </div>
+                <div class="form-group col-xs-8">
+                  <div class="input-group">
+                    <span class="input-group-addon">Hora Turno</span>
+                    <input type="text" class="form-control" value="<?php echo  $r->hora; ?>">
 
-    <div class="box">
-      <div class="form-group col-xs-4">
-        <div class="input-group">
-          <span class="input-group-addon">Ocupación</span>
-          <input type="text" class="form-control" value="{{ @paciente.ocupacion }}">
-        </div>
+                  </div>
+                </div>
+              </div>
+              <div class="box" >
+                <div id="codigo_atendido" class="form-group col-xs-12">
+                  <div>
+                    <img style="height:100px;" id="barcode2"/>
+                    <script>JsBarcode("#barcode2", "<?php echo  $r->id_turno."-".$r->fecha."-Atendido"; ?>");</script>
+                  </div>
+                </div>
+              </div>
+          </div>
       </div>
-      <div class="form-group col-xs-8">
-        <div class="input-group">
-          <span class="input-group-addon">Dirección para la notificación</span>
-          <input type="text" class="form-control" value="{{ @paciente.domicilio }}">
-        </div>
+  </div>
+  <div id="print-box">
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <span class="btn-group">
+          <button  type="button" title="Imprimir" onclick="window.print();"><img src="../img/printer.png" /></button>
+          <button type="button" title="Cerrar ventana" onclick="window.close();"><img src="../img/cancel_print.png" /></button>
+        </span>
       </div>
     </div>
   </div>
 </body>
+
+<script>
+//$("#codigo_presente").load("cod_barra.php");
+</script>

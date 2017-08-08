@@ -56,7 +56,7 @@ class Consultas
         function getClientes(){
             //session_start();
             $query = "SELECT d.* FROM clientes d "
-                . "WHERE estado='A' ORDER BY orden ASC ";
+                . "WHERE estado='A' ORDER BY apellido, nombre ASC ";
             //echo $query;
             $result = $this->db->loadObjectList($query);
             if($result)

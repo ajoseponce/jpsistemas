@@ -3,47 +3,98 @@
     <section class="content-header">
         <h1>
             Listado de Asistencias
-            <small>=</small>
+            <small>--</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i>Listado de Asistencias</a></li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Asistencias</a></li>
 
             <li class="active">Alta</li>
         </ol>
     </section>
-
+<?php //print_r($_SESSION);?>
     <div class="col-lg-12">
         <div class="panel panel-default">
-
+            <div class="panel-heading">
+                <!-- <a href="controlador.php?action=<?php echo base64_encode('cargar_pago'); ?>">Agregar <img src="img/agregar.png"></a> -->
+            </div>
+            <?php if($mensaje){ ?>
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <?php echo $mensaje ;?><a href="#" class="alert-link"></a>.
+                </div>
+            <?php } ?>
+            <?php if($mensaje_error){ ?>
+                <div class="alert alert-error alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <?php echo $mensaje_error ;?><a href="#" class="alert-link"></a>.
+                </div>
+            <?php }
+            //print_r($_SESSION);
+            ?>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <div class="table-container">
-                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                        <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Fecha Hora</th>
-                            <th>Actividad</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php if($result){
-                            foreach ($result as $v) { ?>
-                                <tr class="odd gradeX">
-                                    <td><?php echo $v->persona; ?></td>
-                                    <td><?php echo $v->fecha_hora; ?></td>
-                                    <td><?php echo $v->actividad; ?></td>
-                                </tr>
-                            <?php }} ?>
-                        </tbody>
-                    </table>
+                <div class="dataTable_wrapper">
+                        <table class="table table-striped table-bordered table-hover" >
+                            <tr>
+                                <td>Fecha Desde
+                                    <input type="text"  value="" id="fecha_desde"  name="fecha_desde" type="text">
+                                </td>
+                                <td>Fecha Hasta
+                                    <input type="text"  value="" id="fecha_hasta"  name="fecha_hasta" type="text">
+                                </td>
+                            </tr>
+                        </table>
+
+                    <div class="table-container" id="tabla_listado">
+
+                        <table class="table table-striped table-bordered table-hover" >
+                            <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Actividad</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <?php if($result){
+                                $cant=0;
+                                foreach ($result as $v) {
+
+                                    $cant++;
+                                    ?>
+                                    <tr class="odd gradeX">
+
+                                        <!-- <td><?php echo $cant; ?>  <img src="img/printer.png"  data-toggle="tooltip" title="Imprimir " onclick="imprimir_pago('<?php echo $v->id_pago; ?>')" /></td> -->
+                                        <td><?php echo $v->cliente; ?></td>
+                                        <td><?php echo $v->actividad; ?></td>
+                                        <td><?php echo $v->fecha; ?></td>
+                                        <td><?php echo $v->hora; ?></td>
+
+<!--                                        <td><a href="imprimir_comprobante.php?id_comprobante=--><?php //echo $v->id_pago; ?><!--"><img src="./img/printer.png"></a></td>-->
+                                        <td><?php if($_SESSION['rol']=='Admin'){ ?>
+                                            <img onclick="eliminarPresente(<?php echo $v->id_presente; ?>)" src="./img/delete.png" />
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                <?php }} ?>
+                            <tr class="odd gradeX">
+
+                                <th colspan="5">Asistencias total : <?php echo $cant; ?></th>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
                 </div>
                 <!-- /.table-responsive -->
 
             </div>
             <!-- /.panel-body -->
         </div>
-        <!-- /.panel -->
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -52,7 +103,6 @@
 <!-- /.row -->
 
 <!-- /.row -->
-
 <style>
     .table-container
     {
@@ -75,9 +125,26 @@
         background-color: rgba(0, 0, 0, .3);
     }
 </style>
-<!-- ./wrapper -->
+<script>
+
+    //$j=jQuery.noConflict();
+        $("#fecha_desde").datepicker({
+            dateFormat: 'dd-mm-yy',
+            dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+            onSelect:  function(dateText) {
+                trae_asistencias();
+            },
+            monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
+        });
+        $("#fecha_hasta").datepicker({
+            dateFormat: 'dd-mm-yy',
+            dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+            onSelect:  function(dateText) {
+                trae_asistencias();
+            },
+            monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
+        });
+
+</script>
 <?php include 'footer.php'; ?>
 <!-- /#wrapper -->
-
-<!-- jQuery -->
-

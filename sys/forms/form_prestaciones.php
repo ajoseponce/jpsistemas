@@ -1,18 +1,4 @@
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            prestaciones
-            <small>Preview</small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Prestaciones</a></li>
-
-            <li class="active">Alta</li>
-        </ol>
-    </section>
-
-    <!-- Main content -->
     <section class="content">
 
         <!-- SELECT2 EXAMPLE -->
@@ -33,16 +19,17 @@
                         <div class="form-group">
                             <label>Descripcion</label>
                             <input class="form-control"  value="<?php echo (isset($result->descripcion))?$result->descripcion:""; ?>" name="descripcion" id="descripcion" placeholder="Ingrese descripcion">
-
                         </div>
                         <label>Precio</label>
                             <div class="input-group">
                             <span class="input-group-addon">$</span>
                             <input class="form-control" style="width: 60px;" maxlength="4" value="<?php echo (isset($result->precio))?$result->precio:""; ?>" name="precio" id="precio" placeholder="Ingrese precio">
-<!--                            <span class="input-group-addon">%</span>-->
                         </div>
-
-
+                        <label>Costo</label>
+                            <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input class="form-control" style="width: 60px;" maxlength="4" value="<?php echo (isset($result->costo))?$result->costo:""; ?>" name="costo" id="costo" placeholder="Ingrese costo">
+                        </div>
                         <?php
                         if($result->id_prestacion){
                             ?>
@@ -57,7 +44,7 @@
                         <?php } ?>
                         <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_prestacion'); ?>" />
                         <input type="hidden" id="id_prestacion" name="id_prestacion" value="<?php echo (isset($result->id_prestacion))?$result->id_prestacion:""; ?>" />
-                        <input type="button"  onclick="guardar_prestacion()" class="btn btn-default" value="Guardar Datos" />
+                        <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
                         <button onclick="volver_listado('<?php echo base64_encode('listar_prestaciones'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                     </form>
                     <!-- /.col -->
@@ -111,12 +98,6 @@
         rules: {
             descripcion: {
                 required: true
-            },
-            incremento_dia: {
-                required: true
-            },
-            precio: {
-                number: true
             }
         },
         errorPlacement: function( error, element ) {

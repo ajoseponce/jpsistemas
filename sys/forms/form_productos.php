@@ -41,29 +41,7 @@
                             <input class="form-control" style="width: 60px;" maxlength="4" value="<?php echo (isset($result->precio))?$result->precio:""; ?>" name="precio" id="precio" placeholder="Ingrese precio">
 <!--                            <span class="input-group-addon">%</span>-->
                         </div>
-                        <label>Ingreso 10 < 15</label>
-                            <div class="input-group">
-                            <span class="input-group-addon">%</span>
-                            <input class="form-control"  style="width: 50px;" maxlength="3" value="<?php echo (isset($result->ingreso10_15))?$result->ingreso10_15:""; ?>" name="ingreso10_15" id="ingreso10_15" placeholder="">
-<!--                            <span class="input-group-addon">%</span>-->
-                        </div>
-                        <label>Ingreso 15 < 20</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
-                            <input class="form-control"  style="width: 50px;" maxlength="3" value="<?php echo (isset($result->ingreso15_20))?$result->ingreso15_20:""; ?>" name="ingreso15_20" id="ingreso15_20" placeholder="">
-<!--                            <span class="input-group-addon">%</span>-->
-                        </div>
-                        <label>Ingreso 20 < 25</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
-                            <input class="form-control"  style="width: 50px;" maxlength="3" value="<?php echo (isset($result->ingreso20_25))?$result->ingreso20_25:""; ?>" name="ingreso20_25" id="ingreso20_25" placeholder="">
-<!--                            <span class="input-group-addon">%</span>-->
-                        </div>
-                        <label>Ingreso 25 < 30</label>
-                        <div class="form-group">
-                            <input class="form-control"  style="width: 50px;" maxlength="3" value="<?php echo (isset($result->ingreso25_30))?$result->ingreso25_30:""; ?>" name="ingreso25_30" id="ingreso25_30" placeholder="">
-<!--                            <span class="input-group-addon">%</span>-->
-                        </div>
+                        
                         <label>Incremento Dia de Atraso</label>
                             <div class="input-group">
                                 <span class="input-group-addon">%</span>

@@ -2,7 +2,7 @@
 include('../lib/DB_Conectar.php');
 include('classes/consultas.php');
 $result_cloen = $consultas->getPagosClientesPeriodo($_REQUEST['dni_cliente']);
-$cliente = $consultas->getDatosClientesPeriodo($_REQUEST['dni_cliente']);
+$cliente = $consultas->getDatosClientesPeriodo($_REQUEST['dni_cliente'],$_REQUEST['dominio']);
 //return json data
 
 if($cliente) {
