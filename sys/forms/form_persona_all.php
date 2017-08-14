@@ -87,7 +87,7 @@
                                                 <div class="box-body">
                                                     <div class="box-group" id="accordion">
                                                         <form action="controlador.php" onsubmit="false" id="form_datos_evolucion" method="post">
-                                                        <div class="panel box box-success">
+                                                        <div class="panel box box-success" id="div_evolucion">
                                                           <div class="form-group">
                                                               <label>Diagnostico <img src="img/add.png" onclick="abrir_pop_problemas()" alt=""></label>
                                                               <select id="problemas_persona"  name="problemas_persona" class="form-control select2" multiple="multiple"  data-placeholder="Seleccione una opcion" style="width: 100%;">
@@ -137,9 +137,11 @@
                                                             </div>
                                                             <div id="collapse_<?php echo $e->id_evolucion; ?>" class="panel-collapse collapse in">
                                                               <div class="box-body" class="error">
+                                                                <b>
                                                                 <?php foreach ($problemas_evolucion as $pe){
                                                                   echo $pe->descripcion."-" ;
                                                                 } ?>
+                                                              </b>
                                                               </div>
                                                               <div class="box-body">
                                                                     <?php echo $e->descripcion; ?>

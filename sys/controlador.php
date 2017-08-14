@@ -40,7 +40,7 @@ $action = base64_decode($_REQUEST["action"]);
 
             /**********problemas***********/
             $problemas= $consultas->getProblemas();
-            $problemas= $consultas->getProblemas();
+            //$problemas= $consultas->getProblemas();
             $problemas_persona= $consultas->getProblemasByPersona($id_persona);
 
             $evo_morales= $consultas->getEvoluciones($id_persona);
@@ -49,7 +49,7 @@ $action = base64_decode($_REQUEST["action"]);
 
             $formulario='forms/form_persona_all.php';
         break;
-        case "eliminar_persona":
+        case "eliminar_persona_gym":
             /***************includes******************/
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');
@@ -64,9 +64,9 @@ $action = base64_decode($_REQUEST["action"]);
             $mensaje="La operacion se realizo correctamente.";
             $result= $consultas->getpersonas();
 
-            $formulario='forms/form_lista_personas.php';
-            break;
-          case "eliminar_vehiculo_persona":
+            $formulario='forms/form_lista_personas_gym.php';
+        break;
+        case "eliminar_vehiculo_persona":
               /***************includes******************/
               include('../lib/DB_Conectar.php');
               include('classes/consultas.php');
@@ -249,7 +249,7 @@ $action = base64_decode($_REQUEST["action"]);
             include "nav.php";
 
             include 'menu.php';
-
+            $productos= $consultas->getproductos();
             $result= $consultas->getRelaciones();
 
             $formulario='forms/form_lista_relaciones.php';
@@ -928,7 +928,6 @@ $action = base64_decode($_REQUEST["action"]);
             $result= $consultas->getPersonasbyid($_REQUEST['id_persona']);
             /**********problemas***********/
             $problemas= $consultas->getProblemas();
-            $problemas= $consultas->getProblemas();
             $problemas_persona= $consultas->getProblemasByPersona($_REQUEST['id_persona']);
 
             $evo_morales= $consultas->getEvoluciones($_REQUEST['id_persona']);
@@ -1301,6 +1300,24 @@ $action = base64_decode($_REQUEST["action"]);
                 /*********************/
                 $mensaje="La operacion se realizo correctamente.";
              $formulario='forms/form_lista_stock.php';
+            break;
+            case "eliminar_relacion":
+                /***************includes******************/
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+                /*********************/
+                $consultas->eliminar_relacion($_REQUEST['idRelacion']);
+                $mensaje="Se elimino la relacion correctamente.";
+                $result= $consultas->getPersonasbyid($_REQUEST['idPersona']);
+                $productos= $consultas->getproductos();
+                $proviene= $consultas->getProviene();
+                $actividadesCliente= $consultas->getRelacionByIDCliente($_REQUEST['idPersona']);
+                $formulario='forms/form_persona_gym.php';
             break;
     }
 

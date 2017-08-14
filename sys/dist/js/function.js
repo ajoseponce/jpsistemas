@@ -401,7 +401,7 @@ function trae_actividades_clientes() {
 }
 function eiminaCliente(persona){
     if(confirm('Usted esta por eliminar un cliente.Desea Continuar?')){
-        window.location.assign('controlador.php?action_js=eliminar_persona&id_persona='+persona);
+        window.location.assign('controlador.php?action_js=eliminar_persona_gym&id_persona='+persona);
     }
 }
 function eiminaPatente(registro, persona){
@@ -730,6 +730,7 @@ function guardar_evolucion(){
                     $('#mjs').html('La evolucion se guardo correctamente');
                     $('#mensaje').modal('toggle');
                       $("#bloque_evoluciones").load('trae_evoluciones.php?id_persona='+$("#id_persona").val());
+                      location.reload();
                 }else{
                     $('#mjs_error').html('Ocurrio un error');
                     $('#mensaje_error').modal('toggle');
@@ -781,4 +782,13 @@ function trae_asistencias(){
         // var periodo=$("#periodo").val();
         $("#tabla_listado").load('trae_asistencias.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta);
 
+}
+function trae_relaciones(){
+        var actividad=$("#actividad").val();
+        $("#tabla_listado").load('trae_relaciones.php?actividad='+actividad);
+}
+function elimina_relacion(idRelacion, idPersona){
+    if(confirm('Usted esta por eliminar una relacion de actividad .Desea Continuar?')){
+        window.location.assign('controlador.php?action_js=eliminar_relacion&idRelacion='+idRelacion+'&idPersona='+idPersona);
+    }
 }

@@ -402,13 +402,18 @@ class Consultas
             return 0;
         }
     }
-    function getRelaciones(){
-        $query = "SELECT r.*, CONCAT_WS(' ',p.apellido, p.nombre) cliente, pr.descripcion producto "
+    function getRelaciones($actividad=null){
+			session_start();
+        $query = "SELECT r.*, CONCAT_WS(' ',p.apellido, p.nombre) persona, pr.descripcion producto "
             . "  FROM relaciones r
-               INNER JOIN personas p ON p.id_persona=r.id_persona
+               INNER JOIN personas p ON p.id_persona=r.id_persona AND p.cod_estado='A'
                INNER JOIN productos pr ON pr.id_producto=r.id_producto
-                WHERE 1  " ;
-        //echo $query;
+
+                WHERE p.id_dominio='".$_SESSION['dominio']."'  " ;
+								if($actividad){
+								$query .= " AND pr.id_producto='".$actividad."' ";
+								}
+
         $result = $this->db->loadObjectList($query);
         if($result)
             return $result;
@@ -450,7 +455,7 @@ class Consultas
                INNER JOIN personas p ON p.id_persona=r.id_persona
                INNER JOIN productos pr ON pr.id_producto=r.id_producto
                 " ;
-        $query .= " WHERE r.id_persona='".$id_cliente."' ";
+        $query .= " WHERE r.estado='A' AND r.id_persona='".$id_cliente."' ";
         //echo $query;
         $result = $this->db->loadObjectList($query);
         if($result)
@@ -1822,6 +1827,13 @@ class Consultas
         }else{
             return 0;
         }
+    }
+		function eliminar_relacion($idRelacion){
+        $query = "UPDATE relaciones
+                      SET estado='B'
+                      WHERE id_relacion='$idRelacion'";
+        $this->db->query($query);
+
     }
 
 }

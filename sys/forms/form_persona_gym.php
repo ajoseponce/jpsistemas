@@ -173,8 +173,6 @@
                     Actividades del Cliente
                 </div>
                 <div class="panel-body">
-
-
                     <div class="table-container">
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
@@ -184,11 +182,10 @@
                                 <th>&nbsp;</th>
                             </tr>
                             </thead>
-
                             <tbody>
                             <?php if($actividadesCliente){
                                 foreach ($actividadesCliente as $v) { ?>
-                                    <tr class="odd gradeX">
+                                    <tr class="odd gradeX" id="linea_<?php echo $v->id_relacion; ?>">
                                         <td>
                                             <div id="div_producto_<?php echo $v->id_relacion; ?>">
                                                 <?php echo $v->producto; ?>
@@ -201,7 +198,6 @@
                                                     <?php } ?>
                                                 </select>
                                             </div>
-
                                         </td>
                                         <td>
                                             <div id="div_fecha_<?php echo $v->id_relacion; ?>">
@@ -218,9 +214,13 @@
                                             <div id="div_action_edita_<?php echo $v->id_relacion; ?>" style="display: none;">
                                                 <img style="cursor:pointer;" src="./img/guardar.png" onclick="guardar_edicion_relacion(<?php echo $v->id_relacion; ?>)">
                                             </div>
-                                            
-                                        </td>
 
+                                        </td>
+                                        <td>
+                                            <div id="div_elimina_<?php echo $v->id_relacion; ?>">
+                                                <img style="cursor:pointer;" src="./img/delete.png" onclick="elimina_relacion('<?php echo $v->id_relacion; ?>','<?php echo $v->id_persona; ?>')">
+                                            </div>
+                                        </td>
                                     </tr>
                                 <?php }} ?>
 
@@ -245,7 +245,7 @@
 
                     <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_persona_gym');?>" />
                     <input type="hidden" id="id_persona_dias" name="id_persona_dias" value="<?php echo (isset($result->id_persona_dias))?$result->id_persona_dias:""; ?>" />
-                    <input type="hidden" id="id_persona" id="id_persona"  name="id_persona" value="<?php echo (isset($result->id_persona))?$result->id_persona:""; ?>" />
+                    <input type="hidden" id="id_persona" id="id_persona"  name="id_persona" value="<?php echo (isset($_REQUEST['id_persona']))?$_REQUEST['id_persona']:""; ?>" />
                     <input type="button"  onclick="guardar_datos()" class="btn btn-default" value="Guardar Datos" />
                     <button onclick="volver_listado('<?php echo base64_encode('listar_personas_gym'); ?>')" type="reset"  class="btn btn-default">Volver</button>
 
