@@ -179,7 +179,8 @@ class Consultas
             }
             $table->nombre = $data['nombre'];
             $table->apellido = $data['apellido'];
-            $table->dni = $data['dni'];
+						$table->dni = $data['dni'];
+            $table->cuit = $data['cuit'];
             $table->fecha_nacimiento = $fecha_nac;
             $table->domicilio_dni = $data['domicilio'];
             $table->telefono_particular = $data['telefono_particular'];

@@ -35,19 +35,22 @@ $action = base64_decode($_REQUEST["action"]);
                 }
             }
 
-            $result= $consultas->getPersonasbyid($id_persona);
+            // $result= $consultas->getPersonasbyid($id_persona);
+            //
+            //
+            // /**********problemas***********/
+            // $problemas= $consultas->getProblemas();
+            // //$problemas= $consultas->getProblemas();
+            // $problemas_persona= $consultas->getProblemasByPersona($id_persona);
+            //
+            // $evo_morales= $consultas->getEvoluciones($id_persona);
+            // $turnos= $consultas->getTurnos($id_persona);
+            // /*********************/
+            //
+            // $formulario='forms/form_persona_all.php';
+            $result= $consultas->getpersonas();
 
-
-            /**********problemas***********/
-            $problemas= $consultas->getProblemas();
-            //$problemas= $consultas->getProblemas();
-            $problemas_persona= $consultas->getProblemasByPersona($id_persona);
-
-            $evo_morales= $consultas->getEvoluciones($id_persona);
-            $turnos= $consultas->getTurnos($id_persona);
-            /*********************/
-
-            $formulario='forms/form_persona_all.php';
+            $formulario='forms/form_lista_personas.php';
         break;
         case "eliminar_persona_gym":
             /***************includes******************/

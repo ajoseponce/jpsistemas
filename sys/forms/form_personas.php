@@ -53,6 +53,10 @@
                                 <label>DNI</label>
                                 <input class="form-control"  value="<?php echo (isset($result->dni))?$result->dni:""; ?>" name="dni" id="dni" placeholder="Ingrese dni">
                             </div>
+                          <div class="form-group">
+                              <label>CUIT</label>
+                              <input class="form-control"  value="<?php echo (isset($result->cuil))?$result->cuil:""; ?>" name="cuil" id="cuil" placeholder="Ingrese CUIT">
+                          </div>
                             <div class="input-group">
 <!--                                <label>Fecha Nacimiento</label>-->
                                 <div class="input-group-addon">
