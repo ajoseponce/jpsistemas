@@ -151,7 +151,7 @@
                                             ?>
 
                                             <img src="img/cancela_turno.png" <?php echo $disabled_cancelar; ?>  data-toggle="tooltip" title="Cancelar Turno !" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','Cancelado')" />
-                                            <a href="controlador.php?action=<?php echo base64_encode('carga_comprobante');?>&id_persona=<?php echo $v->id_persona; ?>&id_turno=<?php echo $v->id_turno; ?>"><img src="img/comprobante.png" <?php echo $disabled_cancelar; ?>  data-toggle="tooltip" title="Comprobante !" />
+                                            <!-- <a href="controlador.php?action=<?php echo base64_encode('carga_comprobante');?>&id_persona=<?php echo $v->id_persona; ?>&id_turno=<?php echo $v->id_turno; ?>"><img src="img/comprobante.png" <?php echo $disabled_cancelar; ?>  data-toggle="tooltip" title="Comprobante !" /> -->
                                           </td>
                                       </tr>
                                   <?php }} ?>
