@@ -36,11 +36,13 @@
 
                           <tbody>
                           <?php if($result){
-                              foreach ($result as $v) { ?>
+                              foreach ($result as $v) {
+                                  $cant_pagos = $consultas->getContadorPagosRealizados($v->id_persona,date('m'));
+                                 ?>
                                   <tr class="odd gradeX">
                                       <td><?php echo $v->persona; ?></td>
                                       <td><?php echo $v->producto; ?></td>
-              <!--                        <td><a href="controlador.php?action=edita_relacion&id_relacion=--><?php //echo $v->id_relacion; ?><!--"><img src="img/edit.png"/></a></td>-->
+                                      <td><?php echo ($cant_pagos>0)?"<img src='img/ok_pago.png'/>":""; ?></td>
                                   </tr>
                               <?php }} ?>
                           </tbody>

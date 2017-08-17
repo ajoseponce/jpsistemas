@@ -54,15 +54,15 @@
                                   </thead>
                                   <tbody>
                                     <tr>
-                                      <td><input  name="suggest_productos" id="suggest_prestaciones" class="form-control" style="width:280px; float:left;" value=""/>
+                                      <td><input  name="suggest_prestaciones" id="suggest_prestaciones" class="form-control" style="width:280px; float:left;" value=""/>
                                         <input type="hidden" class="form-control" id="prestaciones" name="prestaciones" value=""/></td>
                                       <td>
-                                         <input type="text" class="form-control" id="cantidad" onchange="calculadora_precio_comprante()" style="width:80px;" name="cantidad" value=""/>
+                                         <input type="text" class="form-control" readonly id="cantidad"  style="width:80px;" name="cantidad" value="1"/>
 
                                       </td>
                                       <td>
-                                        <input type="hidden" class="form-control" id="precio_productos"  name="precio_productos" value=""/>
-                                        <input type="text" class="form-control" id="precio" readonly style="width:80px;" name="precio" value=""/>
+                                        <input type="text" class="form-control" id="precio_prestaciones"  name="precio_prestaciones" readonly style="width:80px;" value=""/>
+                                        <input type="hidden" class="form-control" id="costo_prestaciones"  name="costo_prestaciones" value=""/>
                                       </td>
                                       <td>
                                         <button type="button"  class="btn btn-success "><img src="img/add.png" style="float:left;" onclick="agrega_comprobante()" /></button>
@@ -73,7 +73,7 @@
                               </div>
 
                               <div class="box-body">
-                                <table id="prestaciones_comprobante" class="table table-bordered table-hover">
+                                <table id="prestacion_comprobante" class="table table-bordered table-hover">
                                   <thead>
                                   <tr>
                                     <th>Prestaciones</th>
@@ -98,7 +98,7 @@
                               <div  class="ui-widget">
                                   <BR>
                                   <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_comprobante'); ?>" id="action" />
-                                  <input type="button"  onclick="guardar_datos()" id="graba" class="btn btn-default" value="Grabar Pedido" />
+                                  <input type="button"  onclick="guardar_datos()" id="graba" class="btn btn-default" value="Grabar Comprobante" />
                                   <button onclick="volver_listado('<?php echo base64_encode('listar_comprobantes'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                               </div>
                         </div>
@@ -124,8 +124,8 @@
 </div>
 <script>
     $(function() {
-        autocomleteINI_datos('clientes', 'ajax/suggestClientes.php');
-        autocomleteINI_prod_pedido('productos', 'ajax/suggestProductos.php');
+        autocomleteINI_datos('clientes', 'ajax/suggClientes.php');
+        autocomleteINI_prestacion('prestaciones', 'ajax/suggestPrestaciones.php');
 
         $('body').on('click', '.btn-borrar-fila', function (){
 

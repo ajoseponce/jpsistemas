@@ -72,7 +72,7 @@ function autocomleteINI_productos(id, path) {
             }
         }) ;
 }
-function autocomleteINI_prod_pedido(id, path) {
+function autocomleteINI_prestacion(id, path) {
     $('#suggest_' + id).autocomplete(
         { messages: { noResults: 'nadaaa', results: function() {} },
             source: function (request, response) {
@@ -84,13 +84,10 @@ function autocomleteINI_prod_pedido(id, path) {
                     $('#' + id).val('').trigger('clear');
                     $('#suggest_' + id).val('');
                 } else {
-                    //alert('hola'+ui.item.id);
+                    //alert('hola'+ui.item.precio);
                     $('#' + id).val(ui.item.id).trigger('change');
                     $('#precio_' + id).val(ui.item.precio).trigger('change');
-                    $('#unidad_' + id).val(ui.item.unidad).trigger('change');
-                    $('#unidad_medida').html(ui.item.unidad_div).trigger('change');
-                    $('#precio_productos_div').html(ui.item.precio+'$ x '+ui.item.unidad_div).trigger('change');
-
+                    $('#costo_' + id).val(ui.item.costo).trigger('change');
                     $( "#cantidad" ).focus();
 
                 }
@@ -124,6 +121,7 @@ function agrega_carrito(){
   v3=v2+v1;
   $("#precio_aprox").val(v3.toFixed(2));
 }
+
 function resta(vale){
   v1=parseFloat($("#precio_aprox").val());
   var precio=$('#precio_'+vale).val();
@@ -209,25 +207,25 @@ function autocomleteINI_coberturas(id, path) {
             }
         }) ;
 }
-function autocomleteINI_prestacion(id, path) {
-    $('#suggest_' + id).autocomplete(
-        { messages: { noResults: 'No', results: function() {} },
-            source: function (request, response) {
-                $.getJSON( path, { term: this.term }, response );
-            }, minLength: 2,
-            select: function (event, ui) {
-                // /console.log(ui); i
-                if (ui.item == null) {
-                    $('#' + id).val('').trigger('clear');
-                    $('#suggest_' + id).val('');
-                } else {
-                    //alert('hola'+ui.item.id);
-                    $('#' + id).val(ui.item.id).trigger('change');
-                    $("#prestaciones_comprobante").append('<tr><td>'+ui.item.label+'</td><td>1</td><td>'+ui.item.precio+'</td><td><button type="button"  class="btn btn-danger btn-borrar-fila">x</button></td></tr>');
-                }
-            }
-        }) ;
-}
+// function autocomleteINI_prestacion(id, path) {
+//     $('#suggest_' + id).autocomplete(
+//         { messages: { noResults: 'No', results: function() {} },
+//             source: function (request, response) {
+//                 $.getJSON( path, { term: this.term }, response );
+//             }, minLength: 2,
+//             select: function (event, ui) {
+//                 // /console.log(ui); i
+//                 if (ui.item == null) {
+//                     $('#' + id).val('').trigger('clear');
+//                     $('#suggest_' + id).val('');
+//                 } else {
+//                     //alert('hola'+ui.item.id);
+//                     $('#' + id).val(ui.item.id).trigger('change');
+//                     $("#prestaciones_comprobante").append('<tr><td>'+ui.item.label+'</td><td>1</td><td>'+ui.item.precio+'</td><td><button type="button"  class="btn btn-danger btn-borrar-fila">x</button></td></tr>');
+//                 }
+//             }
+//         }) ;
+// }
 function guardar_edicion_relacion(relacion){
     if($("#id_persona").val()==''){
         alert("La Persona debe estar cargada");
@@ -791,4 +789,38 @@ function elimina_relacion(idRelacion, idPersona){
     if(confirm('Usted esta por eliminar una relacion de actividad .Desea Continuar?')){
         window.location.assign('controlador.php?action_js=eliminar_relacion&idRelacion='+idRelacion+'&idPersona='+idPersona);
     }
+}
+function agrega_comprobante(){
+  if($('#cantidad').val()==''){
+    alert('Ingrese una cantidad');
+    return false;
+  }
+  var prestacion=$('#suggest_prestaciones').val();
+  var id_prestacion=$('#prestaciones').val();
+  // var unidad=$('#unidad_productos').val();
+  var cantidad=$('#cantidad').val();
+  var precio=$('#precio_prestaciones').val();
+  var costo=$('#costo_prestaciones').val();
+  v2=parseFloat(precio);
+  precio=v2.toFixed(2)
+  i++;
+  $("#prestacion_comprobante").append('<tr><td>'+prestacion+'<input name="prestacion_reserva['+i+']" id="prestacion_reserva_'+i+'" value="'+id_prestacion+'" type="hidden"/></td><td><input class="form-control" name="cantidad['+i+']" id="cantidad_'+i+'" value="'+cantidad+'" type="hidden"/><div id="cantidad_prod'+i+'">'+cantidad+'</div></td><td><div id="etiqueta_precio_'+i+'">'+precio+'</div><input type="hidden" name="precio['+i+']" id="precio_'+i+'" value="'+precio+'"/></td><td><button type="button" class="btn btn-danger btn-borrar-fila" onclick="resta('+i+')">x</button></td></tr>');
+  $('#suggest_prestaciones').val("");
+  $('#prestaciones').val("");
+  $('#precio_prestaciones').val("");
+  $('#cantidad').val("1");
+  $( "#suggest_prestaciones" ).focus();
+
+  v1=parseFloat($("#precio_aprox").val());
+    // alert($("#precio_aprox").val());
+  v2=parseFloat(precio);
+  v3=v2+v1;
+  $("#precio_aprox").val(v3.toFixed(2));
+}
+function trae_comprobantes(){
+        var fecha_desde=$("#fecha_desde").val();
+        var fecha_hasta=$("#fecha_hasta").val();
+        // var periodo=$("#periodo").val();
+        $("#tabla_listado").load('trae_comprobantes.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta);
+
 }

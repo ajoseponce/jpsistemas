@@ -1211,7 +1211,7 @@ $action = base64_decode($_REQUEST["action"]);
           $formulario='forms/form_estadistica_actividades.php';
         break;
         /*******************comprobantes  de prestaciones***************************/
-        case "guardar_comprobantes":
+        case "guardar_comprobante":
             include('../lib/DB_Conectar.php');
             include('classes/consultas.php');
             include 'header.php';
@@ -1221,10 +1221,11 @@ $action = base64_decode($_REQUEST["action"]);
             include 'menu.php';
 
             $id_comprobante= $consultas->save_comprobante($_REQUEST);
-            foreach ($_POST['prestacion_comprobante'] as $key => $value) {
+            foreach ($_POST['prestacion_reserva'] as $key => $value) {
               # code...['producto']
               $consultas->save_comprobante_detalle($id_comprobante, $value, $_POST['cantidad'][$key], $_POST['costo'][$key], $_POST['precio'][$key]);
             }
+
             $result= $consultas->getComprobantes();
           $formulario='forms/form_lista_comprobante.php';
         break;
@@ -1248,7 +1249,7 @@ $action = base64_decode($_REQUEST["action"]);
             include "nav.php";
 
             include 'menu.php';
-
+            $cliente= $consultas->getClientesByid($_REQUEST['id_cliente']);
           //  $result= $consultas->getComprobanteByID();
           $formulario='forms/form_comprobante.php';
         break;
@@ -1322,6 +1323,77 @@ $action = base64_decode($_REQUEST["action"]);
                 $actividadesCliente= $consultas->getRelacionByIDCliente($_REQUEST['idPersona']);
                 $formulario='forms/form_persona_gym.php';
             break;
+            /*******************************cliente peluquerias*********************/
+            /*****************Clientes********************/
+            case "guardar_cliente_pelu":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+                include "nav.php";
+                include 'menu.php';
+
+                $id_cliente= $consultas->save_cliente($_REQUEST);
+                  $mensaje="El cliente se guardo correctamente se realizo correctamente.";
+                $result= $consultas->getClientes();
+
+                $formulario='forms/form_lista_clientes.php';
+            break;
+            case "eliminar_clientes_pelu":
+                /***************includes******************/
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                /*********************/
+                $consultas->eliminar_cliente($_REQUEST['id_cliente']);
+                $mensaje="La operacion se realizo correctamente.";
+                $result= $consultas->getClientes();
+
+                $formulario='forms/form_lista_clientes.php';
+                break;
+            case "carga_clientes_pelu":
+                //echo "si bueno tibago";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                //print_r($_SESSION);
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $formulario='forms/form_clientes.php';
+            break;
+            case "edita_cliente_pelu":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+                include "nav.php";
+                include 'menu.php';
+
+                $result= $consultas->getClientesByid($_REQUEST['id_cliente']);
+
+                $formulario='forms/form_clientes.php';
+            break;
+            case "listar_clientes_pelu":
+               // echo "bueno";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getClientes();
+
+                $formulario='forms/form_lista_clientes_pelu.php';
+            break;
+            /********************************************/
     }
 
 if($formulario){

@@ -3,7 +3,7 @@
     <section class="content-header">
         <h1>
             Listado de comprobantes
-            <small>Realizaos</small>
+            <small>Realizados</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Comprobantes</a></li>
@@ -56,7 +56,7 @@
                                 <th>Fecha </th>
                                 <th>Hora</th>
                                 <th>Nota</th>
-                                <th>Usuario Pedido</th>
+                                <th>Usuario</th>
                                 <th>Estado</th>
 
                             </tr>
@@ -73,8 +73,8 @@
 
                                         <td><?php echo $cant; ?></td>
                                         <td><?php echo $v->cliente; ?></td>
-                                        <td><?php echo $v->fecha_retiro; ?></td>
-                                        <td><?php echo $v->hora_retiro; ?></td>
+                                        <td><?php echo $v->fecha; ?></td>
+                                        <td><?php echo $v->hora; ?></td>
                                         <td><?php echo $v->nota; ?></td>
                                         <td><?php echo $v->usuario; ?></td>
                                         <td><?php echo $v->estado; ?></td>
@@ -143,7 +143,7 @@
             monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
         });
         $("#fecha_hasta").datepicker({
-            dateFormat: 'dd-mm-yyyy',
+            dateFormat: 'dd-mm-yy',
             dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
             onSelect:  function(dateText) {
                 trae_comprobantes();

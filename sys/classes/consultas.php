@@ -498,10 +498,13 @@ class Consultas
         else
             return false;
     }
-    function getContadorPagosRealizados($id_cliente){
+    function getContadorPagosRealizados($id_cliente,$periodo=null){
         $query = "SELECT COUNT(p.id_pago) total FROM pagos p  " ;
-        $query .= " WHERE p.id_cliente='".$id_cliente."' ";
-//echo $query;
+				$query .= " WHERE p.id_cliente='".$id_cliente."' ";
+				if($periodo){
+					$query .= " AND p.periodo='".$periodo."' ";
+
+				}
         $result = $this->db->loadObjectList($query);
         if($result)
             return $result[0]->total;
@@ -1697,9 +1700,9 @@ class Consultas
 			//$fecha_retiro=substr($data['fecha_retiro'], 6, 4)."-".substr($data['fecha_retiro'], 3, 2)."-".substr($data['fecha_retiro'], 0, 2);
 			$table = new Table($this->db, 'comprobantes');
 
-			$table->id_persona = $data['clientes'];
+			$table->id_cliente = $data['clientes'];
 			//$table->fecha_retiro = $fecha_retiro;
-			$table->precio = $data['hora'];
+			$table->precio = $data['precio_aprox'];
 			$table->id_turno = $data['id_turno'];
 			$table->fecha_hora = date('Y-m-d H:i:s');
 
@@ -1711,12 +1714,12 @@ class Consultas
 					return 0;
 			}
 		}
-		function save_comprobante_detalle($comprobante, $prestacion, $cantidad, $costo, $precio){
+		function save_comprobante_detalle($comprobante, $prestacion, $cantidad=null, $costo=null, $precio=null){
 		//$fecha_retiro=substr($data['fecha_retiro'], 6, 4)."-".substr($data['fecha_retiro'], 3, 2)."-".substr($data['fecha_retiro'], 0, 2);
 			$table = new Table($this->db, 'comprobantes_detalle');
 
-			$table->id_pedido = $pedido;
-			$table->id_prestacion = $producto;
+			$table->id_comprobante = $comprobante;
+			$table->id_prestacion = $prestacion;
 			$table->costo = $costo;
 			$table->cantidad = $cantidad;
 			$table->precio = $precio;
@@ -1730,9 +1733,9 @@ class Consultas
 		}
 		function getComprobantes($fecha_desde=null, $fecha_hasta=null){
         session_start();
-        $query = "SELECT p.*, date_format(p.fecha_hora, '%d/%m/%Y') fecha,  CONCAT_WS(' ',pr.apellido, pr.nombre) cliente
+        $query = "SELECT p.*, date_format(p.fecha_hora, '%d/%m/%Y') fecha, date_format(p.fecha_hora, '%H:%i') hora,  CONCAT_WS(' ',pr.apellido, pr.nombre) cliente
                   FROM comprobantes p
-                  INNER JOIN personas pr ON pr.id_persona=p.id_cliente
+                  INNER JOIN clientes pr ON pr.id_cliente=p.id_cliente
                   WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' " ;
         if($fecha_desde && $fecha_hasta==null){
             $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
@@ -1748,9 +1751,12 @@ class Consultas
             $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
             $query .=" AND (p.fecha_hora between '".$fecha_desde."' AND '".$fecha_hasta."')";
         }
-
+				if($fecha_desde==null && $fecha_hasta==null){
+						$fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+						$query .=" AND date_format(p.fecha_hora, '%m')='".date('m')."'";
+				}
         //$query .= " WHERE p.periodo='".$periodo."' ";
-      //  echo $query;
+        // $query;
         $result = $this->db->loadObjectList($query);
         if($result)
             return $result;
