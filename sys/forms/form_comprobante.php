@@ -33,7 +33,7 @@
                                     <label>Cliente: </label>
                                     <?php echo $cliente->razon_social; ?>
                                 </div>
-                                    <input type="text" id="clientes" name="clientes" value="<?php echo $_REQUEST['id_cliente']; ?>">
+                                    <input type="hidden" id="clientes" name="clientes" value="<?php echo $_REQUEST['id_cliente']; ?>">
                               <?php }else{ ?>
                                 <div class="ui-widget">
                                     <label>Cliente: </label>
@@ -136,13 +136,10 @@
 
     $("#form_datos").validate({
         rules: {
-            fecha: {
+            clientes: {
                 required: true
             },
-            hora: {
-                required: true
-            },
-            motivo: {
+            prestacion_reserva: {
                 required: true
             }
         },

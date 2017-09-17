@@ -3,12 +3,13 @@
 //ini_set("display_errors", 1);
 include('lib/functions.php');
 requireLogin();
+
 //error_reporting(0);
 if(isset($_REQUEST["action_js"])){
      $_REQUEST["action"]=base64_encode($_REQUEST["action_js"]);
       }
 $action = base64_decode($_REQUEST["action"]);
-//print_r($_REQUEST);
+
     switch ($action) {
 
      //crga el categorias
@@ -35,19 +36,6 @@ $action = base64_decode($_REQUEST["action"]);
                 }
             }
 
-            // $result= $consultas->getPersonasbyid($id_persona);
-            //
-            //
-            // /**********problemas***********/
-            // $problemas= $consultas->getProblemas();
-            // //$problemas= $consultas->getProblemas();
-            // $problemas_persona= $consultas->getProblemasByPersona($id_persona);
-            //
-            // $evo_morales= $consultas->getEvoluciones($id_persona);
-            // $turnos= $consultas->getTurnos($id_persona);
-            // /*********************/
-            //
-            // $formulario='forms/form_persona_all.php';
             $result= $consultas->getpersonas();
 
             $formulario='forms/form_lista_personas.php';
@@ -957,7 +945,20 @@ $action = base64_decode($_REQUEST["action"]);
             /***************includes******************/
             echo $result;
             break;
+            case "listar_turnos_pelu":
+                   // echo "bueno";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
 
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getTurnosClientes();
+
+                $formulario='forms/form_lista_turnos_pelu.php';
+            break;
         case "listar_turnos":
                // echo "bueno";
             include('../lib/DB_Conectar.php');
@@ -1394,6 +1395,310 @@ $action = base64_decode($_REQUEST["action"]);
                 $formulario='forms/form_lista_clientes_pelu.php';
             break;
             /********************************************/
+            /*************************************/
+            case "guardar_persona_obito":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+                include "nav.php";
+                include 'menu.php';
+                //echo "holaa";
+                $consultas->save_persona_obito($_REQUEST);
+
+                $result= $consultas->getPersonasObito();
+
+                $formulario='forms/form_lista_persona_obito.php';
+            break;
+            case "eliminar_persona_obito":
+                /***************includes******************/
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                /*********************/
+                $consultas->eliminar_persona_obito($_REQUEST['id_persona']);
+                $mensaje="La operacion se realizo correctamente.";
+                $result= $consultas->getPersonasObito();
+
+                $formulario='forms/form_lista_personas_obito.php';
+            break;
+            case "carga_personas_obito":
+                //echo "si bueno tibago";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                //print_r($_SESSION);
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $formulario='forms/form_persona_obito.php';
+            break;
+            case "edita_persona_obito":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+                include "nav.php";
+                include 'menu.php';
+
+                $result= $consultas->getPersonaObitaByid($_REQUEST['id_persona']);
+                //$planes= $consultas->getPersonasbyid($_REQUEST['id_persona']);
+
+                $formulario='forms/form_personas.php';
+            break;
+            case "listar_personas_obito":
+               // echo "bueno";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getPersonasObito();
+
+                $formulario='forms/form_lista_persona_obito.php';
+            break;
+            case "guardar_pais":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                echo $consultas->save_pais($_REQUEST);
+
+                break;
+            case "guardar_lugar":
+                    include('../lib/DB_Conectar.php');
+                    include('classes/consultas.php');
+                    echo $consultas->save_lugar_deceso($_REQUEST);
+            break;
+            
+            case "listar_servicios":
+               // echo "bueno";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getServicios();
+
+                $formulario='forms/form_lista_servicios.php';
+            break;
+            case "cargar_servicio":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+                $tipo_ataud= $consultas->getTipoAtaud();
+                $formulario='forms/form_servicio.php';
+            break;
+            case "listar_solicitantes":
+               // echo "bueno";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getSolicitantes();
+
+                $formulario='forms/form_lista_solicitantes.php';
+            break;
+            case "listar_garantes":
+               // echo "bueno";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getGarantes();
+
+                $formulario='forms/form_lista_garantes.php';
+            break;
+            case "guardar_garante":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+                include "nav.php";
+                include 'menu.php';
+
+                $consultas->save_persona_garante($_REQUEST);
+
+                $result= $consultas->getGarantes();
+
+                $formulario='forms/form_lista_garantes.php';
+            break;
+            case "guardar_solicitante":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+                include "nav.php";
+                include 'menu.php';
+
+                $consultas->save_persona_solicitante($_REQUEST);
+
+                $result= $consultas->getSolicitantes();
+
+                $formulario='forms/form_lista_solicitantes.php';
+            break;
+            case "guardar_servicio":
+            // print_r($_REQUEST);
+            // exit;
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+                include "nav.php";
+                include 'menu.php';
+
+                $consultas->save_servicio($_REQUEST);
+
+                $result= $consultas->getServicios();
+
+                $formulario='forms/form_lista_servicios.php';
+            break;
+           /*********************ATAUD*******************/
+            case "listar_tipo_ataud":
+           
+            include('../lib/DB_Conectar.php');
+            include('classes/consultas.php');
+            include 'header.php';
+
+            include "nav.php";
+
+            include 'menu.php';
+
+            $result= $consultas->getTipoAtaud();
+
+            $formulario='forms/form_lista_tipo_ataud.php';
+            break;
+            case "listar_ataud":
+           
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getAtaud();
+
+                $formulario='forms/form_lista_ataud.php';
+            break;
+
+            case "carga_tipo_ataud":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+                $formulario='forms/form_tipo_ataud.php';
+            break;
+            case "cargar_ataud":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $tipo = $consultas->getTipoAtaud();
+
+                $formulario='forms/form_ataud.php';
+            break;
+            
+            case "guardar_tipo_ataud":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $consultas->save_tipo_ataud($_REQUEST);
+                //borrar_relacion($id_producto);
+                $result = $consultas->getTipoAtaud();
+                /*********************/
+                $mensaje="La operacion se realizo correctamente.";
+                $formulario='forms/form_lista_tipo_ataud.php';
+                break;
+
+             case "guardar_ataud":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $consultas->save_ataud($_REQUEST);
+                //borrar_relacion($id_producto);
+                $result = $consultas->getAtaud();
+                /*********************/
+                $mensaje="La operacion se realizo correctamente.";
+                $formulario='forms/form_lista_ataud.php';
+                break;   
+            case "edita_tipo_ataud":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getTipoAtaudByid($_REQUEST['id_tipo_ataud']);
+                $formulario='forms/form_tipo_ataud.php';
+            break;
+            case "edita_ataud":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+                $tipo = $consultas->getTipoAtaud();
+                $result= $consultas->getAtaudByid($_REQUEST['id_ataud']);
+                $formulario='forms/form_ataud.php';
+            break;
+            case "edita_servicio":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+                $tipo_ataud= $consultas->getTipoAtaud();
+
+                $result= $consultas->getServicioByid($_REQUEST['id_servicio']);
+                /******************todo con respecto a ala ataud**************/
+                $ataud= $consultas->getAtaudByid($result->id_ataud);
+                /******************todo con respecto a ala ataud**************/
+                
+                $formulario='forms/form_servicio.php';
+            break;
     }
 
 if($formulario){

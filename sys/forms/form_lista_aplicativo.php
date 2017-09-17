@@ -54,6 +54,7 @@
                                         <?php echo ($v->tipo==2)?"Gimnasio":""; ?>
                                         <?php echo ($v->tipo==3)?"Mecanico":""; ?>
                                         <?php echo ($v->tipo==4)?"Clinico":""; ?>
+                                        <?php echo ($v->tipo==5)?"funeraria":""; ?>
 
                                     <td>
                                         <a href="controlador.php?action=<?php echo base64_encode('edita_aplicativo');?>&id_aplicativo=<?php echo $v->id_aplicativo; ?>"><img src="img/edit.png"/></a></td>

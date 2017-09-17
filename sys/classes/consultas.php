@@ -1116,6 +1116,57 @@ class Consultas
         }
         return array();
     }
+		public function getTurnosClientes($persona=null,$fecha_desde=null,$fecha_hasta=null,$apellidofiltro=null,$nombrefiltro=null,$dnifiltro=null,$motivofiltro=null) {
+			session_start();
+        $query = "SELECT t.* , date_format(t.fecha_turno, '%d/%m/%Y') fecha,
+									date_format(t.fecha_turno, '%H/%i') hora,
+									m.descripcion motivo,
+									CONCAT_WS(' ',p.apellido,p.nombre) cliente
+                  FROM turnos_peluqueria t
+                  LEFT JOIN motivos_turno m ON m.id_motivo=t.id_motivo
+									  LEFT JOIN clientes p ON p.id_cliente=t.id_cliente
+									WHERE 1 AND t.id_dominio='".$_SESSION['dominio']."' ";
+				if($persona){
+					$query .= " AND t.id_cliente = $persona";
+				}
+				if($apellidofiltro){
+            $query .=" AND p.apellido like '%$apellidofiltro%'";
+        }
+        if($nombrefiltro){
+            $query .=" AND p.nombre like '%$nombrefiltro%'";
+        }
+        if($dnifiltro){
+            $query .=" AND p.dni like '%$dnifiltro%'";
+        }
+				if($motivofiltro){
+            $query .=" AND t.id_motivo like '%$motivofiltro%'";
+        }
+				if($fecha_desde==null && $fecha_hasta==null){
+            //$fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $query .=" AND (t.fecha_turno between '".date('Y-m-d')." 00:00:00' AND '".date('Y-m-d')." 23:59:50')";
+        }
+				if($fecha_desde && $fecha_hasta==null){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $query .=" AND t.fecha_turno>='".$fecha_desde."'";
+        }
+        if($fecha_desde==null && $fecha_hasta){
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND t.fecha_turno<='".$fecha_hasta."'";
+        }
+
+        if($fecha_desde && $fecha_hasta){
+            $fecha_desde=substr($fecha_desde, 6, 4)."-".substr($fecha_desde, 3, 2)."-".substr($fecha_desde, 0, 2)." 00:00:00";
+            $fecha_hasta=substr($fecha_hasta, 6, 4)."-".substr($fecha_hasta, 3, 2)."-".substr($fecha_hasta, 0, 2)." 23:59:00";
+            $query .=" AND (t.fecha_turno between '".$fecha_desde."' AND '".$fecha_hasta."')";
+        }
+				$query .= " ORDER BY  t.fecha_turno DESC";
+				//echo $query;
+        $resutlt = $this->db->loadObjectList($query);
+        if ($resutlt) {
+            return $resutlt;
+        }
+        return array();
+    }
 		public function getDatosTurno($id_turno=null) {
 			session_start();
         $query = "SELECT t.* , date_format(t.fecha_turno, '%d/%m/%Y') fecha, date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento,
@@ -1459,22 +1510,22 @@ class Consultas
 
     }
 		function save_marca($data){
-        $table = new Table($this->db, 'marcas');
-        if(isset($data['id_marca'])){
-            $table->find($data['id_marca']);
+            $table = new Table($this->db, 'marcas');
+            if(isset($data['id_marca'])){
+                $table->find($data['id_marca']);
+            }
+            $table->descripcion = $data['descripcion'];
+    				if($data['estado']){
+                $table->estado = $data['estado'];
+            }else{
+                $table->estado = 'A';
+            }
+            if($table->save()){
+                return $table->id_marca;
+            }else{
+                return 0;
+            }
         }
-        $table->descripcion = $data['descripcion'];
-				if($data['estado']){
-            $table->estado = $data['estado'];
-        }else{
-            $table->estado = 'A';
-        }
-        if($table->save()){
-            return $table->id_marca;
-        }else{
-            return 0;
-        }
-    }
 		function getMarcas(){
         $query = "SELECT a.* FROM marcas a WHERE 1 ORDER BY descripcion ASC " ;
         //echo $query;
@@ -1842,6 +1893,523 @@ class Consultas
         $this->db->query($query);
 
     }
+		function getPersonasObitoByid($id_registro){
 
+				$query = "SELECT r.*,date_format(r.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento,pd.*,pc.id_registro id_persona_cobertura,
+				 c.descripcion cobertura, c.id_cobertura  id_cobertura, pc.numero_cobertura, cp.descripcion plan_cobertura, pc.id_plan id_plan_cobertura  "
+						. " FROM personas_obito r "
+						. " LEFT JOIN cobertura c ON c.id_cobertura=pc.id_cobertura "
+						. " WHERE r.id_persona='".$id_registro."' ";
+				//echo $query;
+				$result = $this->db->loadObjectList($query);
+				if($result)
+						return $result[0];
+				else
+						return false;
+		}
+
+		function getPersonasObito($apellidofiltro=null, $nombrefiltro=null, $dni=null){
+						session_start();
+				$query = "SELECT p.*,date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
+						. "  FROM personas_obito p
+
+						WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' ";
+				if($apellidofiltro){
+						$query .=" AND p.apellido like '%$apellidofiltro%'";
+				}
+				if($nombrefiltro){
+						$query .=" AND p.nombre like '%$nombrefiltro%'";
+				}
+				if($dni){
+						$query .=" AND p.dni like '%$dni%'";
+				}
+				$query .= " ORDER BY p.apellido, p.nombre ASC " ;
+
+				//echo $query;
+				$result = $this->db->loadObjectList($query);
+				if($result) {
+						return $result;
+				}else
+						return false;
+		}
+		public function getPaises(){
+			session_start();
+        $query = "SELECT m.*
+                  FROM  paises m
+                  WHERE 1 AND m.estado='A'";
+        $resutlt = $this->db->loadObjectList($query);
+        if ($resutlt) {
+            return $resutlt;
+        }
+        return array();
+    }
+		function save_pais($data){
+        $table = new Table($this->db, 'paises');
+        if(isset($data['id_pais'])){
+            $table->find($data['id_pais']);
+        }
+        $table->descripcion = $data['descripcion'];
+
+        if($data['estado']){
+            $table->estado = $data['estado'];
+        }else{
+            $table->estado = 'A';
+        }
+        if($table->save()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+		public function getCobertura(){
+			session_start();
+        $sql="SELECT c.id_cobertura , c.descripcion FROM cobertura AS c WHERE 1 AND c.estado='A' ORDER BY c.descripcion ASC";
+        $resutlt = $this->db->loadObjectList($sql);
+        if ($resutlt) {
+            return $resutlt;
+        }
+        return array();
+    }
+		public function getLugaresDeceso(){
+			session_start();
+        $sql="SELECT c.id_lugar_deceso , c.descripcion FROM lugar_deceso AS c WHERE 1 AND c.estado='A' ORDER BY c.descripcion ASC";
+        $resutlt = $this->db->loadObjectList($sql);
+        if ($resutlt) {
+            return $resutlt;
+        }
+        return array();
+    }
+		function save_lugar_deceso($data){
+                $table = new Table($this->db, 'lugar_deceso');
+                if(isset($data['id_lugar_deceso'])){
+                    $table->find($data['id_lugar_deceso']);
+                }
+                $table->descripcion = $data['descripcion'];
+
+                if($data['estado']){
+                    $table->estado = $data['estado'];
+                }else{
+                    $table->estado = 'A';
+                }
+                if($table->save()){
+                    return true;
+                }else{
+                    return false;
+                }
+        }
+		function save_persona_obito($data){
+				$fecha_nac=substr($data['fecha_nacimiento'], 6, 4)."-".substr($data['fecha_nacimiento'], 3, 2)."-".substr($data['fecha_nacimiento'], 0, 2);
+				$table = new Table($this->db, 'personas_obito');
+				if(isset($data['id_persona'])){
+						$table->find($data['id_persona']);
+
+						//$table->fecha_modificacion = date('Y-m-d H:i:s');
+				}else{
+						$table->fecha_alta = date('Y-m-d H:i:s');
+
+				}
+				$table->nombre = $data['nombre'];
+				$table->apellido = $data['apellido'];
+				$table->dni = $data['dni'];
+				$table->cuil = $data['cuil'];
+				$table->fecha_nacimiento = $fecha_nac;
+				$table->domicilio = $data['domicilio'];
+				$table->pais_nacimiento = $data['pais'];
+				$table->localidad = $data['localidad'];
+				$table->estado_civil = $data['estado_civil'];
+				$table->religion = $data['religion'];
+				$table->ocupacion = $data['ocupacion'];
+				$table->cobertura = $data['os'];
+				$table->numero_cobertura = $data['numero_cobertura'];
+				$table->lugar_deceso = $data['lugar_deceso'];
+				$table->hora_deceso = $data['hora_deceso'];
+				$table->peso = $data['peso'];
+				$table->talla = $data['talla'];
+				$table->causa = $data['causa'];
+				if($data['estado']){
+						$table->cod_estado = $data['estado'];
+				}else{
+						$table->cod_estado = 'A';
+				}
+				$table->id_proviene = $data['id_proviene'];
+				$table->id_dominio = $_SESSION['dominio'];
+				$table->usuario = $_SESSION['id'];
+				$table->fecha_alta = date('Y-m-d H:i:s');
+				if($table->save()){
+						return $table->id_persona;
+				}else{
+						return 0;
+				}
+		}
+		public function getServicios(){
+			session_start();
+                $sql="SELECT sc.*,date_format(sc.fecha_hora_carga, '%d/%m/%Y %H:%i') fecha_servicio, CONCAT_WS(' ',po.apellido, po.nombre) obito
+                                , CONCAT_WS(' ',ta.descripcion, a.ancho, a.medida) ataud
+                                	FROM servicios AS sc
+                                    INNER JOIN personas_obito AS po ON po.id_persona_obito=sc.id_persona_obito
+                                    LEFT JOIN personas_solicitante AS ps ON ps.id_solicitante=sc.id_solicitante
+                                    LEFT JOIN personas_garante AS pg ON pg.id_garante=sc.id_garante
+                                    INNER JOIN ataud AS a ON a.id_ataud=sc.id_ataud
+        							INNER JOIN tipo_ataud AS ta ON ta.id_tipo_ataud=a.id_tipo
+        							WHERE 1  ORDER BY sc.fecha_hora_carga DESC ";
+                $resutlt = $this->db->loadObjectList($sql);
+                if ($resutlt) {
+                    return $resutlt;
+                }
+                return array();
+        }
+		function getPersonaObitaByid($id_registro){
+
+				$query = "SELECT po.*,date_format(po.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento,date_format(po.hora_deceso, '%H:%i') hora_deceso, c.descripcion cobertura_nombre, p.descripcion pais_nombre, l.descripcion lugar_deceso_nombre "
+						. " FROM personas_obito po "
+						. " INNER JOIN paises p ON p.id_pais=po.pais_nacimiento "
+						. " INNER JOIN cobertura c ON c.id_cobertura=po.cobertura "
+						. " INNER JOIN lugar_deceso l ON l.id_lugar_deceso=po.lugar_deceso "
+						. " WHERE po.id_persona_obito='".$id_registro."' ";
+				//echo $query;
+				$result = $this->db->loadObjectList($query);
+				if($result)
+						return $result[0];
+				else
+						return false;
+		}
+
+        public function getAtaudes(){
+            session_start();
+            $query = "SELECT a.*, ta.descripcion nombre_ataud
+                      FROM  ataud a
+                      INNER JOIN tipo_ataud ta ON ta.id_tipo_ataud=a.id_tipo
+                      WHERE 1 AND a.estado='A' ";
+            $resutlt = $this->db->loadObjectList($query);
+            if ($resutlt) {
+                return $resutlt;
+            }
+            return array();
+        }   
+        public function getTipoAtaud(){
+            
+            $query = "SELECT ta.*
+                      FROM  tipo_ataud ta
+                      WHERE 1 AND ta.estado='A' ";
+            $resutlt = $this->db->loadObjectList($query);
+            if ($resutlt) {
+                return $resutlt;
+            }
+            return array();
+        }  
+        public function getMedidasAtaudPorTipo($tipo){
+            
+            $query = "SELECT ta.*
+                      FROM  ataud ta
+                      WHERE 1 AND ta.id_tipo='".$tipo."' ";
+                      // echo $query;
+            $resutlt = $this->db->loadObjectList($query);
+            if ($resutlt) {
+                return $resutlt;
+            }
+            return array();
+        } 
+        public function getAnchoAtaudPorTipo($tipo, $medida){
+            
+            $query = "SELECT ta.*
+                      FROM  ataud ta
+                      WHERE 1 AND ta.id_tipo='".$tipo."' AND ta.medida='".$medida."' ";
+                      // echo $query;
+            $resutlt = $this->db->loadObjectList($query);
+            if ($resutlt) {
+                return $resutlt;
+            }
+            return array();
+        } 
+        public function getIDAtaudPorCombinacion($tipo=null, $medida=null, $ancho=null){
+            
+            $query = "SELECT ta.*
+                      FROM  ataud ta
+                      WHERE 1 ";
+
+                      if($ancho){
+                        $query .=" AND ta.ancho='".$ancho."'";
+                      }
+                      if($tipo){
+                        $query .="  AND ta.id_tipo='".$tipo."'";
+                      }
+                      if($medida){
+                        $query .=" AND ta.medida='".$medida."'";
+                      }
+                      //  echo $query;
+            $resutlt = $this->db->loadObjectList($query);
+            if ($resutlt) {
+                return $resutlt[0];
+            }else{
+                return false;
+            }
+        } 
+        function getPersonaSolicitanteByid($id_registro){
+
+            $query = "SELECT r.*,date_format(r.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
+                . " FROM personas_solicitante r "
+                . " WHERE r.id_solicitante='".$id_registro."' ";
+            //echo $query;
+            $result = $this->db->loadObjectList($query);
+            if($result)
+                return $result[0];
+            else
+                return false;
+        }
+        function getPersonaGaranteByid($id_registro){
+
+            $query = "SELECT r.*,date_format(r.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
+                . " FROM personas_garante r "
+                . " WHERE r.id_garante='".$id_registro."' ";
+            //echo $query;
+            $result = $this->db->loadObjectList($query);
+            if($result)
+                return $result[0];
+            else
+                return false;
+        }
+
+        function getSolicitantes($apellidofiltro=null, $nombrefiltro=null, $dni=null){
+                        session_start();
+                $query = "SELECT p.*,date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
+                        . "  FROM personas_solicitante p
+
+                        WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' ";
+                if($apellidofiltro){
+                        $query .=" AND p.apellido like '%$apellidofiltro%'";
+                }
+                if($nombrefiltro){
+                        $query .=" AND p.nombre like '%$nombrefiltro%'";
+                }
+                if($dni){
+                        $query .=" AND p.dni like '%$dni%'";
+                }
+                $query .= " ORDER BY p.apellido, p.nombre ASC " ;
+
+                //echo $query;
+                $result = $this->db->loadObjectList($query);
+                if($result) {
+                        return $result;
+                }else
+                        return false;
+        }
+        function getGarantes($apellidofiltro=null, $nombrefiltro=null, $dni=null){
+                        session_start();
+                $query = "SELECT p.*,date_format(p.fecha_nacimiento, '%d/%m/%Y') fecha_nacimiento "
+                        . "  FROM personas_garante p
+
+                        WHERE 1 AND p.id_dominio='".$_SESSION['dominio']."' ";
+                if($apellidofiltro){
+                        $query .=" AND p.apellido like '%$apellidofiltro%'";
+                }
+                if($nombrefiltro){
+                        $query .=" AND p.nombre like '%$nombrefiltro%'";
+                }
+                if($dni){
+                        $query .=" AND p.dni like '%$dni%'";
+                }
+                $query .= " ORDER BY p.apellido, p.nombre ASC " ;
+
+                //echo $query;
+                $result = $this->db->loadObjectList($query);
+                if($result) {
+                        return $result;
+                }else
+                        return false;
+        }
+        function save_persona_garante($data){
+                $fecha_nac=substr($data['fecha_nacimiento'], 6, 4)."-".substr($data['fecha_nacimiento'], 3, 2)."-".substr($data['fecha_nacimiento'], 0, 2);
+                $table = new Table($this->db, 'personas_garante');
+                if(isset($data['id_garante'])){
+                        $table->find($data['id_garante']);
+                }else{
+                        $table->fecha_alta = date('Y-m-d H:i:s');
+                }
+                $table->nombre = $data['nombre'];
+                $table->apellido = $data['apellido'];
+                $table->dni = $data['dni'];
+                $table->fecha_nacimiento = $fecha_nac;
+                $table->domicilio = $data['domicilio'];
+                $table->ocupacion = $data['ocupacion'];
+                $table->tel_casa = $data['tel_casa'];
+                $table->tel_celular = $data['tel_celular'];
+                $table->tel_laboral = $data['tel_laboral'];
+                // $table->parentesco = $data['parentesco'];
+                if($data['estado']){
+                        $table->cod_estado = $data['estado'];
+                }else{
+                        $table->cod_estado = 'A';
+                }
+                $table->id_dominio = $_SESSION['dominio'];
+                $table->usuario = $_SESSION['id'];
+                $table->fecha_alta = date('Y-m-d H:i:s');
+                if($table->save()){
+                        return $table->id_garante;
+                }else{
+                        return 0;
+                }
+        }
+        function save_persona_solicitante($data){
+                $fecha_nac=substr($data['fecha_nacimiento'], 6, 4)."-".substr($data['fecha_nacimiento'], 3, 2)."-".substr($data['fecha_nacimiento'], 0, 2);
+                $table = new Table($this->db, 'personas_solicitante');
+                if(isset($data['id_solicitante'])){
+                        $table->find($data['id_solicitante']);
+                }else{
+                        $table->fecha_alta = date('Y-m-d H:i:s');
+                }
+                $table->nombre = $data['nombre'];
+                $table->apellido = $data['apellido'];
+                $table->dni = $data['dni'];
+                $table->fecha_nacimiento = $fecha_nac;
+                $table->domicilio = $data['domicilio'];
+                $table->ocupacion = $data['ocupacion'];
+                $table->tel_casa = $data['tel_casa'];
+                $table->tel_celular = $data['tel_celular'];
+                $table->tel_laboral = $data['tel_laboral'];
+                $table->parentesco = $data['parentesco'];
+                if($data['estado']){
+                        $table->cod_estado = $data['estado'];
+                }else{
+                        $table->cod_estado = 'A';
+                }
+                $table->id_dominio = $_SESSION['dominio'];
+                $table->usuario = $_SESSION['id'];
+                $table->fecha_alta = date('Y-m-d H:i:s');
+                if($table->save()){
+                        return $table->id_solicitante;
+                }else{
+                        return 0;
+                }
+            }
+            function save_servicio($data){
+                $fecha_inhumacion=substr($data['fecha_inhumacion'], 6, 4)."-".substr($data['fecha_inhumacion'], 3, 2)."-".substr($data['fecha_inhumacion'], 0, 2);
+                $table = new Table($this->db, 'servicios');
+                if(isset($data['id_servicio'])){
+                        $table->find($data['id_servicio']);
+
+                        //$table->fecha_modificacion = date('Y-m-d H:i:s');
+                }else{
+                        $table->fecha_alta = date('Y-m-d H:i:s');
+
+                }
+                $table->id_persona_obito = $data['persona_obito'];
+                $table->id_ataud = $data['id_ataud'];
+                $table->entierro = $data['lugar_entierro'];
+                $table->sala = $data['sala'];
+                $table->capilla = $data['capilla'];
+                $table->fecha_inhumacion = $fecha_inhumacion;
+                $table->domicilio = $data['domicilio'];
+                $table->tipo_preparacion = $data['tipo_preparacion'];
+                $table->cementerio_cremacion = $data['cementerio_cremacion'];
+                $table->hora_inhumacion = $data['hora_inhumacion'];
+                $table->fecha_inhumacion = $data['fecha_inhumacion'];
+                $table->traslado = $data['traslado'];
+                $table->traslado_hasta = $data['traslado_hasta'];
+                $table->traslado_km = $data['traslado_km'];
+                $table->id_solicitante = $data['solicitante'];
+                $table->id_garante = $data['garante'];
+
+                $table->importe = $data['importe'];
+                $table->entrega = $data['entrega'];
+                $table->saldo = $data['saldo'];
+                $table->forma_pago = $data['forma_pago'];
+
+                $table->furgon = $data['furgon'];
+                $table->coche_funebbre = $data['coche_funebbre'];
+                $table->coche_porta = $data['coche_porta'];
+                $table->coche_aacompana = $data['coche_aacompana'];
+                $table->refrigerio = $data['refrigerio'];
+                $table->saldo = $data['saldo'];
+                $table->forma_pago = $data['forma_pago'];
+                
+                
+                $table->id_dominio = $_SESSION['dominio'];
+                $table->id_usuario = $_SESSION['id'];
+                $table->fecha_hora_carga = date('Y-m-d H:i:s');
+                if($table->save()){
+                        return $table->id_servicio;
+                }else{
+                        return 0;
+                }   
+            }
+            function getTipoAtaudByid($id_registro){
+
+                    $query = "SELECT r.* FROM tipo_ataud r  WHERE r.id_tipo_ataud='".$id_registro."' ";
+                    //echo $query;
+                    $result = $this->db->loadObjectList($query);
+                    if($result)
+                        return $result[0];
+                    else
+                        return false;
+            }
+            function save_tipo_ataud($data){
+                $table = new Table($this->db, 'tipo_ataud');
+                if(isset($data['id_tipo_ataud'])){
+                    $table->find($data['id_tipo_ataud']);
+                }
+                $table->descripcion = $data['descripcion'];
+                        if($data['estado']){
+                    $table->estado = $data['estado'];
+                }else{
+                    $table->estado = 'A';
+                }
+                if($table->save()){
+                    return $table->id_marca;
+                }else{
+                    return 0;
+                }
+            }
+            function save_ataud($data){
+                $table = new Table($this->db, 'ataud');
+                if(isset($data['id_ataud'])){
+                    $table->find($data['id_ataud']);
+                }
+                $table->id_tipo = $data['tipo_ataud'];
+                $table->medida = $data['medida'];
+                $table->ancho = $data['ancho'];
+                $table->cantidad = $data['cantidad'];
+                if($data['estado']){
+                    $table->estado = $data['estado'];
+                }else{
+                    $table->estado = 'A';
+                }
+                if($table->save()){
+                    return $table->id_ataud;
+                }else{
+                    return 0;
+                }
+            }
+            public function getAtaud(){
+            
+                $query = "SELECT a.*, ta.descripcion tipo
+                          FROM  ataud a
+                          INNER JOIN  tipo_ataud ta ON ta.id_tipo_ataud=a.id_tipo
+                          WHERE 1 AND a.estado='A' ";
+                $resutlt = $this->db->loadObjectList($query);
+                if ($resutlt) {
+                    return $resutlt;
+                }
+                return array();
+            }
+            function getAtaudByid($id_registro){
+
+                    $query = "SELECT r.* FROM ataud r  WHERE r.id_ataud='".$id_registro."' ";
+                    //echo $query;
+                    $result = $this->db->loadObjectList($query);
+                    if($result)
+                        return $result[0];
+                    else
+                        return false;
+            }
+            function getServicioByid($id_registro){
+
+                    $query = "SELECT r.* FROM servicios r  WHERE r.id_servicio='".$id_registro."' ";
+                    //echo $query;
+                    $result = $this->db->loadObjectList($query);
+                    if($result)
+                        return $result[0];
+                    else
+                        return false;
+            }
 }
 $consultas= new Consultas($db);

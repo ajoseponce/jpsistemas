@@ -3,7 +3,7 @@ include('../lib/DB_Conectar.php');
 include('classes/consultas.php');
 //print_r($_REQUEST);
 // $result = $consultas->getTurnos($_REQUEST['fecha_desde'],$_REQUEST['fecha_hasta'],$_REQUEST['periodo']);
-$result= $consultas->getTurnos($id_persona,$_REQUEST['fecha_desde'],$_REQUEST['fecha_hasta'],$_REQUEST['apellido_filtro'],$_REQUEST['nombre_filtro'],$_REQUEST['dni_filtro'],$_REQUEST['motivo_filtro']);
+$result= $consultas->getTurnosClientes($id_persona,$_REQUEST['fecha_desde'],$_REQUEST['fecha_hasta'],$_REQUEST['apellido_filtro'],$_REQUEST['nombre_filtro'],$_REQUEST['dni_filtro'],$_REQUEST['motivo_filtro']);
 ?>
 
 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -58,13 +58,8 @@ $result= $consultas->getTurnos($id_persona,$_REQUEST['fecha_desde'],$_REQUEST['f
              ?>
             <tr class="odd gradeX" <?php echo $color_linea; ?> >
               <td>
-              <?php if($v->estado=='Presente'){ ?>
-                  <img  data-toggle="tooltip" <?php echo $disabled_cp; ?> title="Cancelar Presente!" src="img/cancela_presente.png" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','cancela_presente')"/>
+                <a href="controlador.php?action=<?php echo base64_encode('carga_comprobante');?>&id_cliente=<?php echo $v->id_cliente; ?>"><img src="img/info_all.png"/></a>
 
-
-              <?php }else{ ?>
-                  <img src="img/presente.png"  data-toggle="tooltip" title="Dar Presente!" <?php echo $disabled_cp; ?> onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','<?php echo $v->estado; ?>')"/>
-              <?php } ?>
               <img src="img/printer.png"  data-toggle="tooltip" title="Imprimir Comprobante" onclick="imprimir_bono('<?php echo $v->id_turno; ?>')" />
               </td>
 
@@ -74,18 +69,7 @@ $result= $consultas->getTurnos($id_persona,$_REQUEST['fecha_desde'],$_REQUEST['f
                 <td><?php echo $v->observaciones; ?></td>
                 <td><?php echo $v->estado; ?></td>
                 <td>
-                  <?php if($v->estado=='Presente'){ ?>
-                      <img src="img/llamando.png"  data-toggle="tooltip" <?php echo $disabled_cll; ?> title="LLamar Paciente!" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','<?php echo $v->estado; ?>')"/>
-                  <?php }
-                      if($v->estado=='Llamando'){ ?>
-                      <img src="img/cancelar_llamada.png"  data-toggle="tooltip"  <?php echo $disabled_cll; ?> title="Cancelar LLamado!" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','cancelar_llamada')"/>
-                  <?php }
-                      if($v->estado=='Llamando'){ ?>
-                      <img src="img/atendio.png"  data-toggle="tooltip" <?php echo $disabled_cll; ?> title="Atender Paciente!" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','<?php echo $v->estado; ?>')"/>
-                    <?php }
-                  ?>
-
-                  <img src="img/cancela_turno.png" <?php echo $disabled_cancelar; ?>   data-toggle="tooltip" title="Cancelar Turno !" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','Cancelado')" />
+                    <img src="img/cancela_turno.png" <?php echo $disabled_cancelar; ?>   data-toggle="tooltip" title="Cancelar Turno !" onclick="edita_estado_turno('<?php echo $v->id_turno; ?>','Cancelado')" />
                 </td>
             </tr>
         <?php }} ?>

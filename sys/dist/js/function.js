@@ -11,7 +11,15 @@ function volver_listado_productos(){
 function guardar_datos(){
     $("#form_datos").submit();
 }
-
+function guardar_obito(){
+    $("#form_obito").submit();
+}
+function guardar_garante(){
+    $("#form_garante").submit();
+}
+function guardar_solicitante(){
+    $("#form_solicitante").submit();
+}
 function guardar_producto(){
 
     $("#form_datos").submit();
@@ -345,6 +353,7 @@ function trae_pagos(){
         $("#tabla_listado").load('trae_pagos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta+'&periodo='+periodo);
 
 }
+
 function trae_turnos(){
 //  alert('si bueno ');
         var fecha_desde=$("#fecha_desde").val();
@@ -358,6 +367,7 @@ function trae_turnos(){
         $("#tabla_listado").load('trae_turnos.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta+'&apellido_filtro='+apellido_filtro+'&nombre_filtro='+nombre_filtro+'&dni_filtro='+dni_filtro+'&motivo_filtro='+motivo_filtro);
 
 }
+
 function trae_turnos_fecha(){
 //  alert('holaaa comenten');
         var fecha_turno=$("#fecha_turno").val();
@@ -581,6 +591,7 @@ function abrir_pop_turnos(idpersona){
     $('#turnera').modal('toggle');
 
 }
+
 function guardar_turno(){
     //alert($("#motivo").val());
     if($("#fecha_turno").val()==''){
@@ -650,6 +661,7 @@ function guardar_motivo(){
             }
     });
 }
+
 function guardar_problema(){
 
     if($("#descripcion_problema").val()==''){
@@ -823,4 +835,207 @@ function trae_comprobantes(){
         // var periodo=$("#periodo").val();
         $("#tabla_listado").load('trae_comprobantes.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta);
 
+}
+function trae_turnos_pelu(){
+//  alert('si bueno ');
+        var fecha_desde=$("#fecha_desde").val();
+        var fecha_hasta=$("#fecha_hasta").val();
+
+        var apellido_filtro=$("#apellido_filtro").val();
+        var nombre_filtro=$("#nombre_filtro").val();
+        var dni_filtro=$("#dni_filtro").val();
+        var motivo_filtro=$("#motivo_filtro").val();
+        // var periodo=$("#periodo").val();
+        $("#tabla_listado").load('trae_turnos_pelu.php?fecha_desde='+fecha_desde+'&fecha_hasta='+fecha_hasta+'&apellido_filtro='+apellido_filtro+'&nombre_filtro='+nombre_filtro+'&dni_filtro='+dni_filtro+'&motivo_filtro='+motivo_filtro);
+
+}
+function abrir_pop_personas(){
+  $("#pais").load('trae_paises.php');
+  $("#os").load('trae_os.php');
+  $("#lugar_deceso").load('trae_lugar_deceso.php');
+
+  $('#nueva_persona').modal('toggle');
+}
+function abrir_pop_solicitantes(){
+  
+  $('#nueva_solicitante').modal('toggle');
+}
+function abrir_pop_garantes(){
+  
+  $('#nueva_garante').modal('toggle');
+}
+function abrir_pop_pais(){
+  $('#form_paises').modal('toggle');
+}
+function abrir_pop_lugar(){
+  $('#form_lugar_deceso').modal('toggle');
+}
+function guardar_pais(){
+    //alert($("#motivo").val());
+    if($("#descripcion").val()==''){
+        $("#descripciondiv").addClass( "form-group  has-error" );
+        return false;
+    }
+    $.ajax({
+            url:           "controlador.php",
+            data:          {action_js: "guardar_pais",descripcion: ""+$("#descripcion").val()},
+            type: 'post',
+            success:       function(data){
+                //alert(data);
+                if(data){
+                    $('#mjs').html('El pais se guardo correctamente');
+                    $('#mensaje').modal('toggle');
+                    $("#pais").load('trae_paises.php');
+                }else{
+                    $('#mjs_error').html('Ocurrio un error');
+                    $('#mensaje_error').modal('toggle');
+                }
+                $('#form_paises').modal('toggle');
+            }
+    });
+}
+function guardar_lugar(){
+    //alert($("#motivo").val());
+    if($("#descripcion_lugar").val()==''){
+        $("#descripciondiv").addClass( "form-group  has-error" );
+        return false;
+    }
+    $.ajax({
+            url:           "controlador.php",
+            data:          {action_js: "guardar_lugar",descripcion: ""+$("#descripcion_lugar").val()},
+            type: 'post',
+            success:       function(data){
+                //alert(data);
+                if(data){
+                    $('#mjs').html('El lugar de deceso se guardo correctamente');
+                    $('#mensaje').modal('toggle');
+                    $("#lugar_deceso").load('trae_lugar_deceso.php');
+                }else{
+                    $('#mjs_error').html('Ocurrio un error');
+                    $('#mensaje_error').modal('toggle');
+                }
+                $('#form_lugar_deceso').modal('toggle');
+            }
+    });
+}
+
+function busca_persona_obito(){
+    var apellido_filtro=$("#apellido_filtro").val();
+    var nombre_filtro=$("#nombre_filtro").val();
+    var dni_filtro=$("#dni_filtro").val();
+    $("#tabla_listado").load('trae_personas_obito.php?dnifiltro='+dni_filtro+'&apellidofiltro='+apellido_filtro+'&nombrefiltro='+nombre_filtro);
+
+}
+
+function trae_medidas_ataud(tipo){
+        
+        $("#medida_ataud").load('trae_medida_por_tipo.php?id_tipo='+tipo);
+
+}
+function trae_anchos_ataud(medida){
+        var tipo=$("#tipo_ataud").val();
+        $("#ancho_ataud").load('trae_ancho_por_tipo_medida.php?id_tipo='+tipo+'&medida='+medida);
+
+}
+function trae_id_ataud(ancho){
+        var tipo=$("#tipo_ataud").val();
+        var medida=$("#medida_ataud").val();
+        $("#div_id_ataud").load('trae_id_ataud.php?id_tipo='+tipo+'&medida='+medida+'&ancho='+ancho);
+
+
+}
+function autocomleteINI_persona_obito(id, path) {
+    $('#suggest_' + id).autocomplete(
+        { messages: { noResults: 'nadaaa', results: function() {} },
+            source: function (request, response) {
+                $.getJSON( path, { term: this.term }, response );
+            }, minLength: 2,
+            select: function (event, ui) {
+                // /console.log(ui); i
+                if (ui.item == null) {
+                    $('#' + id).val('').trigger('clear');
+                    $('#suggest_' + id).val('');
+                } else {
+                    //alert('hola'+ui.item.id);
+                    $('#' + id).val(ui.item.id).trigger('change');
+                    $("#datos_persona_obito").load('trae_datos_persona_obito.php?id_persona_obito='+ui.item.id);
+                    $("#buscador_obito").hide();
+                }
+            }
+        }) ;
+}
+function autocomleteINI_solicitante(id, path) {
+    $('#suggest_' + id).autocomplete(
+        { messages: { noResults: 'nadaaa', results: function() {} },
+            source: function (request, response) {
+                $.getJSON( path, { term: this.term }, response );
+            }, minLength: 2,
+            select: function (event, ui) {
+                // /console.log(ui); i
+                if (ui.item == null) {
+                    $('#' + id).val('').trigger('clear');
+                    $('#suggest_' + id).val('');
+                } else {
+                    //alert('hola'+ui.item.id);
+                    $('#' + id).val(ui.item.id).trigger('change');
+                    $("#datos_solicitante").load('trae_datos_solicitante.php?id_solicitante='+ui.item.id);
+                     $("#buscador_solicitante").hide();
+                }
+            }
+        }) ;
+}
+function autocomleteINI_garante(id, path) {
+    $('#suggest_' + id).autocomplete(
+        { messages: { noResults: 'nadaaa', results: function() {} },
+            source: function (request, response) {
+                $.getJSON( path, { term: this.term }, response );
+            }, minLength: 2,
+            select: function (event, ui) {
+                // /console.log(ui); i
+                if (ui.item == null) {
+                    $('#' + id).val('').trigger('clear');
+                    $('#suggest_' + id).val('');
+                } else {
+                    //alert('hola'+ui.item.id);
+                    $('#' + id).val(ui.item.id).trigger('change');
+                    $("#datos_garante").load('trae_datos_solicitante.php?id_solicitante='+ui.item.id);
+                     $("#buscador_garante").hide();
+                }
+            }
+        }) ;
+}
+function ver_buscador_garante(){
+    $("#buscador_garante").show();
+    $("#datos_garante").html("");
+    
+}
+function ver_buscador_solicitente(){
+    $("#buscador_solicitante").show();
+    $("#datos_solicitante").html("");
+}
+function ver_buscador_obito(){
+    $("#buscador_obito").show();
+    $("#datos_persona_obito").html("");
+}
+function buscar_combinacion_ataud() {
+    var tipo=$("#tipo_ataud").val();
+    var medida=$("#medida").val();
+    var ancho=$("#ancho").val();
+
+    $.ajax({
+        url:           "buscar_combinacion_ataud.php",
+        data:          {medida: ""+medida+"", ancho: ""+ancho+"", tipo: ""+tipo+""},
+        type: 'get',
+        success:       function(data){
+          //alert(data.mjs);
+            if(data==1){
+                // alert('El ataud NOOO ya existe');
+                $("#boton_guardar").prop("disabled", false);
+            }else{
+                $("#boton_guardar").prop("disabled", true);
+
+            }
+
+        }
+    });
 }

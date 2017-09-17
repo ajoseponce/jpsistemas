@@ -103,7 +103,7 @@
                                 </div>
                             <?php } ?>
                             <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_cliente'); ?>" />
-                              <input type="hidden" id="id_cliente" id="id_cliente"  name="id_cliente" value="<?php echo (isset($result->id_cliente))?$result->id_cliente:$_REQUEST['id_cliente']; ?>" />
+                            <input type="hidden" id="id_cliente" id="id_cliente"  name="id_cliente" value="<?php echo (isset($result->id_cliente))?$result->id_cliente:$_REQUEST['id_cliente']; ?>" />
                             <input type="button"  onclick="guardar_datos()" class="btn btn-primary" value="Guardar Datos" />
                             <button onclick="volver_listado('<?php echo base64_encode('listar_clientes'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                             <!-- /.form-group -->

@@ -9,7 +9,7 @@ body{
 	}
 /*-- banner --*/
 .banner{
-	background:url("../images/banner.jpg") no-repeat 0px 0px;
+	background:url("../images/banner.jpg") repeat 0px 0px;
 	background-size:cover;
 	-webkit-background-size: cover;
 	-o-background-size: cover;
@@ -148,9 +148,9 @@ span.colon{
 }
 /*-- //fixed-header --*/
 .nav-left{
-	background:#000000;
+	background:#ffffff;
 	width:5%;
-	padding:17px;
+	padding:9px;
 	float: left;
 	}
 /*-- menu --*/
@@ -386,7 +386,7 @@ span.highlight{
 	height: 22px;
 	margin: 2px;
 	display: inline-block;
-	}	
+	}
 /*---- //style for tabs ----*/
 /*--- circles --*/
 .circles-text-wrp {
@@ -462,7 +462,7 @@ span.highlight{
 	margin: 0;
 	font-size: 17px;
 	}
-/*-- additional --*/	
+/*-- additional --*/
 /*--portfolio-grid--*/
 
 ul#filters {
@@ -502,13 +502,13 @@ ul#filters {
 #portfoliolist .portfolio {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	-o-box-sizing: border-box;	
+	-o-box-sizing: border-box;
 	display: none;
-	overflow: hidden;		
+	overflow: hidden;
 	border: 1px solid #cecece;
 	margin-bottom: 1em;
 	width:100%;
-}	
+}
 .portfolio-wrapper {
 	overflow:hidden;
 	position: relative !important;
@@ -1087,7 +1087,7 @@ ul.social li span.text{
 	padding:0;
 	font-size:16px;
 	color:#666666;
-	}	
+	}
 .desc {
 	margin-top: 18px;
 	}
@@ -1103,7 +1103,7 @@ ul.social li span.text{
 	}
 .desc-left p{
 	margin:0;
-	
+
 	font-size:16px;
 	color:#999999;
 	}
@@ -1322,7 +1322,7 @@ ul.social li span.text{
 	-webkit-transition: .5s all;
 	-o-transition: .5s all;
 	-ms-transition: .5s all;
-	-moz-transition: .5s all;	
+	-moz-transition: .5s all;
 	}
 .contact-info input[type=button]:hover {
 	background:#ffffff;
@@ -1698,7 +1698,7 @@ ul.social-slide li i.mac{
   -ms-border-radius: 30px;
 }
 .callbacks_here a:after{
-	background: #99cc33;	
+	background: #99cc33;
 }
 /*-- Slider part Ends Here --*/
 /*-- to-top --*/
@@ -1709,7 +1709,7 @@ ul.social-slide li i.mac{
 	bottom: 12px;
 	right: 1%;
 	overflow: hidden;
-	z-index: 999; 
+	z-index: 999;
 	width: 32px;
 	height: 32px;
 	border: none;
@@ -2358,7 +2358,7 @@ ul.social-slide li i.mac{
 	span.colon {
 		font-size: 47px;
 		}
-	.banner-info{	
+	.banner-info{
 		margin: 186px 0 0 0;
 		}
 	.banner-info h1 {
@@ -3026,7 +3026,7 @@ ul.social-slide li i.mac{
 	.nav-right ul {
 		top: 107.5%;
 		}
-		
+
 	.underline {
 		width: 59%;
 		margin: 0 auto;
@@ -3219,7 +3219,7 @@ ul.social-slide li i.mac{
 		}
 	.caption-right {
 		width: 33%;
-		 margin-top: 0px; 
+		 margin-top: 0px;
 		}
 	.dot-top p{
 			display:none;
