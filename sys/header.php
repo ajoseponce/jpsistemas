@@ -57,5 +57,8 @@
 <?php include 'motivos.php'; ?>
 <?php include 'problemas.php'; ?>
 <?php include 'mensaje.php'; ?>
+<?php include 'preparador.php'; ?>
 <?php include 'mensaje_error.php'; ?>
+<?php include 'pagos_servicios.php'; ?>
+<?php include 'cementerio.php'; ?>
 <div class="wrapper">

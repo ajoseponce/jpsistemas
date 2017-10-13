@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+// error_reporting(E_ALL);
+// ini_set("display_errors", 1);
 include('lib/functions.php');
 requireLogin();
 
@@ -1445,11 +1445,14 @@ $action = base64_decode($_REQUEST["action"]);
                 include 'header.php';
                 include "nav.php";
                 include 'menu.php';
+                $paises=$consultas->getPaises();
+                $cobertura=$consultas->getCobertura();
+                $lugar_deceso=$consultas->getLugaresDeceso();
 
-                $result= $consultas->getPersonaObitaByid($_REQUEST['id_persona']);
+                $result= $consultas->getPersonaObitaByid($_REQUEST['id_persona_obito']);
                 //$planes= $consultas->getPersonasbyid($_REQUEST['id_persona']);
 
-                $formulario='forms/form_personas.php';
+                $formulario='forms/form_persona_obito.php';
             break;
             case "listar_personas_obito":
                // echo "bueno";
@@ -1499,6 +1502,7 @@ $action = base64_decode($_REQUEST["action"]);
                 include "nav.php";
 
                 include 'menu.php';
+                $preparador= $consultas->getPreparador();
                 $tipo_ataud= $consultas->getTipoAtaud();
                 $formulario='forms/form_servicio.php';
             break;
@@ -1515,6 +1519,16 @@ $action = base64_decode($_REQUEST["action"]);
                 $result= $consultas->getSolicitantes();
 
                 $formulario='forms/form_lista_solicitantes.php';
+            break;
+            case "edita_solicitante":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+                include "nav.php";
+                include 'menu.php';
+
+                $result= $consultas->getSolicitanteByID($_REQUEST['id_solicitante']);
+                $formulario='forms/form_solicitante.php';
             break;
             case "listar_garantes":
                // echo "bueno";
@@ -1565,8 +1579,22 @@ $action = base64_decode($_REQUEST["action"]);
                 include "nav.php";
                 include 'menu.php';
 
-                $consultas->save_servicio($_REQUEST);
-
+                $id_servicio=$consultas->save_servicio($_REQUEST);
+                if($_REQUEST['id_servicio']==null){
+                    if($_REQUEST['entrega']>0){
+                        $_REQUEST['monto']=$_REQUEST['entrega'];
+                        $_REQUEST['id_servicio']=$id_servicio;
+                        $_REQUEST['numero_pago']=1;
+                        $id_pago_servicio=$consultas->save_pago_servicio($_REQUEST);
+                    ?>
+                        <script type="text/javascript">
+                            imprimir_pago_servicio('<?php echo $id_pago_servicio; ?>')
+                           //imprimir_('<?php echo $v->id_servicio; ?>')
+                        </script>    
+                          
+                    <?php 
+                    }
+                } 
                 $result= $consultas->getServicios();
 
                 $formulario='forms/form_lista_servicios.php';
@@ -1691,14 +1719,89 @@ $action = base64_decode($_REQUEST["action"]);
 
                 include 'menu.php';
                 $tipo_ataud= $consultas->getTipoAtaud();
+                $preparador= $consultas->getPreparador();
 
                 $result= $consultas->getServicioByid($_REQUEST['id_servicio']);
                 /******************todo con respecto a ala ataud**************/
                 $ataud= $consultas->getAtaudByid($result->id_ataud);
+                $cementerio=$consultas->getLugar_CM_CR($result->cementerio_cremacion);
                 /******************todo con respecto a ala ataud**************/
                 
                 $formulario='forms/form_servicio.php';
             break;
+            case "guardar_preparador":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                echo $consultas->save_preparador($_REQUEST);
+
+            break;
+            case "guardar_cementerio":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                echo $consultas->save_lugar_servicio($_REQUEST);
+
+            break;
+            case "carga_pago_servicio":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+                $result= $consultas->getServicioByid($_REQUEST['id_servicio']);
+                $solicitante= $consultas->getSolicitanteByID($result->id_solicitante);
+                $garante= $consultas->getSolicitanteByID($result->id_garante);
+                
+                $formulario='forms/form_pago_servicio.php';
+            break;
+            case "guardar_pago_servicio":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+// exit;
+                $numero_pago=$consultas->getNumeroPagosServicios($_REQUEST['id_servicio']);
+                $_REQUEST['numero_pago']=$numero_pago+1;
+                $id_pago_servicio=$consultas->save_pago_servicio($_REQUEST);
+                $servicio= $consultas->getServicioByid($_REQUEST['id_servicio']);
+                $saldo=$servicio->saldo - $_REQUEST['monto'];
+                $consultas->update_saldo_servicio($_REQUEST['id_servicio'], $saldo)
+                ?>
+                <script type="text/javascript">
+                    imprimir_pago_servicio('<?php echo $id_pago_servicio; ?>')
+                </script>    
+                    
+                <?php
+                $result= $consultas->getServicios();
+
+                $formulario='forms/form_lista_servicios.php';
+            break;
+            case "listar_pagos_servicios":
+               // echo "bueno";
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                include 'header.php';
+
+                include "nav.php";
+
+                include 'menu.php';
+
+                $result= $consultas->getPagosServicios();
+
+                $formulario='forms/form_lista_pagos_servicios.php';
+            break;
+            case "borrar_pago_servicio":
+                include('../lib/DB_Conectar.php');
+                include('classes/consultas.php');
+                
+                $consultas->update_baja_pago_servicio($_REQUEST['idPagoServicio']);
+                
+            break;
+
     }
 
 if($formulario){

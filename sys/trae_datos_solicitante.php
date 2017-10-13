@@ -40,11 +40,11 @@ if($result){
         <label>Tel Laboral</label>
         <?php echo $result->tel_laboral; ?>
     </div>
-    <div class="form-group col-md-6">
+    <!-- <div class="form-group col-md-6">
         <label>Parentezco</label>
         <?php echo $result->parentesco; ?>
     </div>
- 
+  -->
 
     <?php
 }

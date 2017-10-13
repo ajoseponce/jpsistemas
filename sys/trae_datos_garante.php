@@ -1,7 +1,7 @@
 <?php
 include('../lib/DB_Conectar.php');
 include('classes/consultas.php');
-$result = $consultas->getPersonaGaranteByid($_REQUEST['id_garante']);
+$result = $consultas->getPersonaSolicitanteByid($_REQUEST['id_solicitante']);
 
 if($result){
     ?>

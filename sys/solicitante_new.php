@@ -54,10 +54,10 @@
                   <label>Telefono Laboral</label>
                   <input class="form-control"  value="" name="tel_laboral" id="tel_laboral" placeholder="Ingrese tel laboral" required>
               </div>
-              <div class="form-group col-md-12">
+             <!--  <div class="form-group col-md-12">
                   <label>Parentezco</label>
                   <input class="form-control"  value="" name="parentesco" id="parentesco" placeholder="Ingrese parentesco" required>
-              </div>
+              </div> -->
             </div>
             <input  value="guardar_solicitante" type="hidden" name="action_js" id="action_js">
             </form>

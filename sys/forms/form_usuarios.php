@@ -60,6 +60,9 @@
                                     <option value="">SELECCIONE UN TIPO</option>
                                     <option <?php echo ($result->tipo==1)?"selected":""; ?> value="1">Administrador</option>
                                     <option <?php echo ($result->tipo==2)?"selected":""; ?>  value="2">Gimnasio</option>
+                                    <option <?php echo ($result->tipo==3)?"selected":""; ?>  value="3">Mecanico</option>
+                                    <option <?php echo ($result->tipo==4)?"selected":""; ?>  value="4">Clinico</option>
+                                    <option <?php echo ($result->tipo==5)?"selected":""; ?>  value="5">Funeraria</option>
                                 </select>
                             </div>
                             <div class="form-group">

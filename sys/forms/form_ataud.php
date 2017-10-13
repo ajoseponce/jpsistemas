@@ -79,14 +79,14 @@
                             <div class="form-group">
                                 <label>Estado</label>
                                 <select style="width: 200px;"  class="form-control" id="estado" name="estado">
-                                    <option value="">SELECCIONE UN ESTADO</option>
+                                    
                                     <option <?php echo ($result->estado=='A')?"selected":""; ?> value="A">ALTA</option>
                                     <option <?php echo ($result->estado=='B')?"selected":""; ?>  value="B">BAJA</option>
                                 </select>
                             </div>
                         <?php } ?>
                         <input type="hidden"  name="action" value="<?php echo base64_encode('guardar_ataud'); ?>" />
-                        <input type="text" id="id_ataud" name="id_ataud" value="<?php echo (isset($result->id_ataud))?$result->id_ataud:""; ?>" />
+                        <input type="hidden" id="id_ataud" name="id_ataud" value="<?php echo (isset($result->id_ataud))?$result->id_ataud:""; ?>" />
                         <input type="button"  onclick="guardar_datos()" class="btn btn-default" id="boton_guardar" value="Guardar Datos" />
                         <button onclick="volver_listado('<?php echo base64_encode('listar_ataud'); ?>')" type="reset"  class="btn btn-default">Volver</button>
                     </form>
